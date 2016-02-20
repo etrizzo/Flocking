@@ -6,56 +6,33 @@ public class Bird : MonoBehaviour
 
 	private BirdModel model;
 	// The model object.
-	public Vector3 mouse_pos, world_pos;
 	public Vector2 direction;
-	public int counter = 0;
-	private float cameraDiff;
-	int screen_x, screen_y;
-	float distanceFromMouse = 2;
-	float speed_slider = 8f;
-	// float speed = Screen.width / Screen.height * 8;
-	float speed;
-	Vector2 slider_coords = new Vector2 (10, 10);
-	Vector2 slider_size = new Vector2 (150, 30);
-	Rect slider_rect, slider_box_rect;
 
-	void OnGUI ()
-	{
-		GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
-		speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
-	}
+	//For Arrows
+	float arrow_speed = 2f; // default speed is 8f. Subject to change
+	float rotation_angle = 100f; //how to update subject to change
+
 
 	public void  Start ()
 	{
-		initSlider ();
-		getMousePos ();
-		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
 		initBirdModel ();
 	}
 
 	void Update ()
 	{
-		speed = Screen.width / Screen.height * speed_slider;
-		updateCounter ();
-		getMousePos ();
-		if (counter % distanceFromMouse == 0) {
-			//			direction = mouse_pos;
-			move ();
-			rotateTowardMouse ();
-		}
+
+		float translation = Input.GetAxis ("Vertical") * arrow_speed;
+		if (translation < 0) {translation = 0;}			//effectively disabling the down button... birds cant fly backwards :/
+
+		float rotation = Input.GetAxis ("Horizontal") * rotation_angle *-1;		//multiply by -1 to negate default rotation
+
+		float new_speed = translation *Time.deltaTime;
+		rotation *= Time.deltaTime;
+		transform.Translate (0, new_speed, 0);
+		transform.Rotate (0, 0, rotation);
 	}
 
-	void getMousePos ()
-	{
-		mouse_pos = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10));
-	}
-
-	void initSlider ()
-	{
-		slider_rect = new Rect (slider_coords.x, slider_coords.y, slider_size.x, slider_size.y);
-		slider_box_rect = new Rect (slider_coords.x, slider_coords.y + slider_size.y, slider_size.x, slider_size.y);
-	}
 
 	void initBirdModel ()
 	{
@@ -64,27 +41,5 @@ public class Bird : MonoBehaviour
 		model.init (this);
 	}
 
-	void move ()
-	{
-		GameObject bird = this.gameObject;
-		bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
-	}
-
-	void rotateTowardMouse ()
-	{
-		// The following is modified from:
-		// http://answers.unity3d.com/questions/653798/character-always-facing-mouse-cursor-position.html
-		Vector3 cur_mouse_pos = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10);
-		Vector3 look_pos = Camera.main.ScreenToWorldPoint (cur_mouse_pos);
-		look_pos = look_pos - transform.position;
-		float angle = Mathf.Atan2 (look_pos.y, look_pos.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis (angle - 90, Vector3.forward);
-	}
-
-
-	void updateCounter ()
-	{
-		counter++;
-	}
 }
 
