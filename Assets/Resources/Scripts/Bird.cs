@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Bird : MonoBehaviour
 {
-
 	private BirdModel model;
 	// The model object.
 	public Vector3 mouse_pos, world_pos;
@@ -57,11 +56,21 @@ public class Bird : MonoBehaviour
 		slider_box_rect = new Rect (slider_coords.x, slider_coords.y + slider_size.y, slider_size.x, slider_size.y);
 	}
 
+	void addTrail(GameObject modelObject){
+		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
+		trail.time = 30f;
+		trail.startWidth = .05f;
+		trail.endWidth = .05f;
+	}
+
 	void initBirdModel ()
 	{
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
-		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+		model = modelObject.AddComponent<BirdModel> ();	// Add a bird_model script to control visuals of the bird.
+		addTrail(modelObject);
 		model.init (this);
+
+
 	}
 
 	void move ()
