@@ -28,18 +28,17 @@ void OnGUI ()
 
     void Update ()
     {
-
-        float translation = Input.GetAxis ("Vertical") * arrow_speed;
-        if (translation < 0) {translation = 0;}			//effectively disabling the down button... birds cant fly backwards :/
-
-        float rotation = Input.GetAxis ("Horizontal") * rotation_angle *-1;		//multiply by -1 to negate default rotation
-
-        float new_speed = translation *Time.deltaTime;
-        rotation *= Time.deltaTime;
-        transform.Translate (0, new_speed, 0);
-        transform.Rotate (0, 0, rotation);
+		arrowMove ();
     }
 
+	void arrowMove(){
+		float rot_speed = Input.GetAxis ("Vertical");        //-1, 1, or 0 depending on up/down keys
+		float rotation = Input.GetAxis ("Horizontal") * rotation_angle * -1;
+		rot_speed = ((rot_speed / 2) + 1);    //changes rotation speed multiplier to  1.5 or .5
+		transform.Translate (0, arrow_speed*Time.deltaTime, 0);
+		transform.Rotate (0, 0, (rotation * rot_speed) * Time.deltaTime);
+
+	}
 
     void initBirdModel ()
     {
