@@ -61,6 +61,17 @@ public class Bird : MonoBehaviour
 		trail.time = 30f;
 		trail.startWidth = .05f;
 		trail.endWidth = .05f;
+		trail.material.color = new Color(Random.value, Random.value, Random.value);
+	}
+
+	private Color getColor(){
+		float r = Random.value;
+		float g = Random.value;
+		float b = Random.value;
+		print ("r is: " + r);
+		print ("g is: " + g);
+		print ("b is: " + b);
+		return new Color (r, g, b, .5f);
 	}
 
 	void initBirdModel ()
