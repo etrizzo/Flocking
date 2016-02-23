@@ -80,8 +80,6 @@ public class Bird : MonoBehaviour
 		model = modelObject.AddComponent<BirdModel> ();	// Add a bird_model script to control visuals of the bird.
 		addTrail(modelObject);
 		model.init (this);
-
-
 	}
 
 	void move ()
