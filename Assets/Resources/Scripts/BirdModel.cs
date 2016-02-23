@@ -5,7 +5,7 @@ public class BirdModel : MonoBehaviour
 {
     private float clock;		// Keep track of time since creation for animation.
     private Bird owner;			// Pointer to the parent object.
-    private Material mat;		// Material for setting/changing texture and color.
+	public Material mat;		// Material for setting/changing texture and color.
 
     public void init(Bird owner) {
         this.owner = owner;
@@ -29,6 +29,14 @@ public class BirdModel : MonoBehaviour
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
+
+		//checks to see if spacebutton is pressed to begin placyback processes
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			owner.playback = true;
+			Destroy (this.gameObject);
+		}
     }
+
+
 }
 
