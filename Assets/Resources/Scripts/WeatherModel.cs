@@ -46,6 +46,7 @@ public class WeatherModel : MonoBehaviour
 		// mat.shader = Shader.Find ("Sprites/Default");// Tell the renderer that our textures have transparency.
 		GetComponent<Renderer> ().material = mat;// Get the material component of this quad object.
 
+		DestroyImmediate (GetComponent<MeshCollider> ());
 		SphereCollider sc = gameObject.AddComponent<SphereCollider> ();
 		sc.isTrigger = false;
 	}
