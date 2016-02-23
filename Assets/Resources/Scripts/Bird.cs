@@ -64,7 +64,7 @@ public class Bird : MonoBehaviour
 	void replay(int inx){
 		
 		model2.transform.position = positions [inx];
-		Debug.Log ("inside replay...:   "+ model2.transform.position); 
+//		Debug.Log ("inside replay...:   "+ model2.transform.position); 
 	}
 
 	void OnGUI()
