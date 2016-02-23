@@ -58,7 +58,7 @@ public class Bird : MonoBehaviour
 
 	void addTrail(GameObject modelObject){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
-		trail.time = 30f;
+		trail.time = 60f;
 		trail.startWidth = .05f;
 		trail.endWidth = .05f;
 		trail.material.color = new Color(Random.value, Random.value, Random.value);
