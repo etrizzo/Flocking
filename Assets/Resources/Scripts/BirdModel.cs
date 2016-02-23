@@ -28,6 +28,7 @@ public class BirdModel : MonoBehaviour
         // Incrememnt the clock based on how much time has elapsed since the previous update.
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
+
         clock = clock + Time.deltaTime;
 
 		//checks to see if spacebutton is pressed to begin placyback processes
