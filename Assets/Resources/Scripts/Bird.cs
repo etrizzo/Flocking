@@ -5,6 +5,7 @@ public class Bird : MonoBehaviour
 {
 
 	private BirdModel model;
+
 	// The model object.
 	public Vector3 mouse_pos, world_pos;
 	public Vector2 direction;
@@ -15,9 +16,14 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
+	private bool mouse = true;
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
+	public Vector3 vel = Vector3.zero;
+
+	//float arrow_speed = 2f; // default speed is 8f. Subject to change
+	float rotation_angle = 100f; //how to update subject to change
 
 	void OnGUI ()
 	{
@@ -36,14 +42,44 @@ public class Bird : MonoBehaviour
 
 	void Update ()
 	{
-		speed = Screen.width / Screen.height * speed_slider;
-		updateCounter ();
-		getMousePos ();
-		if (counter % distanceFromMouse == 0) {
-			//			direction = mouse_pos;
-			move ();
-			rotateTowardMouse ();
+		
+		if (mouse) {
+			speed = Screen.width / Screen.height * speed_slider;
+			updateCounter ();
+			getMousePos ();
+			if (counter % distanceFromMouse == 0) {
+				//			direction = mouse_pos;
+				move ();
+				rotateTowardMouse ();
+			}
+		} else {
+			speed = speed_slider;
+			arrowMove ();
 		}
+		
+		moveCam ();
+	}
+
+	void arrowMove(){
+		float rot_speed = Input.GetAxis ("Vertical");        //-1, 1, or 0 depending on up/down keys
+		float rotation = Input.GetAxis ("Horizontal") * rotation_angle * -1;
+		rot_speed = ((rot_speed / 2) + 1);    //changes rotation speed multiplier to  1.5 or .5
+		transform.Translate (0, speed*Time.deltaTime, 0);
+		transform.Rotate (0, 0, (rotation * rot_speed) * Time.deltaTime);
+
+	}
+
+	void moveCam(){
+		Camera cam = Camera.main;
+		float smooth = 3.0f;
+		Vector3 cameraPos = new Vector3 (this.transform.position.x, this.transform.position.y, -10);
+		cam.transform.position = cameraPos;
+				cam.transform.position = Vector3.Lerp (
+					cam.transform.position, cameraPos, Time.deltaTime * smooth
+				);
+//		cam.transform.position = Vector3.SmoothDamp (
+//			cam.transform.position, cameraPos, ref vel, .3f
+//		);
 	}
 
 	void getMousePos ()
