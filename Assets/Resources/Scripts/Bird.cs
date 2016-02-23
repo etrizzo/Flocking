@@ -22,7 +22,9 @@ public class Bird : MonoBehaviour
 	Rect slider_rect, slider_box_rect;
 	public Vector3 vel = Vector3.zero;
 
-	//float arrow_speed = 2f; // default speed is 8f. Subject to change
+
+	//For Arrows
+	//float arrow_speed = 2f; // now dependent on speed slider. May want to change
 	float rotation_angle = 100f; //how to update subject to change
 
 	void OnGUI ()
@@ -77,9 +79,6 @@ public class Bird : MonoBehaviour
 				cam.transform.position = Vector3.Lerp (
 					cam.transform.position, cameraPos, Time.deltaTime * smooth
 				);
-//		cam.transform.position = Vector3.SmoothDamp (
-//			cam.transform.position, cameraPos, ref vel, .3f
-//		);
 	}
 
 	void getMousePos ()

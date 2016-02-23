@@ -11,7 +11,7 @@ public class BackgroundModel : MonoBehaviour
 	public void init(Background owner) {
 		this.owner = owner;
 
-		transform.parent = owner.transform;					// Set the model's parent to the bird.
+		transform.parent = owner.transform;					// Set the model's parent to the background.
 		transform.localPosition = new Vector3(0,0,.01f);		// Center the model on the parent.
 		float quadHeight = Camera.main.orthographicSize * 2.0f;
 		float quadWidth = quadHeight * Screen.width / Screen.height;
