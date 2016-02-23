@@ -25,7 +25,7 @@ public class Bird : MonoBehaviour
 		speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 	}
 
-	public void  Start ()
+	public void init ()
 	{
 		initSlider ();
 		getMousePos ();
