@@ -16,11 +16,12 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
-	private bool mouse = true;
+	private bool mouse = false;
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
 	public Vector3 vel = Vector3.zero;
+	//private BoxCollider2D col;
 
 
 	//For Arrows
@@ -40,6 +41,7 @@ public class Bird : MonoBehaviour
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
 		initBirdModel ();
+
 	}
 
 	void Update ()
@@ -97,6 +99,12 @@ public class Bird : MonoBehaviour
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 		model.init (this);
+//		MeshCollider mcol = modelObject.GetComponent<MeshCollider>();
+//		if (mcol != null) {
+//			DestroyImmediate (mcol);
+//		}
+
+//		this.col.size = new Vector2 (.5f, .5f );
 	}
 
 	void move ()
@@ -120,6 +128,10 @@ public class Bird : MonoBehaviour
 	void updateCounter ()
 	{
 		counter++;
+	}
+
+	void OnCollisionEnter(){
+		print ("Collision with bird");
 	}
 }
 
