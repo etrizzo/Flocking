@@ -60,7 +60,7 @@ public class Bird : MonoBehaviour
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
 		trail.time = 60f;
 		trail.startWidth = .05f;
-		trail.endWidth = .05f;
+		trail.endWidth = 2f;
 		trail.material.color = new Color(Random.value, Random.value, Random.value);
 	}
 
@@ -74,12 +74,31 @@ public class Bird : MonoBehaviour
 		return new Color (r, g, b, .5f);
 	}
 
+	void addSound(GameObject modelObject){
+		AudioSource birdSound = modelObject.AddComponent<AudioSource> ();
+		birdSound.loop = true;
+		AudioClip birdClip = Resources.Load<AudioClip> ("Sounds/Bird Flock Individuals-0"+getsoundNum());
+		birdSound.clip = birdClip;
+		birdSound.playOnAwake = false;
+	}
+
 	void initBirdModel ()
 	{
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<BirdModel> ();	// Add a bird_model script to control visuals of the bird.
 		addTrail(modelObject);
+		addSound (modelObject);
 		model.init (this);
+	}
+
+	private string getsoundNum(){
+		int soundNum = (int)((Random.value*1000)%15)+1;
+
+		string soundString = "";
+		if (soundNum < 10) {
+			soundString = "0";
+		}
+		return soundString+soundNum.ToString();
 	}
 
 	void move ()

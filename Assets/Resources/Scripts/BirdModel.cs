@@ -8,7 +8,8 @@ public class BirdModel : MonoBehaviour
     private Bird owner;			// Pointer to the parent object.
     private Material mat;		// Material for setting/changing texture and color.
 	private SphereCollider sc;
-	private PhysicMaterial scmat;
+	private AudioSource birdAudio;
+	private AudioClip birdClip;
 
 
     public void init(Bird owner) {
@@ -26,7 +27,10 @@ public class BirdModel : MonoBehaviour
 		sc = this.gameObject.AddComponent<SphereCollider> ();
 		sc.radius = 1.5f;
 		sc.isTrigger = true;
-		scmat = sc.GetComponent<SphereCollider> ().material;
+
+		birdAudio = GetComponent<AudioSource> ();
+		birdClip = GetComponent<AudioClip> ();
+		birdAudio.Play ();
 	}
 
     void Start () {
