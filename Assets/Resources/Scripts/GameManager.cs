@@ -75,14 +75,14 @@ public class GameManager : MonoBehaviour
 			DestroyImmediate (mcol);
 		}
 		MeshRenderer mrend = border.GetComponent<MeshRenderer> ();
-		if (mrend != null){
-			DestroyImmediate (mrend);
-
+//		if (mrend != null){
+//			DestroyImmediate (mrend);
+//		}
 ////		Rigidbody2D rb = border.AddComponent<Rigidbody2D> ();
 ////		rb.isKinematic = true;
 		BoxCollider2D col = border.AddComponent<BoxCollider2D> ();
 //		col.name = "Border Collider";
-	}
+	
 	}
 
 	Background addBGtile(int x, int y) {
