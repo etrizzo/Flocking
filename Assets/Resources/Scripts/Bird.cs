@@ -15,9 +15,12 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
+	public bool hasTrail;
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
+	bool dead = false;
+
 
 	void OnGUI ()
 	{
@@ -25,7 +28,7 @@ public class Bird : MonoBehaviour
 		speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 	}
 
-	public void  init()
+	public void init()
 	{
 		initSlider ();
 		getMousePos ();
@@ -61,6 +64,7 @@ public class Bird : MonoBehaviour
 	{
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+		addTrail (modelObject);
 		model.init (this);
 	}
 
@@ -68,6 +72,24 @@ public class Bird : MonoBehaviour
 	{
 		GameObject bird = this.gameObject;
 		bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
+	}
+
+	void addTrail(GameObject modelObject){
+		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
+		trail.time = 15;
+		trail.startWidth = 0.05f;
+		trail.endWidth = 0.5f;
+		trail.material.color = getColor ();
+	}
+
+	private Color getColor(float opacity = 0.5f){
+		float r = Random.value;
+		float g = Random.value;
+		float b = Random.value;
+//		print ("r is: " + r);
+//		print ("g is: " + g);
+//		print ("b is: " + b);
+		return new Color (r, g, b, opacity);
 	}
 
 	void rotateTowardMouse ()

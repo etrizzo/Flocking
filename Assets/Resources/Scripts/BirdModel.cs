@@ -7,6 +7,14 @@ public class BirdModel : MonoBehaviour
     private Bird owner;			// Pointer to the parent object.
     private Material mat;		// Material for setting/changing texture and color.
 
+	float lifetime = 10;
+	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
+
+	void OnGUI ()
+	{
+		GUI.Box (clock_rect, "Bird time: " + lifetime);
+	}
+
     public void init(Bird owner) {
         this.owner = owner;
 
@@ -29,6 +37,13 @@ public class BirdModel : MonoBehaviour
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
+		lifetime -= Time.deltaTime;
+
+		if (lifetime <= 0) {
+			// TODO: Add to gamemanager's list of repeatable birds
+//			Destroy(this.gameObject);
+
+		}
     }
 }
 
