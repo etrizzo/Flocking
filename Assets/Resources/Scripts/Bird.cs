@@ -16,6 +16,7 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
+//	float maxspeed;
 	private bool mouse = true;
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
@@ -45,9 +46,9 @@ public class Bird : MonoBehaviour
 
 	void Update ()
 	{
-		
 		if (mouse) {
-			speed = Screen.width / Screen.height * speed_slider * 1.5f;
+			speed = Screen.width / Screen.height * speed_slider;
+//			maxspeed = speed;		///may try to fix edge jitter with this later
 			updateCounter ();
 			getMousePos ();
 			if (counter % distanceFromMouse == 0) {
@@ -62,6 +63,7 @@ public class Bird : MonoBehaviour
 		if (!GameManager.zen) {
 			moveCam ();
 		}
+		checkBoundaries ();
 	}
 
 	void arrowMove(){
@@ -99,12 +101,7 @@ public class Bird : MonoBehaviour
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 		model.init (this);
-//		MeshCollider mcol = modelObject.GetComponent<MeshCollider>();
-//		if (mcol != null) {
-//			DestroyImmediate (mcol);
-//		}
 
-//		this.col.size = new Vector2 (.5f, .5f );
 	}
 
 	void move ()
@@ -129,6 +126,31 @@ public class Bird : MonoBehaviour
 	{
 		counter++;
 	}
+
+	//makes the edge jitter like a tiny bit better
+	//work on this more later
+	void checkBoundaries(){
+		float smooth = 3f;
+		//print (speed + " (" + GameManager.x_coord + " " + GameManager.screen_height + ") (" + this.transform.position.x + " " + this.transform.position.y + ")");
+		GameObject birb = this.gameObject;
+		if (Mathf.Abs(this.transform.position.x) > GameManager.x_coord - .1f) {
+			if (this.transform.position.x > 0){
+				this.transform.position = new Vector3(GameManager.x_coord , this.transform.position.y,0);
+			} else {
+				this.transform.position = new Vector3(GameManager.x_coord*-1, this.transform.position.y,0);
+			}
+		} if (Mathf.Abs(this.transform.position.y) > GameManager.screen_height/2 - .1f) {
+			if (this.transform.position.y > 0){
+				this.transform.position  = 
+					new Vector3(this.transform.position.x, GameManager.screen_height / 2 ,0);
+			} else {
+				this.transform.position = new Vector3(this.transform.position.x, GameManager.screen_height / -2,0);
+			}
+		}
+
+	}
+
+
 
 	void OnCollisionEnter(){
 		print ("Collision with bird");
