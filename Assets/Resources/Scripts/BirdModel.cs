@@ -15,7 +15,7 @@ public class BirdModel : MonoBehaviour
 		this.owner = owner;
 
 		transform.parent = owner.transform;// Set the model's parent to the bird.
-		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
+		transform.localPosition = new Vector3 (0, 0, -.01f);// Center the model on the parent.
 		name = "Bird Model";// Name the object.
 
 		mat = new Material (Shader.Find ("Sprites/Default"));

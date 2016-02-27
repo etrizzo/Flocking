@@ -12,15 +12,16 @@ public class BackgroundModel : MonoBehaviour
 		this.owner = owner;
 
 		transform.parent = owner.transform;					// Set the model's parent to the background.
-		transform.localPosition = new Vector3(0,0,.01f);		// Center the model on the parent.
+		transform.localPosition = new Vector3(0,0,0f);		// Center the model on the parent.
 		float quadHeight = Camera.main.orthographicSize * 2.0f;
 		float quadWidth = quadHeight * Screen.width / Screen.height;
-		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f); 
+//		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f); 
+		transform.localScale = new Vector3(quadWidth, quadHeight,1f); 
 		name = "Background Model";									// Name the object.
 
 		mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
 		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
-		mat.mainTexture = Resources.Load<Texture2D>("Textures/grid");	// Set the texture.  Must be in Resources folder.
+		mat.mainTexture = Resources.Load<Texture2D>("Textures/tileBlank");	// Set the texture.  Must be in Resources folder.
 		mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
 	}

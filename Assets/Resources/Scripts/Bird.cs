@@ -16,12 +16,11 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
-	private bool mouse = false;
+	private bool mouse = true;
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
 	public Vector3 vel = Vector3.zero;
-	//private BoxCollider2D col;
 
 
 	//For Arrows
@@ -48,7 +47,7 @@ public class Bird : MonoBehaviour
 	{
 		
 		if (mouse) {
-			speed = Screen.width / Screen.height * speed_slider;
+			speed = Screen.width / Screen.height * speed_slider * 1.5f;
 			updateCounter ();
 			getMousePos ();
 			if (counter % distanceFromMouse == 0) {
@@ -60,8 +59,9 @@ public class Bird : MonoBehaviour
 			speed = speed_slider;
 			arrowMove ();
 		}
-		
-		moveCam ();
+		if (!GameManager.zen) {
+			moveCam ();
+		}
 	}
 
 	void arrowMove(){
