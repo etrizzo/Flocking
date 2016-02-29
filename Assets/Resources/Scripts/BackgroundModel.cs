@@ -7,14 +7,16 @@ public class BackgroundModel : MonoBehaviour
     private Background owner;			// Pointer to the parent object.
     private Material mat;		// Material for setting/changing texture and color.
     private float BGSCALE = 4f;
+	private float quadHeight;
+	private float quadWidth;
 
     public void init(Background owner) {
         this.owner = owner;
 
         transform.parent = owner.transform;					// Set the model's parent to the background.
         transform.localPosition = new Vector3(0,0,1f);		// Center the model on the parent.
-        float quadHeight = Camera.main.orthographicSize * 2.0f;
-        float quadWidth = quadHeight * Screen.width / Screen.height;
+        quadHeight = Camera.main.orthographicSize * 2.0f;
+        quadWidth = quadHeight * Screen.width / Screen.height;
         //		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f);
         transform.localScale = new Vector3(quadWidth, quadHeight,1f);
         name = "Background Model";									// Name the object.
@@ -25,6 +27,19 @@ public class BackgroundModel : MonoBehaviour
         mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
     }
+
+	public void Update(){
+		//resizes the background if the screen size is changed
+		//(also seems like a lot of unused calculations, idk if we care that much
+		float newheight = Camera.main.orthographicSize * 2.0f;
+		float newwidth = quadHeight * Screen.width / Screen.height;
+		if (quadHeight != newheight || quadWidth != newwidth) {
+			quadHeight = newheight;
+			quadWidth = newwidth;
+			transform.localScale = new Vector3 (newwidth, newheight, 1f);
+		}
+
+	}
 
 
 }
