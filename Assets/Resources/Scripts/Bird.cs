@@ -65,6 +65,7 @@ public class Bird : MonoBehaviour
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 		addTrail (modelObject);
+		addSound (modelObject);
 		model.init (this);
 	}
 
@@ -81,6 +82,24 @@ public class Bird : MonoBehaviour
 		trail.endWidth = 0.5f;
 		trail.material.color = getColor ();
 	}
+
+	void addSound(GameObject modelObject){
+		AudioSource birdSound = modelObject.AddComponent<AudioSource> ();
+		birdSound.loop = true;
+		AudioClip birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
+		birdSound.clip = birdClip;
+		birdSound.playOnAwake = false;
+	}
+	private string getsoundNum(){
+ 		int soundNum = (int) ((Random.value * 1000) % 30 ) + 1;
+ 
+ 		string soundString = "";
+ 		if (soundNum < 10) {
+ 			soundString = "0";
+ 		}
+ 		return soundString+soundNum.ToString();
+ 	}
+	
 
 	private Color getColor(float opacity = 0.5f){
 		float r = Random.value;

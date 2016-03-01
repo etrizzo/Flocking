@@ -6,6 +6,8 @@ public class BirdModel : MonoBehaviour
     private float clock;		// Keep track of time since creation for animation.
     private Bird owner;			// Pointer to the parent object.
     private Material mat;		// Material for setting/changing texture and color.
+	private AudioSource birdAudio;
+	private AudioClip birdClip;
 
 	float lifetime = 10;
 	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
@@ -26,6 +28,12 @@ public class BirdModel : MonoBehaviour
         mat.mainTexture = Resources.Load<Texture2D>("Textures/marble");	// Set the texture.  Must be in Resources folder.
         mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
+
+		// Audio stuff
+		birdAudio = GetComponent<AudioSource> ();
+		birdClip = GetComponent<AudioClip> ();
+		birdAudio.Play ();
+
     }
 
     void Start () {
@@ -41,7 +49,7 @@ public class BirdModel : MonoBehaviour
 
 		if (lifetime <= 0) {
 			// TODO: Add to gamemanager's list of repeatable birds
-//			Destroy(this.gameObject);
+			Destroy(this.gameObject);
 
 		}
     }
