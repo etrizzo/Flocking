@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 	//method to replay each dead bird
 	private void replayBirds(){
 		foreach(Bird mouse in dead_bird_list.Values){
-			Debug.Log(mouse.name);
+//			Debug.Log(mouse.name);
 			if (mouse.first) {
 				mouse.direction = new Vector2 (0, 1);
 				mouse.initBirdModel (false);
@@ -109,9 +109,9 @@ public class GameManager : MonoBehaviour
 	void Update(){
 		if (!birdOnScreen) {
 			birdOnScreen = true;
-			Debug.Log (dead_bird_list.Count);
-			Debug.Log(dead_bird_list.Keys.ToString());
 			i = 0; //reset replay
+//			Debug.Log (dead_bird_list.Count);
+//			Debug.Log(dead_bird_list.Keys.ToString());
 //			foreach (Bird mouse in dead_bird_list.Values) {
 //				Destroy (mouse);
 //			}

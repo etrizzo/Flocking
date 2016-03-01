@@ -33,6 +33,11 @@ public class Bird : MonoBehaviour
 	private BirdModel model2;
 	int i = 0; 
 
+	public AudioSource birdAudio;
+	public AudioClip birdClip;
+	public Color trailColor;
+
+
 
 	void OnGUI ()
 	{
@@ -50,7 +55,8 @@ public class Bird : MonoBehaviour
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
 		initBirdModel (true);
-
+		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
+		trailColor = getColor ();
 		positions = new List<Vector3>(100);	//intiate position list for replay
 	}
 
@@ -94,7 +100,7 @@ public class Bird : MonoBehaviour
 	public void replay(int inx){
 
 		model2.transform.position = positions [inx];
-		Debug.Log ("inside replay for... something:   "); 
+//		Debug.Log ("inside replay for... something:   "); 
 	}
 	/****************** End Replay Functions ***************/
 
@@ -114,16 +120,18 @@ public class Bird : MonoBehaviour
 		if (alive) {
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
-			addTrail (modelObject);
-			addSound (modelObject);
+			addTrail (modelObject, trailColor);
+			addSound (modelObject, birdClip);
 			model.init (this);
 		} else {
 			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
-			addTrail (modelObject2);
-			addSound (modelObject2);
+			addTrail (modelObject2, trailColor);
+			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
+
+//			model.GetComponent<CircleCollider2D> ().isTrigger = true;
 		}
 	}
 
@@ -133,29 +141,25 @@ public class Bird : MonoBehaviour
 		bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
 	}
 
-	void addTrail(GameObject modelObject){
+	void addTrail(GameObject modelObject, Color trailColor){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
 		trail.time = 15;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;
-		trail.material.color = getColor ();
+		trail.material.color = trailColor;
 	}
 
-	void addSound(GameObject modelObject){
+	void addSound(GameObject modelObject, AudioClip birdClip){
 		AudioSource birdSound = modelObject.AddComponent<AudioSource> ();
 		birdSound.loop = true;
-		AudioClip birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
+//		AudioClip birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
 		birdSound.clip = birdClip;
 		birdSound.playOnAwake = false;
 	}
 	private string getsoundNum(){
  		int soundNum = (int) ((Random.value * 1000) % 30 ) + 1;
- 
- 		string soundString = "";
- 		if (soundNum < 10) {
- 			soundString = "0";
- 		}
- 		return soundString+soundNum.ToString();
+		print ("print soundNum: " + soundNum.ToString());
+ 		return soundNum.ToString();
  	}
 	
 

@@ -10,6 +10,7 @@ public class BirdModel : MonoBehaviour
 	public Material mat;		// Material for setting/changing texture and color.
 	private AudioSource birdAudio;
 	private AudioClip birdClip;
+	private TrailRenderer birdTrail;
 
 
 	float lifetime = 10;
@@ -39,6 +40,9 @@ public class BirdModel : MonoBehaviour
 		birdClip = GetComponent<AudioClip> ();
 		birdAudio.Play ();
 
+		// Trail Stuff
+		birdTrail = GetComponent<TrailRenderer> ();
+
     }
 
     void Start () {
@@ -57,7 +61,8 @@ public class BirdModel : MonoBehaviour
 			owner.playback = true;
 			owner.gm.birdOnScreen = false;
 			owner.gm.dead_bird_list.Add (owner.name, owner);
-			Debug.Log (owner.gm.dead_bird_list.Count);
+//			Debug.Log (owner.gm.dead_bird_list.Count);
+			birdTrail.Clear ();
 			Destroy (this.gameObject);
 		} else if (lifetime > 0) {
 			lifetime -= Time.deltaTime;
