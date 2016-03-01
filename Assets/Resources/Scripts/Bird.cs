@@ -47,6 +47,7 @@ public class Bird : MonoBehaviour
 			move ();
 			rotateTowardMouse ();
 		}
+		checkBoundaries ();
 	}
 
 	void getMousePos ()
@@ -127,5 +128,31 @@ public class Bird : MonoBehaviour
 	{
 		counter++;
 	}
+
+	//fixes the edge jitter
+	//work on this more later - 
+	//	eliminates need for collider borders but feels a little rigid (maybe an animation?)
+	void checkBoundaries(){
+		float check = .4f;
+		float move = .4f;
+		//if the bird is outside of the boundaries (with a buffer for the size of the model)
+		//move it back to the edge of the map
+		if (Mathf.Abs (this.transform.position.x) > GameManager.x_coord - check) {
+			if (this.transform.position.x > 0) {
+				this.transform.position = new Vector3 (GameManager.x_coord - move, this.transform.position.y, 0);
+			} else {
+				this.transform.position = new Vector3 (GameManager.x_coord * -1 + move, this.transform.position.y, 0);
+			}
+		}
+		if (Mathf.Abs (this.transform.position.y) > GameManager.y_coord*-1 - check) {
+			if (this.transform.position.y > 0) {
+				this.transform.position = 
+					new Vector3 (this.transform.position.x, GameManager.y_coord*-1 - move, 0);
+			} else {
+				this.transform.position = new Vector3 (this.transform.position.x, GameManager.y_coord + move, 0);
+			}
+		}
+	}
+
 }
 

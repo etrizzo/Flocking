@@ -17,27 +17,29 @@ public class GameManager : MonoBehaviour
 	// List<Weather> weather_list;
 
 	// Emily's Variables
-	public Camera cam;
-	public Background bg;
-	public static float screen_height = Camera.main.orthographicSize * 2.0f;
-	public static float screen_width = screen_height * Screen.width / Screen.height;
-	public static float x_coord, y_coord;
-	public static float BGSCALE = 2f;
-	public float border_scale = 4f;
+	public Camera cam;		//main camera
+	public Background bg;		//background tile (in case we need it)
+	public static float x_coord, y_coord;	//x coordinate of right side, y coordinate of bottom side
+	public static float BGSCALE = 2f;	//scaling factor for background (how many screens wide in migration mode)
+	public float border_scale = 4f;		//thickness of the box collider borders
+	float dist;				//distance from the camera to the game for coordinate calculations
+
 
 	void Start ()
 	{
 		// Hardcode it TODO: don't do this
 		zenMode = true;
+		this.cam = Camera.main;
 
-
+		dist = (transform.position - cam.transform.position).z;
 		bird_folder = new GameObject ();
 		bird_folder.name = "Birds";
 
-		this.cam = Camera.main;
 		if (zenMode) {
+			//zoom out the camera in zen mode
 			cam.orthographicSize = 10f;
-			float dist = (transform.position - Camera.main.transform.position).z;
+			//get coordinates of the edges according to:
+			//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
 			x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 		}
@@ -62,43 +64,16 @@ public class GameManager : MonoBehaviour
 		bird.init ();
 		bird.gameObject.name = "Bird "+ bird_count++;
 	}
+
 	Background addBGtile(int x, int y) {
+		//creates background tile
 		GameObject bg_object = new GameObject();			
 		bg_object.name = "BG Object";
 		Background bg = bg_object.AddComponent<Background>();	
 		bg.transform.position = new Vector3(x,y,0);		
 		bg.init((int) x, (int) y);										
 		bg.name = "Background";
-		float bs = border_scale - 2;
-		//float halfsies = BGSCALE / 2;
-		addBorder (x_coord +bs, 0);
-		addBorder (x_coord * -1 - bs, 0);
-		addBorder (0, y_coord);
-		addBorder (0, y_coord - bs);
 		return bg;							
-	}
-
-	void addBorder(float x, float y){
-		GameObject border = GameObject.CreatePrimitive (PrimitiveType.Quad);
-		border.transform.position = new Vector3 (x, y, 0);
-		if (x != 0){
-				border.transform.localScale = new Vector2(border_scale, screen_height * BGSCALE);
-		} else if (y!= 0){
-				border.transform.localScale = new Vector2(screen_width*BGSCALE, border_scale);
-			}
-		border.name = "Border";
-	
-		MeshCollider mcol = border.GetComponent<MeshCollider>();
-		if (mcol != null) {
-				DestroyImmediate (mcol);
-			}
-
-		//delete the renderer so that the wall isn't visible
-		MeshRenderer mrend = border.GetComponent<MeshRenderer> ();
-		if (mrend != null) {
-			DestroyImmediate (mrend);
-		}
-		BoxCollider2D col = border.AddComponent<BoxCollider2D> ();
 	}
 
 	private void zenModeInit (Bird bird)
@@ -114,6 +89,12 @@ public class GameManager : MonoBehaviour
 		if(!birdOnScreen){
 			newBird ();
 		}
+
+
+		//updates x and y coords of the screen in case the screen is resized
+		//(seems like a lot of unneccessary calculation but there's no OnResize event that I can find)
+		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
+		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 	}
 
 
