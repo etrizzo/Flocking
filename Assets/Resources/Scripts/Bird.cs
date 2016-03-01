@@ -111,16 +111,17 @@ public class Bird : MonoBehaviour
 
 	public void initBirdModel (bool alive)
 	{
-		addTrail (modelObject);
-		addSound (modelObject);
-
 		if (alive) {
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			addTrail (modelObject);
+			addSound (modelObject);
 			model.init (this);
 		} else {
 			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			addTrail (modelObject2);
+			addSound (modelObject2);
 			model2.init (this);
 			model2.mat.color = Color.black;
 		}
