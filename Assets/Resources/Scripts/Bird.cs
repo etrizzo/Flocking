@@ -54,9 +54,11 @@ public class Bird : MonoBehaviour
 		getMousePos ();
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
-		initBirdModel (true);
-		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
 		trailColor = getColor ();
+		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
+		initBirdModel (true);
+
+
 		positions = new List<Vector3>(100);	//intiate position list for replay
 	}
 
@@ -130,8 +132,8 @@ public class Bird : MonoBehaviour
 			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
-
-//			model.GetComponent<CircleCollider2D> ().isTrigger = true;
+			//Set collider for dead birds to be a trigger
+			this.GetComponent<CircleCollider2D>().isTrigger = true;
 		}
 	}
 
@@ -164,6 +166,7 @@ public class Bird : MonoBehaviour
 	
 
 	private Color getColor(float opacity = 0.5f){
+		//print("Lololol colors");
 		float r = Random.value;
 		float g = Random.value;
 		float b = Random.value;
