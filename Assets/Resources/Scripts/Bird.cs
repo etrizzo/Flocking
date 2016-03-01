@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Bird : MonoBehaviour
 {
 
 	private BirdModel model;
+	public GameManager gm;
 	// The model object.
 	public Vector3 mouse_pos, world_pos;
 	public Vector2 direction;
@@ -21,34 +23,80 @@ public class Bird : MonoBehaviour
 	Rect slider_rect, slider_box_rect;
 	bool dead = false;
 
+	//Variables For Replay
+	public List<Vector3> positions;
+	private Vector3 objPos;
+	int index = 0; //index for positions list
+	int ind = 0; // index for playback
+	public bool playback = false;
+	public bool first = true;
+	private BirdModel model2;
+	int i = 0; 
+
 
 	void OnGUI ()
 	{
-		GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
-		speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
+		if (!playback) {
+			GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
+			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
+		}
 	}
 
-	public void init()
+	public void init(GameManager gm)
 	{
+		this.gm = gm;
 		initSlider ();
 		getMousePos ();
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
-		initBirdModel ();
+		initBirdModel (true);
+
+		positions = new List<Vector3>(100);	//intiate position list for replay
 	}
 
 	void Update ()
 	{
-		speed = Screen.width / Screen.height * speed_slider;
-		updateCounter ();
-		getMousePos ();
-		if (counter % distanceFromMouse == 0) {
-			//			direction = mouse_pos;
-			move ();
-			rotateTowardMouse ();
-		}
-		checkBoundaries ();
+		if (!playback) {
+			speed = Screen.width / Screen.height * speed_slider;
+			updateCounter ();
+			getMousePos ();
+			if (counter % distanceFromMouse == 0) {
+				//			direction = mouse_pos;
+				move ();
+				rotateTowardMouse ();
+			}
+			checkBoundaries ();
+			recordPosition ();
+		} //else {
+//			speed = Screen.width / Screen.height * speed_slider;
+//			if (first) {
+//				direction = new Vector2 (0, 1);
+//				initBirdModel (false);
+//				first = false;
+//			}
+//			if ( i < index) {
+//				replay (i);
+//				i++;
+//			}
+//		}
 	}
+
+	/****************** Replay Functions ***************/
+	void recordPosition(){
+		objPos = transform.position;
+		positions.Add(objPos);
+//		Debug.Log (index);
+//		Debug.Log ("current posistion is: " + positions[index]);
+
+		index++;
+	}
+
+	public void replay(int inx){
+
+		model2.transform.position = positions [inx];
+		Debug.Log ("inside replay for... something:   "); 
+	}
+	/****************** End Replay Functions ***************/
 
 	void getMousePos ()
 	{
@@ -61,12 +109,20 @@ public class Bird : MonoBehaviour
 		slider_box_rect = new Rect (slider_coords.x, slider_coords.y + slider_size.y, slider_size.x, slider_size.y);
 	}
 
-	void initBirdModel ()
+	public void initBirdModel (bool alive)
 	{
-		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
-		model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
-		addTrail (modelObject);
-		model.init (this);
+		if (alive) {
+			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			addTrail (modelObject);
+			model.init (this);
+		} else {
+			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			addTrail (modelObject2);
+			model2.init (this);
+			model2.mat.color = Color.black;
+		}
 	}
 
 	void move ()

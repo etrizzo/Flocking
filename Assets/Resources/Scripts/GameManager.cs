@@ -10,10 +10,9 @@ public class GameManager : MonoBehaviour
 	 * 1 - Migration Mode
 	 */
 	bool zenMode;
-	Bird bird;
 	int bird_count = 0;
-	bool birdOnScreen = true;
-	List<Bird> dead_bird_list;
+	public bool birdOnScreen = true;
+	public Hashtable dead_bird_list;
 	// List<Weather> weather_list;
 
 	// Emily's Variables
@@ -31,6 +30,8 @@ public class GameManager : MonoBehaviour
 		zenMode = true;
 		this.cam = Camera.main;
 
+		dead_bird_list = new Hashtable ();
+
 		dist = (transform.position - cam.transform.position).z;
 		bird_folder = new GameObject ();
 		bird_folder.name = "Birds";
@@ -45,10 +46,13 @@ public class GameManager : MonoBehaviour
 		}
 		this.bg = addBGtile (0, 0);
 		newBird ();
+
 	}
 
 	private void newBird() {
-		bird = gameObject.AddComponent<Bird> ();
+		GameObject birdObject = new GameObject ();
+		birdObject.name = "bird object";
+		Bird bird = birdObject.AddComponent<Bird> ();
 		bird.transform.parent = bird_folder.transform;
 		if (zenMode) {
 			zenModeInit (bird);
@@ -61,8 +65,8 @@ public class GameManager : MonoBehaviour
 		//rb.isKinematic = true;
 		CircleCollider2D col = bird.gameObject.AddComponent<CircleCollider2D> ();
 		col.name = "Bird Collider";
-		bird.init ();
-		bird.gameObject.name = "Bird "+ bird_count++;
+		bird.init (this);
+		bird.name = "Bird "+ bird_count++;
 	}
 
 	Background addBGtile(int x, int y) {
@@ -85,10 +89,42 @@ public class GameManager : MonoBehaviour
 		// TODO
 	}
 
+	int i = 0;
+	//method to replay each dead bird
+	private void replayBirds(){
+		foreach(Bird mouse in dead_bird_list.Values){
+			Debug.Log(mouse.name);
+			if (mouse.first) {
+				mouse.direction = new Vector2 (0, 1);
+				mouse.initBirdModel (false);
+				mouse.first = false;
+			}
+			if ( i < mouse.positions.Count) {
+				mouse.replay (i);
+				i++;
+			}
+		} 
+	}
+
 	void Update(){
-		if(!birdOnScreen){
+		if (!birdOnScreen) {
+			birdOnScreen = true;
+			Debug.Log (dead_bird_list.Count);
+			Debug.Log(dead_bird_list.Keys.ToString());
+			i = 0; //reset replay
+//			foreach (Bird mouse in dead_bird_list.Values) {
+//				Destroy (mouse);
+//			}
 			newBird ();
+//			foreach(string key in dead_bird_list.Keys)
+//			{
+//				Debug.Log(key +"     "+ dead_bird_list[key]);
+//			}
+		} else {
+			replayBirds ();
+
 		}
+//		Debug.Log (dead_bird_list.Keys);
 
 
 		//updates x and y coords of the screen in case the screen is resized
