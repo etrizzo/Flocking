@@ -12,6 +12,8 @@ public class BirdModel : MonoBehaviour
 	private AudioClip birdClip;
 	private TrailRenderer birdTrail;
 
+	public bool pause;
+
 
 	float lifetime = 10;
 	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
@@ -41,7 +43,9 @@ public class BirdModel : MonoBehaviour
 		birdAudio.Play ();
 
 		// Trail Stuff
-		birdTrail = GetComponent<TrailRenderer> ();
+		birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
+
+		pause = false;
 
     }
 
@@ -55,8 +59,18 @@ public class BirdModel : MonoBehaviour
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
 
+		if (Input.GetKeyDown ("space")){
+			if (!pause) {
+				pause = true;
+				birdAudio.Pause ();
+			} else {
+				pause = false;
+				birdAudio.UnPause ();
+			}
 
-		if (lifetime <= 0 && !owner.playback) {
+		}
+
+		if (lifetime <= 0 && !owner.playback && !pause) {
 			// TODO: Add to gamemanager's list of repeatable birds
 			owner.playback = true;
 			owner.gm.birdOnScreen = false;
@@ -64,7 +78,7 @@ public class BirdModel : MonoBehaviour
 //			Debug.Log (owner.gm.dead_bird_list.Count);
 			birdTrail.Clear ();
 			Destroy (this.gameObject);
-		} else if (lifetime > 0) {
+		} else if (lifetime > 0 && !pause) {
 			lifetime -= Time.deltaTime;
 		}
     }

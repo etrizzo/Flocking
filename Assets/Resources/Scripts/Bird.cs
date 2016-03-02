@@ -37,6 +37,8 @@ public class Bird : MonoBehaviour
 	public AudioClip birdClip;
 	public Color trailColor;
 
+	public bool pause;
+
 
 
 	void OnGUI ()
@@ -54,15 +56,24 @@ public class Bird : MonoBehaviour
 		getMousePos ();
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
-		initBirdModel (true);
 		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
 		trailColor = getColor ();
+		initBirdModel (true);
 		positions = new List<Vector3>(100);	//intiate position list for replay
+		pause = false;
 	}
 
 	void Update ()
 	{
-		if (!playback) {
+		if (Input.GetKeyDown ("space")){
+			if (!pause) {
+				pause = true;
+			} else {
+				pause = false;
+			}
+
+		}
+		if (!playback && !pause) {
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
 			getMousePos ();
@@ -143,7 +154,7 @@ public class Bird : MonoBehaviour
 
 	void addTrail(GameObject modelObject, Color trailColor){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
-		trail.time = 15;
+		trail.time = 10;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;
 		trail.material.color = trailColor;
@@ -158,7 +169,7 @@ public class Bird : MonoBehaviour
 	}
 	private string getsoundNum(){
  		int soundNum = (int) ((Random.value * 1000) % 30 ) + 1;
-		print ("print soundNum: " + soundNum.ToString());
+		//print ("print soundNum: " + soundNum.ToString());
  		return soundNum.ToString();
  	}
 	

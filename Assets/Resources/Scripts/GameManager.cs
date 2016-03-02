@@ -23,9 +23,18 @@ public class GameManager : MonoBehaviour
 	public float border_scale = 4f;		//thickness of the box collider borders
 	float dist;				//distance from the camera to the game for coordinate calculations
 
+	//Various booleans for setting the state of the game
+	public bool go;
+	private bool done;
+	public bool pause;
+
 
 	void Start ()
 	{
+		go = false;
+		done = false;
+		pause = false;
+
 		// Hardcode it TODO: don't do this
 		zenMode = true;
 		this.cam = Camera.main;
@@ -45,7 +54,7 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 		}
 		this.bg = addBGtile (0, 0);
-		newBird ();
+		//newBird ();
 
 	}
 
@@ -107,7 +116,15 @@ public class GameManager : MonoBehaviour
 	}
 
 	void Update(){
-		if (!birdOnScreen) {
+		if (Input.GetKeyDown ("space")){
+			if (!pause && go) {
+				pause = true;
+			} else {
+				pause = false;
+			}
+
+		}
+		if (!birdOnScreen && go && !pause && !done) {
 			birdOnScreen = true;
 			i = 0; //reset replay
 //			Debug.Log (dead_bird_list.Count);
@@ -120,7 +137,7 @@ public class GameManager : MonoBehaviour
 //			{
 //				Debug.Log(key +"     "+ dead_bird_list[key]);
 //			}
-		} else {
+		} else if(go && !pause && !done){
 			replayBirds ();
 
 		}
@@ -131,6 +148,47 @@ public class GameManager : MonoBehaviour
 		//(seems like a lot of unneccessary calculation but there's no OnResize event that I can find)
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
+	}
+
+	// Start button that disappears once clicked (and triggers the start of the game)
+	void OnGUI () {
+		GUIStyle guiStyle = new GUIStyle();
+		int xpos;
+		int ypos;
+		if ((!go && !done) || (pause && !done)) {
+			guiStyle.fontSize = 80;
+			guiStyle.normal.textColor = new Color(103, 58, 148);
+			guiStyle.alignment = TextAnchor.MiddleCenter;
+			xpos = ((Screen.width) - (300)) / 2;
+			ypos = ((Screen.height) - (50)) / 2 - (Screen.height / 3);
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
+
+		} else if (done) {
+			go = false;
+			guiStyle.normal.textColor = new Color(148, 58, 85);
+			guiStyle.fontSize = 80;
+			guiStyle.alignment = TextAnchor.MiddleCenter;
+			xpos = ((Screen.width) - 300) / 2;
+			ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
+			xpos = ((Screen.width)-(150))/2;
+			ypos = ((Screen.height)-(60))/2+(Screen.height/6);
+			if (done && GUI.Button (new Rect (xpos, ypos, 150, 60), "RESTART?")) {
+				Start ();
+			}
+		}
+		xpos = ((Screen.width)-(150))/2;
+		ypos = ((Screen.height)-(60))/2+(Screen.height/4);
+		if (!done && pause) {
+			guiStyle.fontSize = 60;
+			guiStyle.normal.textColor = new Color(58, 148, 130);
+			GUI.Label (new Rect (xpos, ypos, 150, 60), "PAUSED", guiStyle);
+		}
+
+		if (!go && !done && !pause && GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
+			go = true;
+			newBird ();
+		}
 	}
 
 
