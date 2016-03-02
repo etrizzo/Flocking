@@ -12,8 +12,9 @@ public class BirdModel : MonoBehaviour
 	private AudioClip birdClip;
 	public TrailRenderer birdTrail;
 
+	public bool pause;
 
-	float lifetime = 5f;
+	float lifetime;
 	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
 
 	void OnGUI ()
@@ -43,7 +44,10 @@ public class BirdModel : MonoBehaviour
 
 		// Trail Stuff
 		birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
-		birdTrail.receiveShadows = false;
+
+		pause = false;
+
+		lifetime = (float)owner.gm.bird_life;
 
     }
 
@@ -57,11 +61,22 @@ public class BirdModel : MonoBehaviour
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
-//
-//		if (lifetime <= 0){
-//			birdTrail.Clear ();
-//		}
-		if (lifetime <= 0 && !owner.playback) {
+
+
+		if (Input.GetKeyDown ("space")){
+			if (!pause) {
+				pause = true;
+				birdAudio.Pause ();
+				Time.timeScale = 0;
+			} else {
+				pause = false;
+				birdAudio.UnPause ();
+				Time.timeScale = 1;
+			}
+
+		}
+
+		if (lifetime <= 0 && !owner.playback && !pause) {
 			// TODO: Add to gamemanager's list of repeatable birds
 			owner.playback = true;
 			owner.gm.birdOnScreen = false;
@@ -70,7 +85,7 @@ public class BirdModel : MonoBehaviour
 
 			birdTrail.Clear ();
 			Destroy (this.gameObject);
-		} else if (lifetime > 0) {
+		} else if (lifetime > 0 && !pause) {
 			lifetime -= Time.deltaTime;
 		}
     }

@@ -25,7 +25,9 @@ public class Bird : MonoBehaviour
 
 	//Variables For Replay
 	public List<Vector3> positions;
+	public List<ArrayList> movements;
 	private Vector3 objPos;
+	private Quaternion objRot;
 	int index = 0; //index for positions list
 	int ind = 0; // index for playback
 	public bool playback = false;
@@ -36,6 +38,8 @@ public class Bird : MonoBehaviour
 	public AudioSource birdAudio;
 	public AudioClip birdClip;
 	public Color trailColor;
+
+	public bool pause;
 
 
 
@@ -58,12 +62,23 @@ public class Bird : MonoBehaviour
 		trailColor = getColor ();
 		initBirdModel (true);
 		positions = new List<Vector3>(100);	//intiate position list for replay
+		movements = new List<ArrayList> (); // instantiate movements 2D list
+		pause = false;
 	}
 
 	public void Update ()
 	{
-		//print ("updating live");
-		if (!playback) {
+		if (Input.GetKeyDown ("space")){
+			if (!pause) {
+				pause = true;
+				Time.timeScale = 0;
+			} else {
+				pause = false;
+				Time.timeScale = 1;
+			}
+
+		}
+		if (!playback && !pause) {
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
 			getMousePos ();
@@ -91,7 +106,9 @@ public class Bird : MonoBehaviour
 	/****************** Replay Functions ***************/
 	void recordPosition(){
 		objPos = transform.position;
-		positions.Add(objPos);
+		objRot = transform.rotation;
+//		positions.Add(objPos);
+		movements.Add (new ArrayList { objPos, objRot});
 //		Debug.Log (index);
 //		Debug.Log ("current posistion is: " + positions[index]);
 
@@ -99,8 +116,9 @@ public class Bird : MonoBehaviour
 	}
 
 	public void replay(int inx){
-		//print ("Dead Bird " + this);
-		model2.transform.position = positions [inx];
+
+		model2.transform.position = (Vector3) movements[inx][0];
+		model2.transform.rotation = (Quaternion) movements[inx][1];
 //		Debug.Log ("inside replay for... something:   "); 
 	}
 	/****************** End Replay Functions ***************/
@@ -125,7 +143,7 @@ public class Bird : MonoBehaviour
 			addSound (modelObject, birdClip);
 			model.init (this);
 		} else {
-			print (positions.Count);
+			//print (positions.Count);
 			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			//model2.birdTrail.Clear();
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
@@ -150,7 +168,7 @@ public class Bird : MonoBehaviour
 	void addTrail(GameObject modelObject, Color trailColor){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
 		trail.receiveShadows = false;
-		trail.time = 15;
+		trail.time = 10;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;
 		trail.material.color = trailColor;
