@@ -25,7 +25,9 @@ public class Bird : MonoBehaviour
 
 	//Variables For Replay
 	public List<Vector3> positions;
+	public List<ArrayList> movements;
 	private Vector3 objPos;
+	private Quaternion objRot;
 	int index = 0; //index for positions list
 	int ind = 0; // index for playback
 	public bool playback = false;
@@ -60,6 +62,7 @@ public class Bird : MonoBehaviour
 		trailColor = getColor ();
 		initBirdModel (true);
 		positions = new List<Vector3>(100);	//intiate position list for replay
+		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
 	}
 
@@ -101,7 +104,9 @@ public class Bird : MonoBehaviour
 	/****************** Replay Functions ***************/
 	void recordPosition(){
 		objPos = transform.position;
-		positions.Add(objPos);
+		objRot = transform.rotation;
+//		positions.Add(objPos);
+		movements.Add (new ArrayList { objPos, objRot});
 //		Debug.Log (index);
 //		Debug.Log ("current posistion is: " + positions[index]);
 
@@ -110,7 +115,8 @@ public class Bird : MonoBehaviour
 
 	public void replay(int inx){
 
-		model2.transform.position = positions [inx];
+		model2.transform.position = (Vector3) movements[inx][0];
+		model2.transform.rotation = (Quaternion) movements[inx][1];
 //		Debug.Log ("inside replay for... something:   "); 
 	}
 	/****************** End Replay Functions ***************/

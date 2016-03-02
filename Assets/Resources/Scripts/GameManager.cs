@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
 				mouse.initBirdModel (false);
 				mouse.first = false;
 			}
-			if ( i < mouse.positions.Count) {
+			if ( i < mouse.movements.Count) {
 				mouse.replay (i);
 				i++;
 			}
