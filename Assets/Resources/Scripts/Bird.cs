@@ -71,8 +71,10 @@ public class Bird : MonoBehaviour
 		if (Input.GetKeyDown ("space")){
 			if (!pause) {
 				pause = true;
+				Time.timeScale = 0;
 			} else {
 				pause = false;
+				Time.timeScale = 1;
 			}
 
 		}

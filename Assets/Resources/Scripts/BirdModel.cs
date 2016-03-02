@@ -15,7 +15,7 @@ public class BirdModel : MonoBehaviour
 	public bool pause;
 
 
-	float lifetime = 10;
+	float lifetime;
 	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
 
 	void OnGUI ()
@@ -48,6 +48,8 @@ public class BirdModel : MonoBehaviour
 
 		pause = false;
 
+		lifetime = (float)owner.gm.bird_life;
+
     }
 
     void Start () {
@@ -64,9 +66,11 @@ public class BirdModel : MonoBehaviour
 			if (!pause) {
 				pause = true;
 				birdAudio.Pause ();
+				Time.timeScale = 0;
 			} else {
 				pause = false;
 				birdAudio.UnPause ();
+				Time.timeScale = 1;
 			}
 
 		}
