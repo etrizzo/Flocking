@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 	private bool done;
 	public bool pause;
 
+	public int bird_num = 8;
+	public int bird_life = 10;
+
 
 	void Start ()
 	{
@@ -59,6 +62,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void newBird() {
+		bird_num--;
 		GameObject birdObject = new GameObject ();
 		birdObject.name = "bird object";
 		Bird bird = birdObject.AddComponent<Bird> ();
@@ -119,12 +123,14 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown ("space")){
 			if (!pause && go) {
 				pause = true;
+				Time.timeScale = 0;
 			} else {
 				pause = false;
+				Time.timeScale = 1;
 			}
 
 		}
-		if (!birdOnScreen && go && !pause && !done) {
+		if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
 			birdOnScreen = true;
 			i = 0; //reset replay
 //			Debug.Log (dead_bird_list.Count);
@@ -137,9 +143,11 @@ public class GameManager : MonoBehaviour
 //			{
 //				Debug.Log(key +"     "+ dead_bird_list[key]);
 //			}
-		} else if(go && !pause && !done){
+		} else if (go && !pause && !done && bird_num >= 0) {
 			replayBirds ();
 
+		} else if (bird_num <= 0) {
+			done = true;
 		}
 //		Debug.Log (dead_bird_list.Keys);
 
@@ -160,7 +168,7 @@ public class GameManager : MonoBehaviour
 			guiStyle.normal.textColor = new Color(103, 58, 148);
 			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - (300)) / 2;
-			ypos = ((Screen.height) - (50)) / 2 - (Screen.height / 3);
+			ypos = ((Screen.height) - (10)) / 2 - (Screen.height / 3);
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
 
 		} else if (done) {
@@ -173,9 +181,9 @@ public class GameManager : MonoBehaviour
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
 			xpos = ((Screen.width)-(150))/2;
 			ypos = ((Screen.height)-(60))/2+(Screen.height/6);
-			if (done && GUI.Button (new Rect (xpos, ypos, 150, 60), "RESTART?")) {
+			/*if (done && GUI.Button (new Rect (xpos, ypos, 150, 60), "RESTART?")) {
 				Start ();
-			}
+			}*/
 		}
 		xpos = ((Screen.width)-(150))/2;
 		ypos = ((Screen.height)-(60))/2+(Screen.height/4);
@@ -185,6 +193,31 @@ public class GameManager : MonoBehaviour
 			GUI.Label (new Rect (xpos, ypos, 150, 60), "PAUSED", guiStyle);
 		}
 
+		if (!go && !done && !pause) {
+			Vector2 num_slider_coords = new Vector2 (((Screen.width)-(150))/2, (Screen.height)/2);
+			Vector2 num_slider_size = new Vector2 (150, 30);
+			Rect num_slider_rect, num_slider_box_rect;
+
+
+			num_slider_rect = new Rect (num_slider_coords.x, num_slider_coords.y, num_slider_size.x, num_slider_size.y);
+			num_slider_box_rect = new Rect (num_slider_coords.x, num_slider_coords.y + num_slider_size.y, num_slider_size.x, num_slider_size.y);
+
+			Vector2 life_slider_coords = new Vector2 (((Screen.width)-(150))/2, (Screen.height)/2-(Screen.height/8));
+			Vector2 life_slider_size = new Vector2 (150, 30);
+			Rect life_slider_rect, life_slider_box_rect;
+
+			life_slider_rect = new Rect (life_slider_coords.x, life_slider_coords.y, life_slider_size.x, life_slider_size.y);
+			life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
+
+			GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
+			bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 0.0F, 30.0F);
+
+			GUI.Box (life_slider_rect, "Bird Lifetime: " + bird_life.ToString ());
+			bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 0.0F, 60.0F);
+		}
+
+		xpos = ((Screen.width)-(150))/2;
+		ypos = ((Screen.height)/2+(Screen.height/8));
 		if (!go && !done && !pause && GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
 			go = true;
 			newBird ();
