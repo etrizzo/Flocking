@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 	int bird_count = 0;
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
+	public Bird live;
 	// List<Weather> weather_list;
 
 	// Emily's Variables
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
 		col.name = "Bird Collider";
 		bird.init (this);
 		bird.name = "Bird "+ bird_count++;
+		live = bird;
 	}
 
 	Background addBGtile(int x, int y) {
@@ -92,18 +94,27 @@ public class GameManager : MonoBehaviour
 	int i = 0;
 	//method to replay each dead bird
 	private void replayBirds(){
+		//print ("updating dead birds");
 		foreach(Bird mouse in dead_bird_list.Values){
+			//print (mouse.name);
 //			Debug.Log(mouse.name);
 			if (mouse.first) {
 				mouse.direction = new Vector2 (0, 1);
 				mouse.initBirdModel (false);
+//				print ("Trail: " + mouse.model2.birdTrail);
+//				mouse.model2.birdTrail.Clear ();
 				mouse.first = false;
 			}
-			if ( i < mouse.positions.Count) {
+			if (i < mouse.positions.Count) {
 				mouse.replay (i);
-				i++;
+
 			}
-		} 
+			if (i == mouse.positions.Count-1){		//lol wacky trailz
+					mouse.model2.birdTrail.Clear ();
+				}
+
+		}
+		i++;	
 	}
 
 	void Update(){
@@ -122,6 +133,7 @@ public class GameManager : MonoBehaviour
 //			}
 		} else {
 			replayBirds ();
+			live.lolupdate ();
 
 		}
 //		Debug.Log (dead_bird_list.Keys);
@@ -132,6 +144,7 @@ public class GameManager : MonoBehaviour
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 	}
+		
 
 
 	// private void makeWeather ()

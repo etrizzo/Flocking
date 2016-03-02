@@ -30,7 +30,7 @@ public class Bird : MonoBehaviour
 	int ind = 0; // index for playback
 	public bool playback = false;
 	public bool first = true;
-	private BirdModel model2;
+	public BirdModel model2;
 	int i = 0; 
 
 	public AudioSource birdAudio;
@@ -60,8 +60,9 @@ public class Bird : MonoBehaviour
 		positions = new List<Vector3>(100);	//intiate position list for replay
 	}
 
-	void Update ()
+	public void lolupdate ()
 	{
+		print ("updating live");
 		if (!playback) {
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
@@ -98,7 +99,7 @@ public class Bird : MonoBehaviour
 	}
 
 	public void replay(int inx){
-
+		//print ("Dead Bird " + this);
 		model2.transform.position = positions [inx];
 //		Debug.Log ("inside replay for... something:   "); 
 	}
@@ -124,25 +125,31 @@ public class Bird : MonoBehaviour
 			addSound (modelObject, birdClip);
 			model.init (this);
 		} else {
+			print (positions.Count);
 			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+			//model2.birdTrail.Clear();
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			//print(modelObject2.name);
 			addTrail (modelObject2, trailColor);
 			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
 			//Set collider for dead birds to be a trigger
 			this.GetComponent<CircleCollider2D>().isTrigger = true;
+
 		}
 	}
 
 	void move ()
 	{
+		//print ("Live Bird");
 		GameObject bird = this.gameObject;
 		bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
 	}
 
 	void addTrail(GameObject modelObject, Color trailColor){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
+		trail.receiveShadows = false;
 		trail.time = 15;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;
@@ -158,7 +165,7 @@ public class Bird : MonoBehaviour
 	}
 	private string getsoundNum(){
  		int soundNum = (int) ((Random.value * 1000) % 30 ) + 1;
-		print ("print soundNum: " + soundNum.ToString());
+		//print ("print soundNum: " + soundNum.ToString());
  		return soundNum.ToString();
  	}
 	
