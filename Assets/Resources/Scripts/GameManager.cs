@@ -94,10 +94,11 @@ public class GameManager : MonoBehaviour
 	int i = 0;
 	//method to replay each dead bird
 	private void replayBirds(){
+		bool clearAll = false;
 		//print ("updating dead birds");
 		foreach(Bird mouse in dead_bird_list.Values){
-			//print (mouse.name);
 //			Debug.Log(mouse.name);
+
 			if (mouse.first) {
 				mouse.direction = new Vector2 (0, 1);
 				mouse.initBirdModel (false);
@@ -109,11 +110,22 @@ public class GameManager : MonoBehaviour
 				mouse.replay (i);
 
 			}
-			if (i == mouse.positions.Count-1){		//lol wacky trailz
-					mouse.model2.birdTrail.Clear ();
-				}
+
+			// positions.Count is slightly different length for each bird OMG
+			// basically some birds don't reach the end of their list to clear the trail lolol
+			// we probably need to change how this is done.
+//			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
+			if (i >= mouse.positions.Count || clearAll){		//lol wacky trailz
+				mouse.model2.birdTrail.Clear ();
+				clearAll = true;
+			}
 
 		}
+//		if (clearAll) {
+//			foreach (Bird mouse in dead_bird_list.Values) {
+//				mouse.model2.birdTrail.Clear ();
+//			}
+//		}
 		i++;	
 	}
 
@@ -133,7 +145,6 @@ public class GameManager : MonoBehaviour
 //			}
 		} else {
 			replayBirds ();
-			live.lolupdate ();
 
 		}
 //		Debug.Log (dead_bird_list.Keys);

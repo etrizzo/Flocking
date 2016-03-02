@@ -60,9 +60,9 @@ public class Bird : MonoBehaviour
 		positions = new List<Vector3>(100);	//intiate position list for replay
 	}
 
-	public void lolupdate ()
+	public void Update ()
 	{
-		print ("updating live");
+		//print ("updating live");
 		if (!playback) {
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
