@@ -25,6 +25,7 @@ public class Bird : MonoBehaviour
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
 	bool dead = false;
+	public bool alive;
 
 	//Variables For Replay
 	public List<Vector3> positions;
@@ -41,6 +42,8 @@ public class Bird : MonoBehaviour
 	public AudioSource birdAudio;
 	public AudioClip birdClip;
 	public Color trailColor;
+
+	public BirdRadius radius;
 
 	public bool pause;
 
@@ -63,7 +66,8 @@ public class Bird : MonoBehaviour
 		direction = new Vector2 (0, 1);
 		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
 		trailColor = getColor ();
-		initBirdModel (true);
+		alive = true;
+		initBirdModel (alive);
 		positions = new List<Vector3>(100);	//intiate position list for replay
 		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
@@ -155,10 +159,26 @@ public class Bird : MonoBehaviour
 			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
+			initBirdRadius ();
 			//Set collider for dead birds to be a trigger
-			this.GetComponent<CircleCollider2D>().isTrigger = true;
 
+
+			//this.GetComponent<CircleCollider2D>().isTrigger = true;
+
+			//model2.radiusCollider.isTrigger = true;
 		}
+	}
+
+	public void initBirdRadius(){
+		/*print ("Is bird alive? "+alive);
+		if (hasRadius && !alive) {
+			print ("Bird is dead :( :( :(");
+			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+
+			radius = radiusObject.AddComponent<BirdRadius> ();
+
+			radius.init (this);
+		}*/
 	}
 
 	void move ()
@@ -243,6 +263,12 @@ public class Bird : MonoBehaviour
 			}
 		}
 	}
+
+	/*void OnTriggerExit(CircleCollider2D other){
+		if (hasRadius) {
+			
+		}
+	}*/
 
 }
 

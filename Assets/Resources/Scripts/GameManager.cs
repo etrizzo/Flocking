@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
 		birdObject.name = "bird object";
 		Bird bird = birdObject.AddComponent<Bird> ();
 		bird.transform.parent = bird_folder.transform;
+		bird.transform.localPosition = new Vector3 (0, 0, 0);
 		if (zenMode) {
 			zenModeInit (bird);
 		} else {

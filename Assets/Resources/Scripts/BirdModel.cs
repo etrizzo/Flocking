@@ -13,6 +13,7 @@ public class BirdModel : MonoBehaviour
 	public TrailRenderer birdTrail;
 
 	public Material radiusMat;
+	public CircleCollider2D radiusCollider;
 
 	public bool pause;
 
@@ -30,7 +31,11 @@ public class BirdModel : MonoBehaviour
         this.owner = owner;
 
         transform.parent = owner.transform;					// Set the model's parent to the bird.
-        transform.localPosition = new Vector3(0,0,0);		// Center the model on the parent.
+		if (owner.alive) {
+			transform.localPosition = new Vector3 (0, 0, -1);		// Center the model on the parent.
+		} else {
+			transform.localPosition = new Vector3 (0, 0, 0);
+		}
         name = "Bird Model";									// Name the object.
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
@@ -47,7 +52,10 @@ public class BirdModel : MonoBehaviour
 		// Trail Stuff
 		if (owner.hasTrail) {
 			birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
-		}if(owner.hasRadius) {
+
+		//Radius 
+		}
+		if(owner.hasRadius && !owner.alive) {
 			makeRadius ();
 		}
 
@@ -90,6 +98,7 @@ public class BirdModel : MonoBehaviour
 //			Debug.Log (owner.gm.dead_bird_list.Count);
 
 			birdTrail.Clear ();
+			owner.alive = false;
 			Destroy (this.gameObject);
 		} else if (lifetime > 0 && !pause) {
 			lifetime -= Time.deltaTime;
@@ -97,14 +106,14 @@ public class BirdModel : MonoBehaviour
     }
 
 	void makeRadius(){
-		GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
-		radiusObject.transform.parent = this.transform;
-		radiusObject.transform.localPosition = this.transform.localPosition;
-		radiusObject.transform.localScale = new Vector3 (4f, 4f, 1f);
-		radiusMat = radiusObject.GetComponent<Renderer>().material;
-		radiusMat.mainTexture = Resources.Load<Texture2D> ("Textures/radius");
-		radiusMat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
-		radiusMat.shader = Shader.Find ("Sprites/Default");
+		if (owner.hasRadius && !owner.alive) {
+			print ("Bird is dead :( :( :(");
+			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+
+			BirdRadius radius = radiusObject.AddComponent<BirdRadius> ();
+
+			radius.init (this);
+		}
 	}
 }
 
