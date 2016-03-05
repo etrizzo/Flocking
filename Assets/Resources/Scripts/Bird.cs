@@ -35,7 +35,7 @@ public class Bird : MonoBehaviour
 	int ind = 0; // index for playback
 	public bool playback = false;
 	public bool first = true;
-	private BirdModel model2;
+	public BirdModel model2;
 	int i = 0; 
 
 	public AudioSource birdAudio;
@@ -69,7 +69,7 @@ public class Bird : MonoBehaviour
 		pause = false;
 	}
 
-	void Update ()
+	public void Update ()
 	{
 		if (Input.GetKeyDown ("space")){
 			if (!pause) {
@@ -146,25 +146,31 @@ public class Bird : MonoBehaviour
 			addSound (modelObject, birdClip);
 			model.init (this);
 		} else {
+			//print (positions.Count);
 			GameObject modelObject2 = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+			//model2.birdTrail.Clear();
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
+			//print(modelObject2.name);
 			addTrail (modelObject2, trailColor);
 			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
 			//Set collider for dead birds to be a trigger
 			this.GetComponent<CircleCollider2D>().isTrigger = true;
+
 		}
 	}
 
 	void move ()
 	{
+		//print ("Live Bird");
 		GameObject bird = this.gameObject;
 		bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
 	}
 
 	void addTrail(GameObject modelObject, Color trailColor){
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
+		trail.receiveShadows = false;
 		trail.time = 10;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;

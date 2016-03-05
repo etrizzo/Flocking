@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 	int bird_count = 0;
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
+	public Bird live;
 	// List<Weather> weather_list;
 
 	// Emily's Variables
@@ -80,6 +81,7 @@ public class GameManager : MonoBehaviour
 		col.name = "Bird Collider";
 		bird.init (this);
 		bird.name = "Bird "+ bird_count++;
+		live = bird;
 	}
 
 	Background addBGtile(int x, int y) {
@@ -106,18 +108,39 @@ public class GameManager : MonoBehaviour
 	int i = 0;
 	//method to replay each dead bird
 	private void replayBirds(){
+		bool clearAll = false;
+		//print ("updating dead birds");
 		foreach(Bird mouse in dead_bird_list.Values){
 //			Debug.Log(mouse.name);
+
 			if (mouse.first) {
 				mouse.direction = new Vector2 (0, 1);
 				mouse.initBirdModel (false);
+//				print ("Trail: " + mouse.model2.birdTrail);
+//				mouse.model2.birdTrail.Clear ();
 				mouse.first = false;
 			}
 			if ( i < mouse.movements.Count) {
 				mouse.replay (i);
-				i++;
+
 			}
-		} 
+
+			// positions.Count is slightly different length for each bird OMG
+			// basically some birds don't reach the end of their list to clear the trail lolol
+			// we probably need to change how this is done.
+//			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
+			if (i >= mouse.movements.Count || clearAll){		//lol wacky trailz
+				mouse.model2.birdTrail.Clear ();
+				clearAll = true;
+			}
+
+		}
+//		if (clearAll) {
+//			foreach (Bird mouse in dead_bird_list.Values) {
+//				mouse.model2.birdTrail.Clear ();
+//			}
+//		}
+		i++;	
 	}
 
 	void Update(){
@@ -158,6 +181,7 @@ public class GameManager : MonoBehaviour
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 	}
+		
 
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI () {

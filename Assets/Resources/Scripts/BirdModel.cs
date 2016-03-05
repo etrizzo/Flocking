@@ -10,12 +10,11 @@ public class BirdModel : MonoBehaviour
 	public Material mat;		// Material for setting/changing texture and color.
 	private AudioSource birdAudio;
 	private AudioClip birdClip;
-	private TrailRenderer birdTrail;
+	public TrailRenderer birdTrail;
 
 	public Material radiusMat;
 
 	public bool pause;
-
 
 	float lifetime;
 	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
@@ -63,10 +62,12 @@ public class BirdModel : MonoBehaviour
     }
 
     void Update () {
+		
         // Incrememnt the clock based on how much time has elapsed since the previous update.
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
+
 
 		if (Input.GetKeyDown ("space")){
 			if (!pause) {
@@ -87,6 +88,7 @@ public class BirdModel : MonoBehaviour
 			owner.gm.birdOnScreen = false;
 			owner.gm.dead_bird_list.Add (owner.name, owner);
 //			Debug.Log (owner.gm.dead_bird_list.Count);
+
 			birdTrail.Clear ();
 			Destroy (this.gameObject);
 		} else if (lifetime > 0 && !pause) {
