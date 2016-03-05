@@ -96,10 +96,11 @@ public class GameManager : MonoBehaviour
 	private void zenModeInit (Bird bird)
 	{
 		bird.hasTrail = true;
+		bird.hasRadius = true; //DELETE
 	}
 
 	private void migrationModeInit (Bird bird) {
-		// TODO
+		bird.hasRadius = true;
 	}
 
 	int i = 0;

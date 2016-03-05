@@ -17,7 +17,10 @@ public class Bird : MonoBehaviour
 	float speed_slider = 8f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
-	public bool hasTrail;
+
+	public bool hasTrail = false;
+	public bool hasRadius = false;
+
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;

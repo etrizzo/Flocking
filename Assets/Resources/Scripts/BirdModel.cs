@@ -12,6 +12,8 @@ public class BirdModel : MonoBehaviour
 	private AudioClip birdClip;
 	private TrailRenderer birdTrail;
 
+	public Material radiusMat;
+
 	public bool pause;
 
 
@@ -44,7 +46,11 @@ public class BirdModel : MonoBehaviour
 		birdAudio.Play ();
 
 		// Trail Stuff
-		birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
+		if (owner.hasTrail) {
+			birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
+		}if(owner.hasRadius) {
+			makeRadius ();
+		}
 
 		pause = false;
 
@@ -87,5 +93,16 @@ public class BirdModel : MonoBehaviour
 			lifetime -= Time.deltaTime;
 		}
     }
+
+	void makeRadius(){
+		GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+		radiusObject.transform.parent = this.transform;
+		radiusObject.transform.localPosition = this.transform.localPosition;
+		radiusObject.transform.localScale = new Vector3 (4f, 4f, 1f);
+		radiusMat = radiusObject.GetComponent<Renderer>().material;
+		radiusMat.mainTexture = Resources.Load<Texture2D> ("Textures/radius");
+		radiusMat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
+		radiusMat.shader = Shader.Find ("Sprites/Default");
+	}
 }
 
