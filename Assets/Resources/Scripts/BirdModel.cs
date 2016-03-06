@@ -45,13 +45,14 @@ public class BirdModel : MonoBehaviour
         mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 
-		// Audio stuff
-		birdAudio = GetComponent<AudioSource> ();
-		birdClip = GetComponent<AudioClip> ();
-		birdAudio.Play ();
 
 		// Trail Stuff
 		if (owner.hasTrail) {
+			// Audio stuff
+			birdAudio = GetComponent<AudioSource> ();
+			birdClip = GetComponent<AudioClip> ();
+			birdAudio.Play ();
+
 			birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
 
 		//Radius 
@@ -98,7 +99,9 @@ public class BirdModel : MonoBehaviour
 			owner.gm.dead_bird_list.Add (owner.name, owner);
 //			Debug.Log (owner.gm.dead_bird_list.Count);
 
-			birdTrail.Clear ();
+			if (owner.hasTrail) {
+				birdTrail.Clear ();
+			}
 			owner.alive = false;
 			Destroy (this.gameObject);
 		} else if (lifetime > 0 && !pause) {

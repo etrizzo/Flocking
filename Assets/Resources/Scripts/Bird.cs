@@ -146,8 +146,10 @@ public class Bird : MonoBehaviour
 		if (alive) {
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
-			addTrail (modelObject, trailColor);
-			addSound (modelObject, birdClip);
+			if (hasTrail) {
+				addTrail (modelObject, trailColor);
+				addSound (modelObject, birdClip);
+			}
 			model.init (this);
 		} else {
 			//print (positions.Count);
@@ -155,11 +157,15 @@ public class Bird : MonoBehaviour
 			//model2.birdTrail.Clear();
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 			//print(modelObject2.name);
-			addTrail (modelObject2, trailColor);
-			addSound (modelObject2, birdClip);
+			if (hasTrail) {
+				addTrail (modelObject2, trailColor);
+				addSound (modelObject2, birdClip);
+			}
 			model2.init (this);
 			model2.mat.color = Color.black;
-			initBirdRadius ();
+			if (hasRadius) {
+				initBirdRadius ();
+			}
 			//Set collider for dead birds to be a trigger
 
 
