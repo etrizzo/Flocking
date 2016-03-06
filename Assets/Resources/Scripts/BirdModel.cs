@@ -51,6 +51,7 @@ public class BirdModel : MonoBehaviour
 
 		lifetime = (float)owner.gm.bird_life;
 
+		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
     }
 
 

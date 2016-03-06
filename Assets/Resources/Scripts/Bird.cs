@@ -142,6 +142,7 @@ public class Bird : MonoBehaviour
 
 	public void initBirdModel (bool alive)
 	{
+		
 		if (alive) {
 			Camera.main.transform.position = new Vector3 (0, 0, -10);
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
@@ -159,10 +160,12 @@ public class Bird : MonoBehaviour
 			addSound (modelObject2, birdClip);
 			model2.init (this);
 			model2.mat.color = Color.black;
-			//Set collider for dead birds to be a trigger
-			this.GetComponent<CircleCollider2D>().isTrigger = true;
+
+
 
 		}
+		//Set collider for dead birds to be a trigger
+		this.GetComponent<CircleCollider2D>().isTrigger = true;
 	}
 
 	void move ()
@@ -267,6 +270,7 @@ public class Bird : MonoBehaviour
 			cam.transform.position, cameraPos, Time.deltaTime * smooth
 		);
 	}
+
 
 }
 

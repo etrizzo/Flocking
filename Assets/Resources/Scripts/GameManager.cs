@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
 	public int bird_num = 8;
 	public int bird_life = 10;
 
+	Destination dest;
+
 
 	void Start ()
 	{
@@ -48,19 +50,23 @@ public class GameManager : MonoBehaviour
 		dist = (transform.position - cam.transform.position).z;
 		bird_folder = new GameObject ();
 		bird_folder.name = "Birds";
+		//get coordinates of the edges according to:
+		//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
+		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
+		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
 
 		if (zenMode) {
 			//zoom out the camera in zen mode
 			cam.orthographicSize = 10f;
 			BGSCALE = 1f;
+		} else {
+			makeDestination ();
 		}
-		//get coordinates of the edges according to:
-		//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
-		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
-		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
-		this.bg = addBGtile (0, 0);
-		//newBird ();
 
+				this.bg = addBGtile (0, 0);
+		//newBird ();
+		
+	
 	}
 
 	private void newBird() {
@@ -75,10 +81,16 @@ public class GameManager : MonoBehaviour
 			migrationModeInit (bird);
 		
 		}
-		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
-		rb.gravityScale = 0;
+
+//		rb.gravityScale = 0;
 		//rb.isKinematic = true;
+		DestroyImmediate(bird.gameObject.GetComponent<MeshCollider>());
 		CircleCollider2D col = bird.gameObject.AddComponent<CircleCollider2D> ();
+		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
+		col.isTrigger = true;
+		rb.isKinematic = true;
+//		rb.gravityScale = 0;
+		//rb.useGravity = false;
 		col.name = "Bird Collider";
 		bird.init (this);
 		bird.name = "Bird "+ bird_count++;
@@ -248,6 +260,14 @@ public class GameManager : MonoBehaviour
 			go = true;
 			newBird ();
 		}
+	}
+
+	private void makeDestination(){
+		GameObject destinationObject = new GameObject ();
+		destinationObject.name = "Destination";
+		dest = destinationObject.AddComponent<Destination> ();
+		dest.init ();
+
 	}
 
 
