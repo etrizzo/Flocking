@@ -5,7 +5,8 @@ using System.Collections;
 public class BirdModel : MonoBehaviour
 {
     private float clock;		// Keep track of time since creation for animation.
-    private Bird owner;			// Pointer to the parent object.
+    public Bird owner;			// Pointer to the parent object.
+	public BirdRadius radius;
 
 	public Material mat;		// Material for setting/changing texture and color.
 	private AudioSource birdAudio;
@@ -110,7 +111,7 @@ public class BirdModel : MonoBehaviour
 			print ("Bird is dead :( :( :(");
 			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 
-			BirdRadius radius = radiusObject.AddComponent<BirdRadius> ();
+			radius = radiusObject.AddComponent<BirdRadius> ();
 
 			radius.init (this);
 		}

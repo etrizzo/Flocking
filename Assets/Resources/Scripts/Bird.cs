@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Bird : MonoBehaviour
 {
 
-	private BirdModel model;
+	public BirdModel model;
 	public GameManager gm;
 	// The model object.
 	public Vector3 mouse_pos, world_pos;

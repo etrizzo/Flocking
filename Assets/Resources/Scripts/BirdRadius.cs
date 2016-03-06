@@ -14,6 +14,8 @@ public class BirdRadius : MonoBehaviour
 
 	public bool pause;
 
+	public bool containsBird;
+
 	public void init(BirdModel owner) {
 		this.owner = owner;
 
@@ -21,6 +23,8 @@ public class BirdRadius : MonoBehaviour
 		transform.localPosition = new Vector3 (0, 0, 0);
 		transform.localScale = new Vector3 (4f, 4f, 1f);
 		name = "Bird Radius";
+
+		containsBird = false;
 
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider> ());
 		radiusCollider = this.gameObject.AddComponent<CircleCollider2D> ();
@@ -31,10 +35,6 @@ public class BirdRadius : MonoBehaviour
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/radius");	// Set the texture.  Must be in Resources folder.
 		mat.color = new Color(1,1,1, .5f);											// Set the color (easy way to tint things).
 		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
-	
-		radiusCollider = this.gameObject.AddComponent<CircleCollider2D> ();
-		radiusCollider.radius = .5f;
-		radiusCollider.isTrigger = true;
 	}
 
 	void Start () {
@@ -49,16 +49,21 @@ public class BirdRadius : MonoBehaviour
 		clock = clock + Time.deltaTime;
 	}
 
-	void OnTriggerEnter(CircleCollider2D other){
-		Debug.Log ("ENTERED");
+	void OnTriggerEnter2D(Collider2D other){
+		Bird otherBird = other.gameObject.GetComponent<Bird> ();
+		if (otherBird != null && otherBird.alive) {
+			containsBird = true;
+		}
+		//Debug.Log ("ENTERED "+other.gameObject.name);
 	}
 
-	void OnTriggerExit(CircleCollider2D other){
-		Debug.Log ("DESTROYED "+ other);
+	void OnTriggerExit2D(Collider2D other){
+		//Debug.Log ("DESTROYED "+ other);
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
-		if (otherBird.hasRadius && otherBird.alive) {
-			
-			Destroy (otherBird.gameObject);
+		if (otherBird != null && otherBird.alive) {
+			containsBird = false;
+			owner.owner.gm.checkKill ();
+			//Destroy (otherBird.gameObject);
 		}
 	}
 }

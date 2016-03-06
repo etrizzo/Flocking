@@ -236,10 +236,10 @@ public class GameManager : MonoBehaviour
 			life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
 
 			GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
-			bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 0.0F, 30.0F);
+			bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
 
-			GUI.Box (life_slider_rect, "Bird Lifetime: " + bird_life.ToString ());
-			bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 0.0F, 60.0F);
+			GUI.Box (life_slider_rect, "Bird Lifetime (sec): " + bird_life.ToString ());
+			bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
 		}
 
 		xpos = ((Screen.width)-(150))/2;
@@ -247,6 +247,19 @@ public class GameManager : MonoBehaviour
 		if (!go && !done && !pause && GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
 			go = true;
 			newBird ();
+		}
+	}
+
+	public void checkKill(){
+		bool kill = true;
+		foreach (Bird mouse in dead_bird_list.Values) {
+			print ("checking "+mouse.name+" model: "+mouse.model2.name);
+			if (mouse.model2.radius.containsBird) {
+				kill = false;
+			}
+		}
+		if (kill) {
+			Destroy (live.gameObject);
 		}
 	}
 
