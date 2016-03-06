@@ -81,20 +81,35 @@ public class BirdModel : MonoBehaviour
 			}
 
 		}
+		if (GameManager.zenMode) {
+			if (lifetime <= 0 && !owner.playback && !pause) {
+				
+				RestartBirds();
+			} else if (lifetime > 0 && !pause) {
+				lifetime -= Time.deltaTime;
+			}
+		} else {
+			if (owner.AtDestination) {
+				RestartBirds ();
 
-		if (lifetime <= 0 && !owner.playback && !pause) {
-			// TODO: Add to gamemanager's list of repeatable birds
-			owner.playback = true;
-			owner.gm.birdOnScreen = false;
-			owner.gm.dead_bird_list.Add (owner.name, owner);
-//			Debug.Log (owner.gm.dead_bird_list.Count);
+			}
 
-			birdTrail.Clear ();
-			Destroy (this.gameObject);
-		} else if (lifetime > 0 && !pause) {
-			lifetime -= Time.deltaTime;
 		}
     }
+
+
+	void RestartBirds(){
+		// TODO: Add to gamemanager's list of repeatable birds
+		owner.playback = true;
+		owner.gm.birdOnScreen = false;
+		owner.gm.dead_bird_list.Add (owner.name, owner);
+		//			Debug.Log (owner.gm.dead_bird_list.Count);
+
+		birdTrail.Clear ();
+		owner.AtDestination = false;
+		Destroy (this.gameObject);
+
+	}
 
 }
 

@@ -32,8 +32,10 @@ public class DestinationModel : MonoBehaviour
 	}
 
 
-	void OnTriggerEnter(){
-		print ("loludidit");
+	void OnTriggerEnter2D(Collider2D col){
+//		print ("loludidit");
+		Bird bird = col.gameObject.GetComponent<Bird> ();
+		bird.AtDestination = true;
 	}
 
 

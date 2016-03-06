@@ -40,6 +40,7 @@ public class Bird : MonoBehaviour
 	public Color trailColor;
 
 	public bool pause;
+	public bool AtDestination = false;
 
 
 
@@ -64,6 +65,7 @@ public class Bird : MonoBehaviour
 		positions = new List<Vector3>(100);	//intiate position list for replay
 		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
+
 	}
 
 	public void Update ()

@@ -38,9 +38,6 @@ public class Destination : MonoBehaviour {
 //		this.gameObject.AddComponent<BoxCollider2D> ();
 
 	}
-	void OnTriggerEnter(){
-		print ("loludidit");
-	}
 
 
 
