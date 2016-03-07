@@ -48,6 +48,9 @@ public class Bird : MonoBehaviour
 	public bool pause;
 	public bool AtDestination = false;
 
+	public bool mouse = false;
+	float rotation_angle = 100f; //how to update subject to change
+
 
 
 	void OnGUI ()
@@ -91,10 +94,15 @@ public class Bird : MonoBehaviour
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
 			//getMousePos ();
-			if (counter % distanceFromMouse == 0) {
-				//	direction = mouse_pos;
-				move ();
-				rotateTowardMouse ();
+			if (mouse) {
+				if (counter % distanceFromMouse == 0) {
+					//	direction = mouse_pos;
+					move ();
+					rotateTowardMouse ();
+				}
+			} else {
+				speed = speed_slider;
+				arrowMove ();
 			}
 			checkBoundaries ();
 			recordPosition ();
@@ -285,6 +293,15 @@ public class Bird : MonoBehaviour
 		cam.transform.position = Vector3.Lerp (
 			cam.transform.position, cameraPos, Time.deltaTime * smooth
 		);
+	}
+
+	void arrowMove(){
+		float rot_speed = Input.GetAxis ("Vertical");        //-1, 1, or 0 depending on up/down keys
+		float rotation = Input.GetAxis ("Horizontal") * rotation_angle * -1;
+		rot_speed = ((rot_speed / 2) + 1);    //changes rotation speed multiplier to  1.5 or .5
+		transform.Translate (0, speed*Time.deltaTime, 0);
+		transform.Rotate (0, 0, (rotation * rot_speed) * Time.deltaTime);
+
 	}
 
 }
