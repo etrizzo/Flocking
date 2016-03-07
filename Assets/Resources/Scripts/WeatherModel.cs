@@ -3,6 +3,8 @@ using System.Collections;
 
 public class WeatherModel : MonoBehaviour
 {
+
+	int weather_counter = 0;
 	// Keep track of time since creation for animation.
 	private float clock;
 	// Pointer to the parent object.
@@ -40,6 +42,10 @@ public class WeatherModel : MonoBehaviour
 		y_range.y = -1 * y_range.x;
 	}
 
+	public void move_location() {
+		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
+	}
+
 	public void init (Weather owner)
 	{
 		this.owner = owner;
@@ -48,7 +54,7 @@ public class WeatherModel : MonoBehaviour
 
 //		transform.parent = owner.transform;// Set the model's parent to the bird.
 //		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
-		name = "Weather Model — " + owner.type;// Name the object.
+		name = "Weather Model " + ++weather_counter + "— " + owner.type;// Name the object.
 		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
 		transform.localScale = new Vector3 (scale, scale, 1);
 
@@ -114,6 +120,6 @@ public class WeatherModel : MonoBehaviour
 		// to Update is unpredictable.
 		clock = clock + Time.deltaTime;
 
-		transform.localScale = new Vector3 (scale, scale, scale);
+//		transform.localScale = new Vector3 (scale, scale, scale);
 	}
 }

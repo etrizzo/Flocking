@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
 	public Bird live;
-	// List<Weather> weather_list;
 
 	// Emily's Variables
 	public Camera cam;
@@ -53,7 +52,7 @@ public class GameManager : MonoBehaviour
 	Destination dest;
 
 	int weather_count = 50;
-	public List<Weather> weather_list = new List<Weather>();
+	public List<WeatherModel> weather_list = new List<WeatherModel>();
 
 	void Start ()
 	{
@@ -478,14 +477,14 @@ public class GameManager : MonoBehaviour
 	{
 		Weather new_weather = gameObject.AddComponent<Weather> ();
 		do {
-			new_weather.init ("cloud");
-			weather_list.Add(new_weather);
+			WeatherModel new_model = new_weather.init ("cloud");
+			weather_list.Add(new_model);
 		} while (--weather_count != 0);
 	}
 
 	public void clearWeather() {
-		foreach (Weather w in weather_list) {
-//			w.GetComponent<WeatherModel> ().init();
+		foreach (WeatherModel w_model in weather_list) {
+			w_model.move_location();
 		}
 	}
 }
