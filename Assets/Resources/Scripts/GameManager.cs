@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 	GuiState state;
 
+	public float score;
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
 	public bool go;
 	private bool done;
 	public bool pause;
+	public float loadScreenCounter = 5f;
 
 	public int bird_num = 8;
 	public int bird_life = 10;
@@ -206,11 +208,11 @@ public class GameManager : MonoBehaviour
 			}
 		}
 		if (kill) {
-			
+			cam.transform.localPosition = new Vector3 (0, 0, 10f);
 			Destroy (live.gameObject);
 			birdOnScreen = false;
 			clearWeather ();
-		}
+		} 
 	}
 
 	private void initSound(AudioClip gameClip){
@@ -236,6 +238,7 @@ public class GameManager : MonoBehaviour
 
 		}
 		if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
+			
 			birdOnScreen = true;
 			i = 0; //reset replay
 //			Debug.Log (dead_bird_list.Count);
@@ -248,7 +251,10 @@ public class GameManager : MonoBehaviour
 //			{
 //				Debug.Log(key +"     "+ dead_bird_list[key]);
 //			}
+			loadScreenCounter = 5f;
+			state.mode = 6;
 		} else if (go && !pause && !done && bird_num >= 0) {
+			
 			replayBirds ();
 
 		} else if (bird_num <= 0) {
@@ -269,6 +275,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
+		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -287,6 +294,9 @@ public class GameManager : MonoBehaviour
 			break;
 		case 5:
 			unpauseGame ();
+			break;
+		case 6:
+			loadScreen ();
 			break;
 		}
 	}
@@ -396,7 +406,8 @@ public class GameManager : MonoBehaviour
 		go = true;
 		initMode ();
 		newBird ();
-		state.mode = 5;
+		loadScreenCounter = 5f;
+		state.mode = 6;
 	}
 
 	private void pauseGame ()
@@ -430,6 +441,31 @@ public class GameManager : MonoBehaviour
 		dest.init ();
 
 	}
+		
+	private void loadScreen(){
+		Time.timeScale = 0;
+		loadScreenCounter -= Time.unscaledDeltaTime*.5f;
+		int countdown = (int)loadScreenCounter+1;
+		GUIStyle guiStyle = new GUIStyle ();
+		int xpos = ((Screen.width) - (150)) / 2;
+		int ypos = ((Screen.height) - (60)) / 2;
+		guiStyle.fontSize = 60;
+		guiStyle.normal.textColor = new Color (58, 148, 130);
+		if (loadScreenCounter > 3) {
+			GUI.Label (new Rect (xpos, ypos, 150, 60), "Ready?", guiStyle);
+		}
+		else if (loadScreenCounter > 0) {
+			
+			GUI.Label (new Rect (xpos, ypos, 150, 60), countdown.ToString ()+"...", guiStyle);
+		} 
+		else if(loadScreenCounter > -1){
+			GUI.Label (new Rect (xpos, ypos, 150, 60), "Go!", guiStyle);
+		}
+		else {
+			state.mode = 5;
+		}
+	}
+
 
 	/************************ End Gui Stuff ****************************/
 

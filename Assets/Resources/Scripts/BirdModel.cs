@@ -112,6 +112,7 @@ public class BirdModel : MonoBehaviour
 			}
 		} else {
 			if (owner.AtDestination) {
+				owner.gm.score += 100;
 				RestartBirds ();
 
 			}
