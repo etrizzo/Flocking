@@ -131,7 +131,8 @@ public class BirdModel : MonoBehaviour
 	}
 
 	void RestartBirds(){
-		// TODO: Add to gamemanager's list of repeatable birds
+		// TODO: Add to gamemanager's list of repeatable birds'
+		owner.speed_slider ++;
 		owner.alive = false;
 		owner.playback = true;
 		owner.alive = false;

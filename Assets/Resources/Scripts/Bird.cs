@@ -13,7 +13,7 @@ public class Bird : MonoBehaviour
 	private float cameraDiff;
 	int screen_x, screen_y;
 	float distanceFromMouse = 2;
-	float speed_slider = 4f;
+	public float speed_slider = 4f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
 
@@ -60,8 +60,9 @@ public class Bird : MonoBehaviour
 		}
 	}
 
-	public void init(GameManager gm)
+	public void init(GameManager gm, float speed)
 	{
+		this.speed_slider = speed;
 		this.gm = gm;
 		initSlider ();
 		getMousePos ();
