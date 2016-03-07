@@ -63,6 +63,7 @@ public class BirdModel : MonoBehaviour
 		//Radius 
 		}
 		if(owner.hasRadius && !owner.alive) {
+			Debug.Log("radius");
 			makeRadius ();
 		}
 
@@ -91,11 +92,15 @@ public class BirdModel : MonoBehaviour
 		if (Input.GetKeyDown ("space")){
 			if (!pause) {
 				pause = true;
-				birdAudio.Pause ();
+				if (owner.gm.zenMode) {
+					birdAudio.Pause ();
+				}
 				Time.timeScale = 0;
 			} else {
 				pause = false;
-				birdAudio.UnPause ();
+				if (owner.gm.zenMode) {
+					birdAudio.UnPause ();
+				}
 				Time.timeScale = 1;
 			}
 
@@ -114,7 +119,7 @@ public class BirdModel : MonoBehaviour
 			}
 		}
 
-		if (lifetime <= 0 && !owner.playback && !pause) {
+		/*if (lifetime <= 0 && !owner.playback && !pause) {
 			// TODO: Add to gamemanager's list of repeatable birds
 			owner.playback = true;
 			owner.gm.birdOnScreen = false;
@@ -128,7 +133,7 @@ public class BirdModel : MonoBehaviour
 			Destroy (this.gameObject);
 		} else if (lifetime > 0 && !pause) {
 			lifetime -= Time.deltaTime;
-		}
+		}*/
     }
 
 	void makeRadius(){
@@ -145,10 +150,11 @@ public class BirdModel : MonoBehaviour
 	void RestartBirds(){
 		// TODO: Add to gamemanager's list of repeatable birds
 		owner.playback = true;
+		owner.alive = false;
 		owner.gm.birdOnScreen = false;
 		owner.gm.dead_bird_list.Add (owner.name, owner);
 		//			Debug.Log (owner.gm.dead_bird_list.Count);
-		if (owner.gm.zenMode) {
+		if (owner.hasTrail) {
 			birdTrail.Clear ();
 		} else {
 			owner.AtDestination = false;

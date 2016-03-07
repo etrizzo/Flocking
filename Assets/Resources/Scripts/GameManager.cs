@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 	GuiState state;
 
 	public bool zenMode;
+	public AudioSource gameAudio;
+	public AudioClip gameClip;
 
 	int bird_count = 0;
 	public bool birdOnScreen = true;
@@ -65,6 +67,9 @@ public class GameManager : MonoBehaviour
 
 		this.bg = addBGtile (0, 0);
 		//newBird ();
+
+		gameClip = Resources.Load<AudioClip> ("Sounds/StartMenu");
+		initSound (gameClip);
 
 	}
 
@@ -192,6 +197,17 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	private void initSound(AudioClip gameClip){
+		gameAudio = this.gameObject.AddComponent<AudioSource> ();
+		gameAudio.loop = true;
+		getSound (gameClip);
+	}
+
+	private void getSound(AudioClip gameClip){
+		gameAudio.clip = gameClip;
+		gameAudio.Play ();
+	}
+
 	void Update(){
 		if (Input.GetKeyDown ("space")){
 			if (!pause && go) {
@@ -259,6 +275,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void getMode(){
+
 		GUIStyle guiStyle = new GUIStyle();
 		int xpos;
 		int ypos;
@@ -350,6 +367,12 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void startGame(){
+		if (!zenMode) {
+			gameClip = Resources.Load<AudioClip> ("Sounds/BackgroundMigration");
+			getSound (gameClip);
+		} else {
+			DestroyImmediate (gameAudio);
+		}
 		go = true;
 		initMode ();
 		newBird ();

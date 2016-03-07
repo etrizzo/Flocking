@@ -174,9 +174,6 @@ public class Bird : MonoBehaviour
 			model2.init (this);
 			model2.mat.color = Color.black;
 
-			if (hasRadius) {
-				initBirdRadius ();
-			}
 			//Set collider for dead birds to be a trigger
 
 
@@ -186,18 +183,6 @@ public class Bird : MonoBehaviour
 		}
 		//Set collider for dead birds to be a trigger
 		this.GetComponent<CircleCollider2D>().isTrigger = true;
-	}
-
-	public void initBirdRadius(){
-		/*print ("Is bird alive? "+alive);
-		if (hasRadius && !alive) {
-			print ("Bird is dead :( :( :(");
-			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
-
-			radius = radiusObject.AddComponent<BirdRadius> ();
-
-			radius.init (this);
-		}*/
 	}
 
 	void move ()
