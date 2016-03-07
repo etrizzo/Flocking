@@ -14,7 +14,7 @@ public class Bird : MonoBehaviour
 	private float cameraDiff;
 	int screen_x, screen_y;
 	float distanceFromMouse = 2;
-	float speed_slider = 8f;
+	float speed_slider = 4f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
 
@@ -51,7 +51,7 @@ public class Bird : MonoBehaviour
 
 	void OnGUI ()
 	{
-		if (!playback) {
+		if (!playback && gm.zenMode) {
 			GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
 			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 		}

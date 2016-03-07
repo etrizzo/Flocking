@@ -23,7 +23,7 @@ public class BirdModel : MonoBehaviour
 
 	void OnGUI ()
 	{
-		if (!owner.playback) {
+		if (!owner.playback && owner.gm.zenMode) {
 			GUI.Box (clock_rect, "Bird time: " + lifetime);
 		}
 	}

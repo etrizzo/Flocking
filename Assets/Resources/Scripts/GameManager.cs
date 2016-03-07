@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 	}
 	GuiState state;
 
-	bool zenMode;
+	public bool zenMode;
 	int bird_count = 0;
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
@@ -161,13 +161,14 @@ public class GameManager : MonoBehaviour
 	public void checkKill(){
 		bool kill = true;
 		foreach (Bird mouse in dead_bird_list.Values) {
-			print ("checking "+mouse.name+" model: "+mouse.model2.name);
 			if (mouse.model2.radius.containsBird) {
 				kill = false;
 			}
 		}
 		if (kill) {
+			
 			Destroy (live.gameObject);
+			birdOnScreen = false;
 		}
 	}
 
@@ -209,6 +210,8 @@ public class GameManager : MonoBehaviour
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
 	}
+
+	/************************ Start Gui Stuff ****************************/
 
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI () {
@@ -352,6 +355,10 @@ public class GameManager : MonoBehaviour
 			state.mode = 4;
 		}
 	}
+
+
+
+	/************************ End Gui Stuff ****************************/
 
 
 

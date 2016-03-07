@@ -54,16 +54,13 @@ public class BirdRadius : MonoBehaviour
 		if (otherBird != null && otherBird.alive) {
 			containsBird = true;
 		}
-		//Debug.Log ("ENTERED "+other.gameObject.name);
 	}
 
 	void OnTriggerExit2D(Collider2D other){
-		//Debug.Log ("DESTROYED "+ other);
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;
 			owner.owner.gm.checkKill ();
-			//Destroy (otherBird.gameObject);
 		}
 	}
 }
