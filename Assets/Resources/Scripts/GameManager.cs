@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
 	public Bird live;
+	public float timeUntilKill;
+	public bool inRadius;
 
 	// Emily's Variables
 	public Camera cam;
@@ -96,6 +98,7 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else { //in migration mode
 //			BGSCALE = 2f;
+			inRadius = true;
 			makeDestination ();
 			makeWeather ();
 		}
@@ -201,20 +204,21 @@ public class GameManager : MonoBehaviour
 	}
 
 
-	public void checkKill ()
+	public void checkBirdInRadius ()
 	{
-		bool kill = true;
+		inRadius = false;
+		timeUntilKill = 2f;
 		foreach (Bird mouse in dead_bird_list.Values) {
 			if (mouse.model2.radius.containsBird) {
-				kill = false;
+				inRadius = true;
 			}
 		}
-		if (kill) {
+		/*if (!inRadius) {
 			cam.transform.localPosition = new Vector3 (0, 0, 10f);
 			Destroy (live.gameObject);
 			birdOnScreen = false;
 			clearWeather ();
-		} 
+		} */
 	}
 
 	private void initSound(AudioClip gameClip){
@@ -269,6 +273,15 @@ public class GameManager : MonoBehaviour
 			//(seems like a lot of unneccessary calculation but there's no OnResize event that I can find)
 			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
+		} else if (!inRadius) {
+			timeUntilKill -= Time.deltaTime;
+			if (timeUntilKill < 0) {
+				cam.transform.localPosition = new Vector3 (0, 0, 10f);
+				inRadius = true;
+				Destroy (live.gameObject);
+				birdOnScreen = false;
+				clearWeather ();
+			}
 		}
 	}
 
@@ -277,7 +290,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
-		
+		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -300,9 +313,6 @@ public class GameManager : MonoBehaviour
 		case 6:
 			loadScreen ();
 			break;
-		}
-		if (!zenMode){
-			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
 		}
 	}
 

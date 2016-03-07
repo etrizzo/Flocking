@@ -13,7 +13,7 @@ public class WeatherModel : MonoBehaviour
 	private Material mat;
 
 	// Random weather position min/max
-	private static int weather_border = 5;
+	private static int weather_border = 1;
 	Vector2 x_range = new Vector2 (GameManager.x_coord * GameManager.BGSCALE - weather_border, 0);
 	Vector2 y_range = new Vector2 (GameManager.y_coord * GameManager.BGSCALE + weather_border, 0);
 	Vector2 slider_coords = new Vector2 (200, 10);

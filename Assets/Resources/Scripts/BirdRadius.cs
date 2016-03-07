@@ -21,7 +21,7 @@ public class BirdRadius : MonoBehaviour
 
 		transform.parent = owner.transform;					// Set the model's parent to the bird.
 		transform.localPosition = new Vector3 (0, 0, 0);
-		transform.localScale = new Vector3 (4f, 4f, 1f);
+		transform.localScale = new Vector3 (7f, 7f, 1f);
 		name = "Bird Radius";
 
 		containsBird = false;
@@ -53,6 +53,7 @@ public class BirdRadius : MonoBehaviour
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = true;
+			owner.owner.gm.checkBirdInRadius ();
 		}
 	}
 
@@ -60,7 +61,7 @@ public class BirdRadius : MonoBehaviour
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;
-			owner.owner.gm.checkKill ();
+			owner.owner.gm.checkBirdInRadius ();
 		}
 	}
 }
