@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
-		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
+		
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -299,6 +299,9 @@ public class GameManager : MonoBehaviour
 		case 6:
 			loadScreen ();
 			break;
+		}
+		if (!zenMode){
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
 		}
 	}
 
