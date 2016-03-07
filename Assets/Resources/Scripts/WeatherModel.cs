@@ -16,7 +16,7 @@ public class WeatherModel : MonoBehaviour
 	Vector2 y_range = new Vector2 (GameManager.y_coord * GameManager.BGSCALE + weather_border, 0);
 	Vector2 slider_coords = new Vector2 (200, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
-	float scale = 1f;
+	float scale = 3f;
 	Rect slider_rect, slider_box_rect;
 
 
@@ -24,11 +24,11 @@ public class WeatherModel : MonoBehaviour
 	int timeIn = 0;
 	bool containsBird;
 
-	void OnGUI ()
-	{
-		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
-		scale = GUI.HorizontalSlider (slider_box_rect, scale, 1F, 20.0F);
-	}
+//	void OnGUI ()
+//	{
+//		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
+//		scale = GUI.HorizontalSlider (slider_box_rect, scale, 1F, 20.0F);
+//	}
 
 	void Start ()
 	{
@@ -50,7 +50,7 @@ public class WeatherModel : MonoBehaviour
 //		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
 		name = "Weather Model — " + owner.type;// Name the object.
 		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
-		transform.localScale = new Vector3 (3, 3, 3);
+		transform.localScale = new Vector3 (scale, scale, 1);
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
 		mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + owner.type);// Set the texture.  Must be in Resources folder.
