@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 	GuiState state;
 
+	public float score;
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
@@ -207,11 +208,11 @@ public class GameManager : MonoBehaviour
 			}
 		}
 		if (kill) {
-			
+			cam.transform.localPosition = new Vector3 (0, 0, 10f);
 			Destroy (live.gameObject);
 			birdOnScreen = false;
 			clearWeather ();
-		}
+		} 
 	}
 
 	private void initSound(AudioClip gameClip){
@@ -237,6 +238,7 @@ public class GameManager : MonoBehaviour
 
 		}
 		if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
+			
 			birdOnScreen = true;
 			i = 0; //reset replay
 //			Debug.Log (dead_bird_list.Count);
@@ -250,6 +252,7 @@ public class GameManager : MonoBehaviour
 //				Debug.Log(key +"     "+ dead_bird_list[key]);
 //			}
 		} else if (go && !pause && !done && bird_num >= 0) {
+			
 			replayBirds ();
 
 		} else if (bird_num <= 0) {
@@ -270,6 +273,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
+		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
 		switch (state.mode) {
 		case 0:
 			getMode ();

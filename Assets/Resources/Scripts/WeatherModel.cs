@@ -72,12 +72,19 @@ public class WeatherModel : MonoBehaviour
 
 	void OnTriggerStay2D (Collider2D other)
 	{
+		Bird bird = other.gameObject.GetComponent<Bird> ();
+		if (bird) {
+			bird.gm.score -= .2f;
+			if (bird.gm.score < 0) {
+				bird.gm.score = 0;
+			}
+		}
 		if (containsBird) {
 		// Glow blue randomly
 		mat.color = new Color (0, 0, Random.Range (-255, 255));
-		if (debug) {
-			print ("booped " + other.name + ", time: " + timeIn++);
-		}
+//		if (debug) {
+//			print ("booped " + other.name + ", time: " + timeIn++);
+//		}
 		}
 	}
 

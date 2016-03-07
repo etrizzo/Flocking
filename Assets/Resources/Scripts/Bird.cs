@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Bird : MonoBehaviour
 {
-
 	public BirdModel model;
 	public GameManager gm;
 	// The model object.
@@ -48,7 +47,7 @@ public class Bird : MonoBehaviour
 	public bool pause;
 	public bool AtDestination = false;
 
-	public bool mouse = false;
+	public bool mouse = true;
 	float rotation_angle = 100f; //how to update subject to change
 
 
@@ -91,6 +90,7 @@ public class Bird : MonoBehaviour
 
 		}
 		if (!playback && !pause) {
+			gm.score += Time.deltaTime;
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
 			//getMousePos ();
@@ -301,7 +301,6 @@ public class Bird : MonoBehaviour
 		rot_speed = ((rot_speed / 2) + 1);    //changes rotation speed multiplier to  1.5 or .5
 		transform.Translate (0, speed*Time.deltaTime, 0);
 		transform.Rotate (0, 0, (rotation * rot_speed) * Time.deltaTime);
-
 	}
 
 }
