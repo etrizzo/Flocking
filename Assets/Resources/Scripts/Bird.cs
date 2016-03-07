@@ -46,6 +46,7 @@ public class Bird : MonoBehaviour
 	public BirdRadius radius;
 
 	public bool pause;
+	public bool AtDestination = false;
 
 
 
@@ -71,6 +72,7 @@ public class Bird : MonoBehaviour
 		positions = new List<Vector3>(100);	//intiate position list for replay
 		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
+
 	}
 
 	public void Update ()
@@ -88,9 +90,9 @@ public class Bird : MonoBehaviour
 		if (!playback && !pause) {
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();
-			getMousePos ();
+			//getMousePos ();
 			if (counter % distanceFromMouse == 0) {
-				//			direction = mouse_pos;
+				//	direction = mouse_pos;
 				move ();
 				rotateTowardMouse ();
 			}
@@ -108,6 +110,12 @@ public class Bird : MonoBehaviour
 //				i++;
 //			}
 //		}
+
+		if (!gm.zenMode) {
+			moveCam ();
+
+		}
+		getMousePos ();
 	}
 
 	/****************** Replay Functions ***************/
@@ -143,7 +151,9 @@ public class Bird : MonoBehaviour
 
 	public void initBirdModel (bool alive)
 	{
+		
 		if (alive) {
+			Camera.main.transform.position = new Vector3 (0, 0, -10);
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 			if (hasTrail) {
@@ -163,6 +173,7 @@ public class Bird : MonoBehaviour
 			}
 			model2.init (this);
 			model2.mat.color = Color.black;
+
 			if (hasRadius) {
 				initBirdRadius ();
 			}
@@ -173,6 +184,8 @@ public class Bird : MonoBehaviour
 
 			//model2.radiusCollider.isTrigger = true;
 		}
+		//Set collider for dead birds to be a trigger
+		this.GetComponent<CircleCollider2D>().isTrigger = true;
 	}
 
 	public void initBirdRadius(){
@@ -232,10 +245,14 @@ public class Bird : MonoBehaviour
 	{
 		// The following is modified from:
 		// http://answers.unity3d.com/questions/653798/character-always-facing-mouse-cursor-position.html
-		Vector3 cur_mouse_pos = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10);
-		Vector3 look_pos = Camera.main.ScreenToWorldPoint (cur_mouse_pos);
-		look_pos = look_pos - transform.position;
+//		Vector3 cur_mouse_pos = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10);
+//		Vector3 look_pos = Camera.main.ScreenToWorldPoint (cur_mouse_pos);
+
+		//something about the timing of when the mouse position is recorded was messing up playback in migration mode
+		//changing from the other mouse position works
+		Vector3 look_pos = mouse_pos - transform.position;
 		float angle = Mathf.Atan2 (look_pos.y, look_pos.x) * Mathf.Rad2Deg;
+		//float angle = Mathf.Atan2 (mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.AngleAxis (angle - 90, Vector3.forward);
 	}
 
@@ -249,32 +266,40 @@ public class Bird : MonoBehaviour
 	//work on this more later - 
 	//	eliminates need for collider borders but feels a little rigid (maybe an animation?)
 	void checkBoundaries(){
+		
 		float check = .4f;
 		float move = .4f;
+		float x = GameManager.x_coord * GameManager.BGSCALE;
+		float y = GameManager.y_coord * GameManager.BGSCALE;
 		//if the bird is outside of the boundaries (with a buffer for the size of the model)
 		//move it back to the edge of the map
-		if (Mathf.Abs (this.transform.position.x) > GameManager.x_coord - check) {
+		if (Mathf.Abs (this.transform.position.x) > x - check) {
 			if (this.transform.position.x > 0) {
-				this.transform.position = new Vector3 (GameManager.x_coord - move, this.transform.position.y, 0);
+				this.transform.position = new Vector3 (x - move, this.transform.position.y, 0);
 			} else {
-				this.transform.position = new Vector3 (GameManager.x_coord * -1 + move, this.transform.position.y, 0);
+				this.transform.position = new Vector3 (x * -1 + move, this.transform.position.y, 0);
 			}
 		}
-		if (Mathf.Abs (this.transform.position.y) > GameManager.y_coord*-1 - check) {
+		if (Mathf.Abs (this.transform.position.y) > y*-1 - check) {
 			if (this.transform.position.y > 0) {
 				this.transform.position = 
-					new Vector3 (this.transform.position.x, GameManager.y_coord*-1 - move, 0);
+					new Vector3 (this.transform.position.x, y*-1 - move, 0);
 			} else {
-				this.transform.position = new Vector3 (this.transform.position.x, GameManager.y_coord + move, 0);
+				this.transform.position = new Vector3 (this.transform.position.x, y + move, 0);
 			}
 		}
+
 	}
 
-	/*void OnTriggerExit(CircleCollider2D other){
-		if (hasRadius) {
-			
-		}
-	}*/
+	void moveCam(){
+		Camera cam = Camera.main;
+		float smooth = 3.0f;
+		Vector3 cameraPos = new Vector3 (this.transform.position.x, this.transform.position.y, -10);
+		cam.transform.position = cameraPos;
+		cam.transform.position = Vector3.Lerp (
+			cam.transform.position, cameraPos, Time.deltaTime * smooth
+		);
+	}
 
 }
 

@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 
@@ -15,10 +16,10 @@ public class BackgroundModel : MonoBehaviour
 
         transform.parent = owner.transform;					// Set the model's parent to the background.
         transform.localPosition = new Vector3(0,0,1f);		// Center the model on the parent.
-        quadHeight = Camera.main.orthographicSize * 2.0f;
-        quadWidth = quadHeight * Screen.width / Screen.height;
+        //quadHeight = Camera.main.orthographicSize * 2.0f;
+        //quadWidth = quadHeight * Screen.width / Screen.height;
         //		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f);
-        transform.localScale = new Vector3(quadWidth, quadHeight,1f);
+		transform.localScale = new Vector3(GameManager.x_coord * GameManager.BGSCALE*2, GameManager.y_coord*GameManager.BGSCALE*2,1f);
         name = "Background Model";									// Name the object.
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
@@ -31,14 +32,15 @@ public class BackgroundModel : MonoBehaviour
 	public void Update(){
 		//resizes the background if the screen size is changed
 		//(also seems like a lot of unused calculations, idk if we care that much
-		float newheight = Camera.main.orthographicSize * 2.0f;
-		float newwidth = quadHeight * Screen.width / Screen.height;
-		if (quadHeight != newheight || quadWidth != newwidth) {
-			quadHeight = newheight;
-			quadWidth = newwidth;
-			transform.localScale = new Vector3 (newwidth, newheight, 1f);
+		if (owner.gm.zenMode) {
+			float newheight = Camera.main.orthographicSize * 2.0f;
+			float newwidth = quadHeight * Screen.width / Screen.height;
+			if (quadHeight != newheight || quadWidth != newwidth) {
+				quadHeight = newheight;
+				quadWidth = newwidth;
+				transform.localScale = new Vector3 (newwidth, newheight, 1f);
+			}
 		}
-
 	}
 
 

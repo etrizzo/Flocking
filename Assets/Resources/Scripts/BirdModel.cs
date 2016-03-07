@@ -28,8 +28,13 @@ public class BirdModel : MonoBehaviour
 		}
 	}
 
-    public void init(Bird owner) {
-        this.owner = owner;
+	public void init (Bird owner)
+	{
+		this.owner = owner;
+
+		transform.parent = owner.transform;// Set the model's parent to the bird.
+		transform.localPosition = new Vector3 (0, 0, -.01f);// Center the model on the parent.
+		name = "Bird Model";// Name the object.
 
         transform.parent = owner.transform;					// Set the model's parent to the bird.
 		if (owner.alive) {
@@ -65,11 +70,15 @@ public class BirdModel : MonoBehaviour
 
 		lifetime = (float)owner.gm.bird_life;
 
+		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
     }
 
-    void Start () {
-        clock = 0f;
-    }
+
+	void Start ()
+	{
+		clock = 0f;
+	}
+
 
     void Update () {
 		
@@ -90,6 +99,19 @@ public class BirdModel : MonoBehaviour
 				Time.timeScale = 1;
 			}
 
+		}
+		if (owner.gm.zenMode) {
+			if (lifetime <= 0 && !owner.playback && !pause) {
+				
+				RestartBirds ();
+			} else if (lifetime > 0 && !pause) {
+				lifetime -= Time.deltaTime;
+			}
+		} else {
+			if (owner.AtDestination) {
+				RestartBirds ();
+
+			}
 		}
 
 		if (lifetime <= 0 && !owner.playback && !pause) {
@@ -118,6 +140,21 @@ public class BirdModel : MonoBehaviour
 
 			radius.init (this);
 		}
+	}
+
+	void RestartBirds(){
+		// TODO: Add to gamemanager's list of repeatable birds
+		owner.playback = true;
+		owner.gm.birdOnScreen = false;
+		owner.gm.dead_bird_list.Add (owner.name, owner);
+		//			Debug.Log (owner.gm.dead_bird_list.Count);
+		if (owner.gm.zenMode) {
+			birdTrail.Clear ();
+		} else {
+			owner.AtDestination = false;
+		}
+		Destroy (this.gameObject);
+
 	}
 }
 

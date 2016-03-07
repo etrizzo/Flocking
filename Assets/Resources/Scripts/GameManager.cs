@@ -9,13 +9,13 @@ public class GameManager : MonoBehaviour
 	 * 0 - Zen Mode
 	 * 1 - Migration Mode
 	 */
-
 	struct GuiState{
 		public int mode;
 	}
 	GuiState state;
 
 	public bool zenMode;
+
 	int bird_count = 0;
 	public bool birdOnScreen = true;
 	public Hashtable dead_bird_list;
@@ -38,12 +38,17 @@ public class GameManager : MonoBehaviour
 	public int bird_num = 8;
 	public int bird_life = 10;
 
+	Destination dest;
+
 
 	void Start ()
 	{
 		go = false;
 		done = false;
 		pause = false;
+
+		// Hardcode it TODO: don't do this
+		zenMode = false;
 
 		this.cam = Camera.main;
 
@@ -52,6 +57,10 @@ public class GameManager : MonoBehaviour
 		dist = (transform.position - cam.transform.position).z;
 		bird_folder = new GameObject ();
 		bird_folder.name = "Birds";
+		//get coordinates of the edges according to:
+		//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
+		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
+		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
 
 
 		this.bg = addBGtile (0, 0);
@@ -68,10 +77,12 @@ public class GameManager : MonoBehaviour
 			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} 
-
-		else {
-			
+		else { //in migration mode
+			BGSCALE = 1f;
+			makeDestination ();
 		}
+		this.bg = addBGtile (0, 0);
+		//newBird ();
 	}
 
 	private void newBird() {
@@ -87,10 +98,16 @@ public class GameManager : MonoBehaviour
 			migrationModeInit (bird);
 		
 		}
-		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
-		rb.gravityScale = 0;
+
+//		rb.gravityScale = 0;
 		//rb.isKinematic = true;
+		DestroyImmediate(bird.gameObject.GetComponent<MeshCollider>());
 		CircleCollider2D col = bird.gameObject.AddComponent<CircleCollider2D> ();
+		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
+		col.isTrigger = true;
+		rb.isKinematic = true;
+//		rb.gravityScale = 0;
+		//rb.useGravity = false;
 		col.name = "Bird Collider";
 		bird.init (this);
 		bird.name = "Bird "+ bird_count++;
@@ -103,7 +120,7 @@ public class GameManager : MonoBehaviour
 		bg_object.name = "BG Object";
 		Background bg = bg_object.AddComponent<Background>();	
 		bg.transform.position = new Vector3(x,y,0);		
-		bg.init((int) x, (int) y);										
+		bg.init((int) x, (int) y, this);										
 		bg.name = "Background";
 		return bg;							
 	}
@@ -115,6 +132,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void migrationModeInit (Bird bird) {
+//		Debug.Log ("inside migrationmode init :)))");
 		bird.hasRadius = true;
 		bird.hasTrail = false;
 	}
@@ -143,9 +161,11 @@ public class GameManager : MonoBehaviour
 			// basically some birds don't reach the end of their list to clear the trail lolol
 			// we probably need to change how this is done.
 //			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
-			if (i >= mouse.movements.Count || clearAll){		//lol wacky trailz
-				mouse.model2.birdTrail.Clear ();
-				clearAll = true;
+			if (zenMode) {
+				if (i >= mouse.movements.Count || clearAll) {		//lol wacky trailz
+					mouse.model2.birdTrail.Clear ();
+					clearAll = true;
+				}
 			}
 
 		}
@@ -204,11 +224,12 @@ public class GameManager : MonoBehaviour
 		}
 //		Debug.Log (dead_bird_list.Keys);
 
-
-		//updates x and y coords of the screen in case the screen is resized
-		//(seems like a lot of unneccessary calculation but there's no OnResize event that I can find)
-		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
-		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
+		if (zenMode) {
+			//updates x and y coords of the screen in case the screen is resized
+			//(seems like a lot of unneccessary calculation but there's no OnResize event that I can find)
+			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
+			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
+		}
 	}
 
 	/************************ Start Gui Stuff ****************************/
@@ -356,7 +377,13 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	private void makeDestination(){
+		GameObject destinationObject = new GameObject ();
+		destinationObject.name = "Destination";
+		dest = destinationObject.AddComponent<Destination> ();
+		dest.init ();
 
+	}
 
 	/************************ End Gui Stuff ****************************/
 
