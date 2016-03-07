@@ -24,7 +24,7 @@ public class BackgroundModel : MonoBehaviour
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
-        mat.mainTexture = Resources.Load<Texture2D>("Textures/tileBlank");	// Set the texture.  Must be in Resources folder.
+        mat.mainTexture = Resources.Load<Texture2D>("Textures/grid");	// Set the texture.  Must be in Resources folder.
         mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
     }

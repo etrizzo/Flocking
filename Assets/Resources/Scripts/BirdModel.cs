@@ -45,10 +45,9 @@ public class BirdModel : MonoBehaviour
         name = "Bird Model";									// Name the object.
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
-//        mat.mainTexture = Resources.Load<Texture2D>("Textures/marble");	// Set the texture.  Must be in Resources folder.
+		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
         mat.mainTexture = Resources.Load<Texture2D>("Textures/bird");	// Set the texture.  Must be in Resources folder.
         mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
-        mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 
 
 		// Trail Stuff
@@ -91,11 +90,15 @@ public class BirdModel : MonoBehaviour
 		if (Input.GetKeyDown ("space")){
 			if (!pause) {
 				pause = true;
-				birdAudio.Pause ();
+				if (owner.gm.zenMode) {
+					birdAudio.Pause ();
+				}
 				Time.timeScale = 0;
 			} else {
 				pause = false;
-				birdAudio.UnPause ();
+				if (owner.gm.zenMode) {
+					birdAudio.UnPause ();
+				}
 				Time.timeScale = 1;
 			}
 
@@ -113,22 +116,6 @@ public class BirdModel : MonoBehaviour
 
 			}
 		}
-
-		if (lifetime <= 0 && !owner.playback && !pause) {
-			// TODO: Add to gamemanager's list of repeatable birds
-			owner.playback = true;
-			owner.gm.birdOnScreen = false;
-			owner.gm.dead_bird_list.Add (owner.name, owner);
-//			Debug.Log (owner.gm.dead_bird_list.Count);
-
-			if (owner.hasTrail) {
-				birdTrail.Clear ();
-			}
-			owner.alive = false;
-			Destroy (this.gameObject);
-		} else if (lifetime > 0 && !pause) {
-			lifetime -= Time.deltaTime;
-		}
     }
 
 	void makeRadius(){
@@ -144,11 +131,13 @@ public class BirdModel : MonoBehaviour
 
 	void RestartBirds(){
 		// TODO: Add to gamemanager's list of repeatable birds
+		owner.alive = false;
 		owner.playback = true;
+		owner.alive = false;
 		owner.gm.birdOnScreen = false;
 		owner.gm.dead_bird_list.Add (owner.name, owner);
 		//			Debug.Log (owner.gm.dead_bird_list.Count);
-		if (owner.gm.zenMode) {
+		if (owner.hasTrail) {
 			birdTrail.Clear ();
 		} else {
 			owner.AtDestination = false;

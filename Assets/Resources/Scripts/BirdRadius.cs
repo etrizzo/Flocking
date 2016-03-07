@@ -32,9 +32,9 @@ public class BirdRadius : MonoBehaviour
 		radiusCollider.isTrigger = true;
 
 		mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
+		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/radius");	// Set the texture.  Must be in Resources folder.
 		mat.color = new Color(1,1,1, .5f);											// Set the color (easy way to tint things).
-		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 	}
 
 	void Start () {

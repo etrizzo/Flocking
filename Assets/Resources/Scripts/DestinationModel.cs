@@ -14,7 +14,6 @@ public class DestinationModel : MonoBehaviour
 	public void init(Destination owner) {
 		this.owner = owner;
 
-		print(owner.transform.position);
 		transform.parent = owner.transform;					// Set the model's parent to the background.
 		transform.localPosition = owner.transform.position;		// Center the model on the parent.
 		//quadHeight = Camera.main.orthographicSize * 2.0f;
@@ -28,14 +27,16 @@ public class DestinationModel : MonoBehaviour
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/gem1");	// Set the texture.  Must be in Resources folder.
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
 		BoxCollider2D bc = this.gameObject.AddComponent<BoxCollider2D> ();
+		bc.isTrigger = true;
 		//bc.size = new Vector2 (4f, 4f);
 	}
 
 
 	void OnTriggerEnter2D(Collider2D col){
-//		print ("loludidit");
 		Bird bird = col.gameObject.GetComponent<Bird> ();
-		bird.AtDestination = true;
+		if (bird) {
+			bird.AtDestination = true;
+		}
 	}
 
 
