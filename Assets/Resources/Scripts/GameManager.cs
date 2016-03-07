@@ -64,8 +64,7 @@ public class GameManager : MonoBehaviour
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
 
-
-		this.bg = addBGtile (0, 0);
+		//this.bg = addBGtile (0, 0);
 		//newBird ();
 
 		gameClip = Resources.Load<AudioClip> ("Sounds/StartMenu");
@@ -75,6 +74,7 @@ public class GameManager : MonoBehaviour
 
 	private void initMode(){
 		if (zenMode) {
+			BGSCALE = 1f;
 			//zoom out the camera in zen mode
 			cam.orthographicSize = 10f;
 			//get coordinates of the edges according to:
@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} 
 		else { //in migration mode
-			BGSCALE = 1f;
+			//BGSCALE = 2f;
 			makeDestination ();
 		}
 		this.bg = addBGtile (0, 0);
