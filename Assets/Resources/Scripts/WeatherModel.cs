@@ -11,8 +11,9 @@ public class WeatherModel : MonoBehaviour
 	private Material mat;
 
 	// Random weather position min/max
-	float move_min = -3;
-	float move_max = 3;
+	private static int weather_border = 5;
+	Vector2 x_range = new Vector2 (GameManager.x_coord * GameManager.BGSCALE - weather_border, 0);
+	Vector2 y_range = new Vector2 (GameManager.y_coord * GameManager.BGSCALE + weather_border, 0);
 	Vector2 slider_coords = new Vector2 (200, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	float scale = 1f;
@@ -21,11 +22,22 @@ public class WeatherModel : MonoBehaviour
 
 	bool debug = true;
 	int timeIn = 0;
+	bool containsBird;
 
 	void OnGUI ()
 	{
 		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
 		scale = GUI.HorizontalSlider (slider_box_rect, scale, 1F, 20.0F);
+	}
+
+	void Start ()
+	{
+		clock = 0f;
+	}
+
+	void Awake() {
+		x_range.y = -1 * x_range.x;
+		y_range.y = -1 * y_range.x;
 	}
 
 	public void init (Weather owner)
@@ -37,7 +49,7 @@ public class WeatherModel : MonoBehaviour
 //		transform.parent = owner.transform;// Set the model's parent to the bird.
 //		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
 		name = "Weather Model — " + owner.type;// Name the object.
-		transform.localPosition = new Vector3 (Random.Range (move_min, move_max), Random.Range (move_min, move_max), 0);
+		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
 		transform.localScale = new Vector3 (3, 3, 3);
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
@@ -47,34 +59,46 @@ public class WeatherModel : MonoBehaviour
 		GetComponent<Renderer> ().material = mat;// Get the material component of this quad object.
 
 		DestroyImmediate (GetComponent<MeshCollider> ());
-		SphereCollider sc = gameObject.AddComponent<SphereCollider> ();
-		sc.isTrigger = false;
+		CircleCollider2D cc = gameObject.AddComponent<CircleCollider2D> ();
+		cc.isTrigger = true;
 	}
 
-	void OnTriggerStay (Collider other)
+	void OnTriggerEnter2D(Collider2D other){
+		Bird otherBird = other.gameObject.GetComponent<Bird> ();
+		if (otherBird != null && otherBird.alive) {
+			containsBird = true;
+		}
+	}
+
+	void OnTriggerStay2D (Collider2D other)
 	{
+		if (containsBird) {
 		// Glow blue randomly
 		mat.color = new Color (0, 0, Random.Range (-255, 255));
 		if (debug) {
 			print ("booped " + other.name + ", time: " + timeIn++);
 		}
-//		Destroy (other.gameObject);
+		}
 	}
 
-	void OnTriggerExit (Collider other)
-	{
-		if (debug) {
-			print ("Oh, buh bye!");
-			print ("------");
+	void OnTriggerExit2D(Collider2D other){
+		Bird otherBird = other.gameObject.GetComponent<Bird> ();
+		if (otherBird != null && otherBird.alive) {
+			containsBird = false;
 		}
 		mat.color = Color.gray;
-		timeIn = 0;
 	}
 
-	void Start ()
-	{
-		clock = 0f;
-	}
+//	void OnTriggerExit2D (Collider2D other)
+//	{
+//		if (debug) {
+//			print ("Oh, buh bye!");
+//			print ("------");
+//		}
+//		mat.color = Color.gray;
+//		timeIn = 0;
+//	}
+
 
 	void Update ()
 	{
