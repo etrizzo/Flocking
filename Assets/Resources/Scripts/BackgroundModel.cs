@@ -32,7 +32,7 @@ public class BackgroundModel : MonoBehaviour
 	public void Update(){
 		//resizes the background if the screen size is changed
 		//(also seems like a lot of unused calculations, idk if we care that much
-		if (GameManager.zenMode) {
+		if (owner.gm.zenMode) {
 			float newheight = Camera.main.orthographicSize * 2.0f;
 			float newwidth = quadHeight * Screen.width / Screen.height;
 			if (quadHeight != newheight || quadWidth != newwidth) {

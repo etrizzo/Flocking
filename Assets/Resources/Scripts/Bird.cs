@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Bird : MonoBehaviour
 {
 
-	private BirdModel model;
+	public BirdModel model;
 	public GameManager gm;
 	// The model object.
 	public Vector3 mouse_pos, world_pos;
@@ -17,11 +17,15 @@ public class Bird : MonoBehaviour
 	float speed_slider = 4f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
-	public bool hasTrail;
+
+	public bool hasTrail = false;
+	public bool hasRadius = false;
+
 	Vector2 slider_coords = new Vector2 (10, 10);
 	Vector2 slider_size = new Vector2 (150, 30);
 	Rect slider_rect, slider_box_rect;
 	bool dead = false;
+	public bool alive;
 
 	//Variables For Replay
 	public List<Vector3> positions;
@@ -39,6 +43,8 @@ public class Bird : MonoBehaviour
 	public AudioClip birdClip;
 	public Color trailColor;
 
+	public BirdRadius radius;
+
 	public bool pause;
 	public bool AtDestination = false;
 
@@ -46,7 +52,7 @@ public class Bird : MonoBehaviour
 
 	void OnGUI ()
 	{
-		if (!playback) {
+		if (!playback && gm.zenMode) {
 			GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
 			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 		}
@@ -61,7 +67,8 @@ public class Bird : MonoBehaviour
 		direction = new Vector2 (0, 1);
 		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
 		trailColor = getColor ();
-		initBirdModel (true);
+		alive = true;
+		initBirdModel (alive);
 		positions = new List<Vector3>(100);	//intiate position list for replay
 		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
@@ -104,7 +111,7 @@ public class Bird : MonoBehaviour
 //			}
 //		}
 
-		if (!GameManager.zenMode) {
+		if (!gm.zenMode) {
 			moveCam ();
 
 		}
@@ -149,8 +156,10 @@ public class Bird : MonoBehaviour
 			Camera.main.transform.position = new Vector3 (0, 0, -10);
 			GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 			model = modelObject.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
-			addTrail (modelObject, trailColor);
-			addSound (modelObject, birdClip);
+			if (hasTrail) {
+				addTrail (modelObject, trailColor);
+				addSound (modelObject, birdClip);
+			}
 			model.init (this);
 		} else {
 			//print (positions.Count);
@@ -158,16 +167,37 @@ public class Bird : MonoBehaviour
 			//model2.birdTrail.Clear();
 			model2 = modelObject2.AddComponent<BirdModel> ();						// Add a bird_model script to control visuals of the bird.
 			//print(modelObject2.name);
-			addTrail (modelObject2, trailColor);
-			addSound (modelObject2, birdClip);
+			if (hasTrail) {
+				addTrail (modelObject2, trailColor);
+				addSound (modelObject2, birdClip);
+			}
 			model2.init (this);
 			model2.mat.color = Color.black;
 
+			if (hasRadius) {
+				initBirdRadius ();
+			}
+			//Set collider for dead birds to be a trigger
 
 
+			//this.GetComponent<CircleCollider2D>().isTrigger = true;
+
+			//model2.radiusCollider.isTrigger = true;
 		}
 		//Set collider for dead birds to be a trigger
 		this.GetComponent<CircleCollider2D>().isTrigger = true;
+	}
+
+	public void initBirdRadius(){
+		/*print ("Is bird alive? "+alive);
+		if (hasRadius && !alive) {
+			print ("Bird is dead :( :( :(");
+			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+
+			radius = radiusObject.AddComponent<BirdRadius> ();
+
+			radius.init (this);
+		}*/
 	}
 
 	void move ()
@@ -261,8 +291,6 @@ public class Bird : MonoBehaviour
 
 	}
 
-
-
 	void moveCam(){
 		Camera cam = Camera.main;
 		float smooth = 3.0f;
@@ -272,7 +300,6 @@ public class Bird : MonoBehaviour
 			cam.transform.position, cameraPos, Time.deltaTime * smooth
 		);
 	}
-
 
 }
 

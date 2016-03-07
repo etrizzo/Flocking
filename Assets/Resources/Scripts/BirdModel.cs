@@ -5,12 +5,16 @@ using System.Collections;
 public class BirdModel : MonoBehaviour
 {
     private float clock;		// Keep track of time since creation for animation.
-    private Bird owner;			// Pointer to the parent object.
+    public Bird owner;			// Pointer to the parent object.
+	public BirdRadius radius;
 
 	public Material mat;		// Material for setting/changing texture and color.
 	private AudioSource birdAudio;
 	private AudioClip birdClip;
 	public TrailRenderer birdTrail;
+
+	public Material radiusMat;
+	public CircleCollider2D radiusCollider;
 
 	public bool pause;
 
@@ -19,7 +23,7 @@ public class BirdModel : MonoBehaviour
 
 	void OnGUI ()
 	{
-		if (!owner.playback) {
+		if (!owner.playback && owner.gm.zenMode) {
 			GUI.Box (clock_rect, "Bird time: " + lifetime);
 		}
 	}
@@ -32,6 +36,13 @@ public class BirdModel : MonoBehaviour
 		transform.localPosition = new Vector3 (0, 0, -.01f);// Center the model on the parent.
 		name = "Bird Model";// Name the object.
 
+        transform.parent = owner.transform;					// Set the model's parent to the bird.
+		if (owner.alive) {
+			transform.localPosition = new Vector3 (0, 0, -1);		// Center the model on the parent.
+		} else {
+			transform.localPosition = new Vector3 (0, 0, 0);
+		}
+        name = "Bird Model";									// Name the object.
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
 //        mat.mainTexture = Resources.Load<Texture2D>("Textures/marble");	// Set the texture.  Must be in Resources folder.
@@ -39,13 +50,21 @@ public class BirdModel : MonoBehaviour
         mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 
-		// Audio stuff
-		birdAudio = GetComponent<AudioSource> ();
-		birdClip = GetComponent<AudioClip> ();
-		birdAudio.Play ();
 
 		// Trail Stuff
-		birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
+		if (owner.hasTrail) {
+			// Audio stuff
+			birdAudio = GetComponent<AudioSource> ();
+			birdClip = GetComponent<AudioClip> ();
+			birdAudio.Play ();
+
+			birdTrail = this.gameObject.GetComponent<TrailRenderer> ();
+
+		//Radius 
+		}
+		if(owner.hasRadius && !owner.alive) {
+			makeRadius ();
+		}
 
 		pause = false;
 
@@ -81,10 +100,10 @@ public class BirdModel : MonoBehaviour
 			}
 
 		}
-		if (GameManager.zenMode) {
+		if (owner.gm.zenMode) {
 			if (lifetime <= 0 && !owner.playback && !pause) {
 				
-				RestartBirds();
+				RestartBirds ();
 			} else if (lifetime > 0 && !pause) {
 				lifetime -= Time.deltaTime;
 			}
@@ -93,10 +112,35 @@ public class BirdModel : MonoBehaviour
 				RestartBirds ();
 
 			}
+		}
 
+		if (lifetime <= 0 && !owner.playback && !pause) {
+			// TODO: Add to gamemanager's list of repeatable birds
+			owner.playback = true;
+			owner.gm.birdOnScreen = false;
+			owner.gm.dead_bird_list.Add (owner.name, owner);
+//			Debug.Log (owner.gm.dead_bird_list.Count);
+
+			if (owner.hasTrail) {
+				birdTrail.Clear ();
+			}
+			owner.alive = false;
+			Destroy (this.gameObject);
+		} else if (lifetime > 0 && !pause) {
+			lifetime -= Time.deltaTime;
 		}
     }
 
+	void makeRadius(){
+		if (owner.hasRadius && !owner.alive) {
+			print ("Bird is dead :( :( :(");
+			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
+
+			radius = radiusObject.AddComponent<BirdRadius> ();
+
+			radius.init (this);
+		}
+	}
 
 	void RestartBirds(){
 		// TODO: Add to gamemanager's list of repeatable birds
@@ -104,12 +148,13 @@ public class BirdModel : MonoBehaviour
 		owner.gm.birdOnScreen = false;
 		owner.gm.dead_bird_list.Add (owner.name, owner);
 		//			Debug.Log (owner.gm.dead_bird_list.Count);
-
-		birdTrail.Clear ();
-		owner.AtDestination = false;
+		if (owner.gm.zenMode) {
+			birdTrail.Clear ();
+		} else {
+			owner.AtDestination = false;
+		}
 		Destroy (this.gameObject);
 
 	}
-
 }
 
