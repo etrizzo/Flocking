@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
 	 * 0 - Zen Mode
 	 * 1 - Migration Mode
 	 */
-	struct GuiState{
+	struct GuiState
+	{
 		public int mode;
 	}
+
 	GuiState state;
 
 	public bool zenMode;
@@ -23,12 +25,18 @@ public class GameManager : MonoBehaviour
 	// List<Weather> weather_list;
 
 	// Emily's Variables
-	public Camera cam;		//main camera
-	public Background bg;		//background tile (in case we need it)
-	public static float x_coord, y_coord;	//x coordinate of right side, y coordinate of bottom side
-	public static float BGSCALE = 2f;	//scaling factor for background (how many screens wide in migration mode)
-	public float border_scale = 4f;		//thickness of the box collider borders
-	float dist;				//distance from the camera to the game for coordinate calculations
+	public Camera cam;
+	//main camera
+	public Background bg;
+	//background tile (in case we need it)
+	public static float x_coord, y_coord;
+	//x coordinate of right side, y coordinate of bottom side
+	public static float BGSCALE = 2f;
+	//scaling factor for background (how many screens wide in migration mode)
+	public float border_scale = 4f;
+	//thickness of the box collider borders
+	float dist;
+	//distance from the camera to the game for coordinate calculations
 
 	//Various booleans for setting the state of the game
 	public bool go;
@@ -40,6 +48,8 @@ public class GameManager : MonoBehaviour
 
 	Destination dest;
 
+	int weather_count = 50;
+	public List<Weather> weather_list = new List<Weather>();
 
 	void Start ()
 	{
@@ -59,8 +69,8 @@ public class GameManager : MonoBehaviour
 		bird_folder.name = "Birds";
 		//get coordinates of the edges according to:
 		//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
-		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
-		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
+		x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;		//x coord of the right of the screen
+		y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;		//y coord of the bottom of the screen
 
 
 		this.bg = addBGtile (0, 0);
@@ -68,24 +78,27 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	private void initMode(){
+	private void initMode ()
+	{
 		if (zenMode) {
+			BGSCALE = 1f;
 			//zoom out the camera in zen mode
 			cam.orthographicSize = 10f;
 			//get coordinates of the edges according to:
 			//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
 			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
-		} 
-		else { //in migration mode
-			BGSCALE = 1f;
+		} else { //in migration mode
+//			BGSCALE = 2f;
 			makeDestination ();
+			makeWeather ();
 		}
 		this.bg = addBGtile (0, 0);
 		//newBird ();
 	}
 
-	private void newBird() {
+	private void newBird ()
+	{
 		bird_num--;
 		GameObject birdObject = new GameObject ();
 		birdObject.name = "bird object";
@@ -101,7 +114,7 @@ public class GameManager : MonoBehaviour
 
 //		rb.gravityScale = 0;
 		//rb.isKinematic = true;
-		DestroyImmediate(bird.gameObject.GetComponent<MeshCollider>());
+		DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
 		CircleCollider2D col = bird.gameObject.AddComponent<CircleCollider2D> ();
 		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
 		col.isTrigger = true;
@@ -110,17 +123,18 @@ public class GameManager : MonoBehaviour
 		//rb.useGravity = false;
 		col.name = "Bird Collider";
 		bird.init (this);
-		bird.name = "Bird "+ bird_count++;
+		bird.name = "Bird " + bird_count++;
 		live = bird;
 	}
 
-	Background addBGtile(int x, int y) {
+	Background addBGtile (int x, int y)
+	{
 		//creates background tile
-		GameObject bg_object = new GameObject();			
+		GameObject bg_object = new GameObject ();			
 		bg_object.name = "BG Object";
-		Background bg = bg_object.AddComponent<Background>();	
-		bg.transform.position = new Vector3(x,y,0);		
-		bg.init((int) x, (int) y, this);										
+		Background bg = bg_object.AddComponent<Background> ();	
+		bg.transform.position = new Vector3 (x, y, 0);		
+		bg.init ((int)x, (int)y, this);										
 		bg.name = "Background";
 		return bg;							
 	}
@@ -131,7 +145,8 @@ public class GameManager : MonoBehaviour
 		bird.hasRadius = false;
 	}
 
-	private void migrationModeInit (Bird bird) {
+	private void migrationModeInit (Bird bird)
+	{
 //		Debug.Log ("inside migrationmode init :)))");
 		bird.hasRadius = true;
 		bird.hasTrail = false;
@@ -139,10 +154,11 @@ public class GameManager : MonoBehaviour
 
 	int i = 0;
 	//method to replay each dead bird
-	private void replayBirds(){
+	private void replayBirds ()
+	{
 		bool clearAll = false;
 		//print ("updating dead birds");
-		foreach(Bird mouse in dead_bird_list.Values){
+		foreach (Bird mouse in dead_bird_list.Values) {
 //			Debug.Log(mouse.name);
 
 			if (mouse.first) {
@@ -152,7 +168,7 @@ public class GameManager : MonoBehaviour
 //				mouse.model2.birdTrail.Clear ();
 				mouse.first = false;
 			}
-			if ( i < mouse.movements.Count) {
+			if (i < mouse.movements.Count) {
 				mouse.replay (i);
 
 			}
@@ -178,7 +194,8 @@ public class GameManager : MonoBehaviour
 	}
 
 
-	public void checkKill(){
+	public void checkKill ()
+	{
 		bool kill = true;
 		foreach (Bird mouse in dead_bird_list.Values) {
 			if (mouse.model2.radius.containsBird) {
@@ -189,11 +206,13 @@ public class GameManager : MonoBehaviour
 			
 			Destroy (live.gameObject);
 			birdOnScreen = false;
+			clearWeather ();
 		}
 	}
 
-	void Update(){
-		if (Input.GetKeyDown ("space")){
+	void Update ()
+	{
+		if (Input.GetKeyDown ("space")) {
 			if (!pause && go) {
 				pause = true;
 				Time.timeScale = 0;
@@ -235,7 +254,8 @@ public class GameManager : MonoBehaviour
 	/************************ Start Gui Stuff ****************************/
 
 	// Start button that disappears once clicked (and triggers the start of the game)
-	void OnGUI () {
+	void OnGUI ()
+	{
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -258,8 +278,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void getMode(){
-		GUIStyle guiStyle = new GUIStyle();
+	private void getMode ()
+	{
+		GUIStyle guiStyle = new GUIStyle ();
 		int xpos;
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
@@ -269,17 +290,16 @@ public class GameManager : MonoBehaviour
 			xpos = ((Screen.width) - (300)) / 2;
 			ypos = ((Screen.height) - (10)) / 2 - (Screen.height / 3);
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
-		}
-		else if (done) {
+		} else if (done) {
 			go = false;
-			guiStyle.normal.textColor = new Color(148, 58, 85);
+			guiStyle.normal.textColor = new Color (148, 58, 85);
 			guiStyle.fontSize = 80;
 			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - 300) / 2;
 			ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
-			xpos = ((Screen.width)-(150))/2;
-			ypos = ((Screen.height)-(60))/2+(Screen.height/6);
+			xpos = ((Screen.width) - (150)) / 2;
+			ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
 		}
 
 		if (!go && !done) {
@@ -304,7 +324,8 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void zenOptions(){
+	private void zenOptions ()
+	{
 		zenMode = true;
 		showNumSlider ();
 		showLifeSlider ();
@@ -315,7 +336,8 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void migrationOptions(){
+	private void migrationOptions ()
+	{
 		zenMode = false;
 		showNumSlider ();
 		int xpos = ((Screen.width) - (150)) / 2;
@@ -325,8 +347,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void showNumSlider(){
-		Vector2 num_slider_coords = new Vector2 (((Screen.width)-(150))/2, (Screen.height)/2);
+	private void showNumSlider ()
+	{
+		Vector2 num_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2);
 		Vector2 num_slider_size = new Vector2 (150, 30);
 		Rect num_slider_rect, num_slider_box_rect;
 
@@ -337,8 +360,9 @@ public class GameManager : MonoBehaviour
 		bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
 	}
 
-	private void showLifeSlider(){
-		Vector2 life_slider_coords = new Vector2 (((Screen.width)-(150))/2, (Screen.height)/2-(Screen.height/8));
+	private void showLifeSlider ()
+	{
+		Vector2 life_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2 - (Screen.height / 8));
 		Vector2 life_slider_size = new Vector2 (150, 30);
 		Rect life_slider_rect, life_slider_box_rect;
 
@@ -349,18 +373,20 @@ public class GameManager : MonoBehaviour
 		bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
 	}
 
-	private void startGame(){
+	private void startGame ()
+	{
 		go = true;
 		initMode ();
 		newBird ();
 		state.mode = 5;
 	}
 
-	private void pauseGame(){
+	private void pauseGame ()
+	{
 		Time.timeScale = 0;
-		GUIStyle guiStyle = new GUIStyle();
-		int xpos = ((Screen.width)-(150))/2;
-		int ypos = ((Screen.height)-(60))/2+(Screen.height/4);
+		GUIStyle guiStyle = new GUIStyle ();
+		int xpos = ((Screen.width) - (150)) / 2;
+		int ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 4);
 		if (!done && pause) {
 			guiStyle.fontSize = 60;
 			guiStyle.normal.textColor = new Color (58, 148, 130);
@@ -370,14 +396,16 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void unpauseGame(){
+	private void unpauseGame ()
+	{
 		Time.timeScale = 1;
 		if (pause) {
 			state.mode = 4;
 		}
 	}
 
-	private void makeDestination(){
+	private void makeDestination ()
+	{
 		GameObject destinationObject = new GameObject ();
 		destinationObject.name = "Destination";
 		dest = destinationObject.AddComponent<Destination> ();
@@ -388,12 +416,19 @@ public class GameManager : MonoBehaviour
 	/************************ End Gui Stuff ****************************/
 
 
+	private void makeWeather ()
+	{
+		Weather new_weather = gameObject.AddComponent<Weather> ();
+		do {
+			new_weather.init ("cloud");
+			weather_list.Add(new_weather);
+		} while (--weather_count != 0);
+	}
 
-
-	// private void makeWeather ()
-	// {
-	//     Weather new_weather = gameObject.AddComponent<Weather> ();
-	//     new_weather.init ("cloud");
-	// }
+	public void clearWeather() {
+		foreach (Weather w in weather_list) {
+//			w.GetComponent<WeatherModel> ().init();
+		}
+	}
 }
 
