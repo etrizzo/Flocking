@@ -62,7 +62,6 @@ public class BirdModel : MonoBehaviour
 
 		//Radius 
 		}
-		print (owner.hasRadius + " " + owner.alive);
 		if(owner.hasRadius && !owner.alive) {
 			makeRadius ();
 		}

@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
 		//http://answers.unity3d.com/questions/62189/detect-edge-of-screen.html
 		x_coord = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;		//x coord of the right of the screen
 		y_coord = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;		//y coord of the bottom of the screen
-		print(x_coord + " " + y_coord);
 
 		//this.bg = addBGtile (0, 0);
 		//newBird ();

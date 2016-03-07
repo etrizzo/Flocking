@@ -34,7 +34,9 @@ public class DestinationModel : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D col){
 		Bird bird = col.gameObject.GetComponent<Bird> ();
-		bird.AtDestination = true;
+		if (bird) {
+			bird.AtDestination = true;
+		}
 	}
 
 
