@@ -14,7 +14,6 @@ public class DestinationModel : MonoBehaviour
 	public void init(Destination owner) {
 		this.owner = owner;
 
-		print(owner.transform.position);
 		transform.parent = owner.transform;					// Set the model's parent to the background.
 		transform.localPosition = owner.transform.position;		// Center the model on the parent.
 		//quadHeight = Camera.main.orthographicSize * 2.0f;
@@ -33,7 +32,6 @@ public class DestinationModel : MonoBehaviour
 
 
 	void OnTriggerEnter2D(Collider2D col){
-//		print ("loludidit");
 		Bird bird = col.gameObject.GetComponent<Bird> ();
 		bird.AtDestination = true;
 	}
