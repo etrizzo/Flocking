@@ -27,6 +27,7 @@ public class DestinationModel : MonoBehaviour
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/gem1");	// Set the texture.  Must be in Resources folder.
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
 		BoxCollider2D bc = this.gameObject.AddComponent<BoxCollider2D> ();
+		bc.isTrigger = true;
 		//bc.size = new Vector2 (4f, 4f);
 	}
 
