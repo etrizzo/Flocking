@@ -12,16 +12,18 @@ public class Weather : MonoBehaviour
 		init ("tileBlank");
 	}
 
-	public void init (string weather_type)
+	public WeatherModel init (string weather_type)
 	{
 		this.type = weather_type;
-		initWeatherModel ();
+		return initWeatherModel ();
 	}
 
-	public void initWeatherModel ()
+	public WeatherModel initWeatherModel ()
 	{
 		GameObject modelObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 		model = modelObject.AddComponent<WeatherModel> ();						// Add a bird_model script to control visuals of the bird.
 		model.init (this);
+
+		return model;
 	}
 }
