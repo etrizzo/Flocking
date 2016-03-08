@@ -60,8 +60,9 @@ public class Bird : MonoBehaviour
 		}
 	}
 
-	public void init(GameManager gm)
+	public void init(GameManager gm, float speed)
 	{
+		this.speed_slider = speed;
 		this.gm = gm;
 		initSlider ();
 		getMousePos ();

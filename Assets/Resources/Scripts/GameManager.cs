@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 
 	public int bird_num = 8;
 	public int bird_life = 10;
+	float birdspeed = 4f;
 
 	Destination dest;
 
@@ -133,9 +134,10 @@ public class GameManager : MonoBehaviour
 //		rb.gravityScale = 0;
 		//rb.useGravity = false;
 		col.name = "Bird Collider";
-		bird.init (this);
+		bird.init (this, birdspeed);
 		bird.name = "Bird " + bird_count++;
 		live = bird;
+		birdspeed+= .25f;
 	}
 
 	Background addBGtile (int x, int y)
