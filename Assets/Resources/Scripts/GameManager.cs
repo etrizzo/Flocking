@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	public Bird live;
 	public float timeUntilKill;
 	public bool inRadius;
+	public float birdSpeed;
 
 	// Emily's Variables
 	public Camera cam;
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else { //in migration mode
 //			BGSCALE = 2f;
+			birdSpeed = 3f;
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
@@ -108,6 +110,7 @@ public class GameManager : MonoBehaviour
 	private void newBird ()
 	{
 		bird_num--;
+		birdSpeed++;
 		GameObject birdObject = new GameObject ();
 		birdObject.name = "bird object";
 		Bird bird = birdObject.AddComponent<Bird> ();
@@ -273,13 +276,24 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else if (!inRadius) {
 			timeUntilKill -= Time.deltaTime;
-			if (timeUntilKill < 0) {
+			/*foreach (Bird b in dead_bird_list.Values) {
+				if (b) {
+					b.model.radius.mat.color = Color.red;
+				}
+			}*/
+			if (timeUntilKill < 0 && live) {
 				cam.transform.localPosition = new Vector3 (0, 0, 10f);
 				inRadius = true;
 				Destroy (live.gameObject);
 				birdOnScreen = false;
 				clearWeather ();
 			}
+		} else {
+			/*foreach (Bird b in dead_bird_list.Values) {
+				if (b) {
+					b.model.radius.mat.color = new Color (1, 1, 1, .5f);
+				}
+			}*/
 		}
 	}
 

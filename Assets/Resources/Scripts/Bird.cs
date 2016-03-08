@@ -13,7 +13,7 @@ public class Bird : MonoBehaviour
 	private float cameraDiff;
 	int screen_x, screen_y;
 	float distanceFromMouse = 2;
-	float speed_slider = 4f;
+	public float speed_slider = 4f;
 	// float speed = Screen.width / Screen.height * 8;
 	float speed;
 
@@ -74,6 +74,9 @@ public class Bird : MonoBehaviour
 		positions = new List<Vector3>(100);	//intiate position list for replay
 		movements = new List<ArrayList> (); // instantiate movements 2D list
 		pause = false;
+		if (!gm.zenMode) {
+			speed_slider = gm.birdSpeed;
+		}
 
 	}
 
