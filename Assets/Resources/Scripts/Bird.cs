@@ -83,7 +83,7 @@ public class Bird : MonoBehaviour
 
 	public void Update ()
 	{
-		if (Input.GetKeyDown ("space")){
+		/*if (Input.GetKeyDown ("space")){
 			if (!pause) {
 				pause = true;
 				Time.timeScale = 0;
@@ -92,8 +92,8 @@ public class Bird : MonoBehaviour
 				Time.timeScale = 1;
 			}
 
-		}
-		if (!playback && !pause) {
+		}*/
+		if (!playback && !gm.pause) {
 			gm.score += Time.deltaTime;
 			speed = Screen.width / Screen.height * speed_slider;
 			updateCounter ();

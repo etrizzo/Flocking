@@ -24,7 +24,7 @@ public class DestinationModel : MonoBehaviour
 
 		mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
 		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
-		mat.mainTexture = Resources.Load<Texture2D>("Textures/gem1");	// Set the texture.  Must be in Resources folder.
+		mat.mainTexture = Resources.Load<Texture2D>("Textures/sun");	// Set the texture.  Must be in Resources folder.
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
 		BoxCollider2D bc = this.gameObject.AddComponent<BoxCollider2D> ();
 		bc.isTrigger = true;

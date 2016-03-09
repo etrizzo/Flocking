@@ -47,6 +47,13 @@ public class BirdRadius : MonoBehaviour
 		// Using deltaTime is critical for animation and movement, since the time between each call
 		// to Update is unpredictable.
 		clock = clock + Time.deltaTime;
+
+		/*if (!owner.owner.gm.inRadius) {
+			mat.color = Color.red;
+		}
+		else{
+			mat.color = new Color(1,1,1, .5f);
+		}*/
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
