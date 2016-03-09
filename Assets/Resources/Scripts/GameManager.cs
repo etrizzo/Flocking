@@ -336,15 +336,15 @@ public class GameManager : MonoBehaviour
 		int xpos;
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
-			guiStyle.fontSize = 80;
-			guiStyle.normal.textColor = new Color (103, 58, 148);
+			guiStyle.fontSize = 200;
+			guiStyle.normal.textColor = new Color (.40f, .23f, .58f);
 			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - (300)) / 2;
 			ypos = ((Screen.height) - (10)) / 2 - (Screen.height / 3);
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
 		} else if (done) {
 			go = false;
-			guiStyle.normal.textColor = new Color (148, 58, 85);
+			guiStyle.normal.textColor = new Color (.58f, .23f, .33f);
 			guiStyle.fontSize = 80;
 			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - 300) / 2;
@@ -443,12 +443,12 @@ public class GameManager : MonoBehaviour
 	{
 		Time.timeScale = 0;
 		GUIStyle guiStyle = new GUIStyle ();
-		int xpos = ((Screen.width) - (150)) / 2;
-		int ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 4);
+		int xpos = ((Screen.width) - (800)) / 2;
+		int ypos = ((Screen.height) + (250)) / 2 - (Screen.height / 3);
 		if (!done && pause) {
-			guiStyle.fontSize = 60;
-			guiStyle.normal.textColor = new Color (58, 148, 130);
-			GUI.Label (new Rect (xpos, ypos, 150, 60), "PAUSED", guiStyle);
+			guiStyle.fontSize = 200;
+			guiStyle.normal.textColor = new Color (255, 255, 255, .5f);
+			GUI.Label (new Rect (xpos, ypos, 300, 10), "PAUSED", guiStyle);
 		} else {
 			state.mode = 5;
 		}
