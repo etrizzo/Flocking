@@ -99,7 +99,9 @@ public class WeatherModel : MonoBehaviour
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;
 		}
-		mat.color = Color.gray;
+		if (otherBird){
+			mat.color = Color.gray;
+		}
 	}
 
 //	void OnTriggerExit2D (Collider2D other)

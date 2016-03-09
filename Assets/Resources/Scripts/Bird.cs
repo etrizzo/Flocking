@@ -292,11 +292,30 @@ public class Bird : MonoBehaviour
 	void moveCam(){
 		Camera cam = Camera.main;
 		float smooth = 3.0f;
-		Vector3 cameraPos = new Vector3 (this.transform.position.x, this.transform.position.y, -10);
+		//Vector3 cameraPos = new Vector3 (this.transform.position.x, this.transform.position.y, -10);
+		Vector3 cameraPos = checkCameraBoundaries();
 		cam.transform.position = cameraPos;
 		cam.transform.position = Vector3.Lerp (
 			cam.transform.position, cameraPos, Time.deltaTime * smooth
 		);
+
+	}
+
+	Vector3 checkCameraBoundaries(){
+		Camera cam = Camera.main;
+		float x = GameManager.x_coord * GameManager.BGSCALE;
+		float y = GameManager.y_coord * GameManager.BGSCALE;
+		Vector3 pos = cam.transform.position;
+		// if not at the x border, use bird's x
+		if (Mathf.Abs (this.transform.position.x) + GameManager.x_coord < x) {
+			pos.x = this.transform.position.x;
+		}
+
+		//if not at the y border, use bird's y
+		if (Mathf.Abs (this.transform.position.y) - GameManager.y_coord < y*-1 ) {
+			pos.y = this.transform.position.y;
+		}
+		return pos;
 	}
 
 	void arrowMove(){
