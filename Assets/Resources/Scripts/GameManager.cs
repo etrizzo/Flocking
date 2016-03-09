@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
 //		rb.gravityScale = 0;
 		//rb.isKinematic = true;
 		DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
-		CircleCollider2D col = bird.gameObject.AddComponent<CircleCollider2D> ();
+		PolygonCollider2D col = bird.gameObject.AddComponent<PolygonCollider2D>();
 		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
 		col.isTrigger = true;
 		rb.isKinematic = true;
