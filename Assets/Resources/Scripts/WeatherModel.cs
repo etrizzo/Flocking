@@ -80,8 +80,13 @@ public class WeatherModel : MonoBehaviour
 		GetComponent<Renderer> ().material = mat;// Get the material component of this quad object.
 
 		DestroyImmediate (GetComponent<MeshCollider> ());
-		CircleCollider2D cc = gameObject.AddComponent<CircleCollider2D> ();
-		cc.isTrigger = true;
+		PolygonCollider2D col = gameObject.AddComponent<PolygonCollider2D>();
+
+		//set the points array for the polygon collider
+		Vector2[] points = new Vector2[]{new Vector2(.43f, -.3f), new Vector2(-.4f, -.3f), 
+			new Vector2(-.45f, 0f), new Vector2(-.15f, .35f), new Vector2(.3f, .15f), new Vector2(.45f, 0f),new Vector2(.43f, -.3f)};
+		col.points = points;
+		col.isTrigger = true;
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
