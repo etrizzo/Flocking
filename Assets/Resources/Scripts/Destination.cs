@@ -12,7 +12,7 @@ public class Destination : MonoBehaviour {
 		float y = Random.Range (0f, 1f);
 		print (x + ", " + y);
 		if (x < .5f) {
-			x = GameManager.x_coord * GameManager.BGSCALE * -1;
+			x = GameManager.x_coord * GameManager.BGSCALE * -1 ;
 		} else {
 			x = GameManager.x_coord * GameManager.BGSCALE;
 		}

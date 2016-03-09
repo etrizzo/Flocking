@@ -19,7 +19,7 @@ public class DestinationModel : MonoBehaviour
 		//quadHeight = Camera.main.orthographicSize * 2.0f;
 		//quadWidth = quadHeight * Screen.width / Screen.height;
 		//		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f);
-		transform.localScale = new Vector3(4f, 4f,1f);
+		transform.localScale = new Vector3(6f, 6f,1f);
 		name = "Destination Model";									// Name the object.
 
 		mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
