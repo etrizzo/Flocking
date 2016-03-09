@@ -169,41 +169,41 @@ public class GameManager : MonoBehaviour
 	//method to replay each dead bird
 	private void replayBirds ()
 	{
-		bool clearAll = false;
-		//print ("updating dead birds");
-		foreach (Bird mouse in dead_bird_list.Values) {
+			bool clearAll = false;
+			//print ("updating dead birds");
+			foreach (Bird mouse in dead_bird_list.Values) {
 //			Debug.Log(mouse.name);
 
-			if (mouse.first) {
-				mouse.direction = new Vector2 (0, 1);
-				mouse.initBirdModel (false);
+				if (mouse.first) {
+					mouse.direction = new Vector2 (0, 1);
+					mouse.initBirdModel (false);
 //				print ("Trail: " + mouse.model2.birdTrail);
 //				mouse.model2.birdTrail.Clear ();
-				mouse.first = false;
-			}
-			if (i < mouse.movements.Count) {
-				mouse.replay (i);
-
-			}
-
-			// positions.Count is slightly different length for each bird OMG
-			// basically some birds don't reach the end of their list to clear the trail lolol
-			// we probably need to change how this is done.
-//			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
-			if (zenMode) {
-				if (i >= mouse.movements.Count || clearAll) {		//lol wacky trailz
-					mouse.model2.birdTrail.Clear ();
-					clearAll = true;
+					mouse.first = false;
 				}
-			}
+				if (i < mouse.movements.Count) {
+					mouse.replay (i);
 
-		}
+				}
+
+				// positions.Count is slightly different length for each bird OMG
+				// basically some birds don't reach the end of their list to clear the trail lolol
+				// we probably need to change how this is done.
+//			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
+				if (zenMode) {
+					if (i >= mouse.movements.Count || clearAll) {		//lol wacky trailz
+						mouse.model2.birdTrail.Clear ();
+						clearAll = true;
+					}
+				}
+
+			}
 //		if (clearAll) {
 //			foreach (Bird mouse in dead_bird_list.Values) {
 //				mouse.model2.birdTrail.Clear ();
 //			}
 //		}
-		i++;	
+			i++;
 	}
 
 
@@ -236,13 +236,13 @@ public class GameManager : MonoBehaviour
 	}
 
 	void Update(){
-		if (Input.GetKeyDown ("space")){
+		if (Input.GetKeyDown ("space") && state.mode != 6){
 			if (!pause && go) {
 				pause = true;
-				Time.timeScale = 0;
+				state.mode = 4;
 			} else {
 				pause = false;
-				Time.timeScale = 1;
+				state.mode = 5;
 			}
 
 		}
