@@ -246,7 +246,12 @@ public class GameManager : MonoBehaviour
 			}
 
 		}
-		if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
+		if(bird_num < 0){
+			done = true;
+			state.mode = 7;
+		}
+			
+		else if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
 			
 			birdOnScreen = true;
 			i = 0; //reset replay
@@ -266,9 +271,7 @@ public class GameManager : MonoBehaviour
 			
 			replayBirds ();
 
-		} else if (bird_num <= 0) {
-			done = true;
-		}
+		} 
 //		Debug.Log (dead_bird_list.Keys);
 
 		if (zenMode) {
@@ -290,12 +293,6 @@ public class GameManager : MonoBehaviour
 				birdOnScreen = false;
 				clearWeather ();
 			}
-		} else {
-			/*foreach (Bird b in dead_bird_list.Values) {
-				if (b) {
-					b.model.radius.mat.color = new Color (1, 1, 1, .5f);
-				}
-			}*/
 		}
 	}
 
@@ -327,6 +324,9 @@ public class GameManager : MonoBehaviour
 		case 6:
 			loadScreen ();
 			break;
+		case 7:
+			endScreen();
+			break;
 		}
 	}
 
@@ -342,18 +342,7 @@ public class GameManager : MonoBehaviour
 			xpos = ((Screen.width) - (300)) / 2;
 			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
-		} else if (done) {
-			go = false;
-			guiStyle.normal.textColor = new Color (.58f, .23f, .33f);
-			guiStyle.fontSize = 80;
-			guiStyle.alignment = TextAnchor.MiddleCenter;
-			xpos = ((Screen.width) - 300) / 2;
-			ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
-			GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
-			xpos = ((Screen.width) - (150)) / 2;
-			ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
 		}
-
 		if (!go && !done) {
 			xpos = ((Screen.width) + (25)) / 2;
 			ypos = ((Screen.height) / 2 + (Screen.height / 8));
@@ -493,6 +482,19 @@ public class GameManager : MonoBehaviour
 		else {
 			state.mode = 5;
 		}
+	}
+
+	private void endScreen(){
+		go = false;
+		GUIStyle guiStyle = new GUIStyle ();
+		guiStyle.normal.textColor = new Color (.58f, .23f, .33f);
+		guiStyle.fontSize = 80;
+		guiStyle.alignment = TextAnchor.MiddleCenter;
+		int xpos = ((Screen.width) - 300) / 2;
+		int ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
+		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
+		xpos = ((Screen.width) - (150)) / 2;
+		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
 	}
 
 
