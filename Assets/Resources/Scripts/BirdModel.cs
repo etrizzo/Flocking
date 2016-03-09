@@ -114,6 +114,7 @@ public class BirdModel : MonoBehaviour
 			if (owner.AtDestination) {
 				owner.gm.score += 100;
 				RestartBirds ();
+				owner.gm.clearWeather ();
 
 			}
 		}
