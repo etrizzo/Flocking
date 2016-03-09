@@ -194,7 +194,10 @@ public class Bird : MonoBehaviour
 			//model2.radiusCollider.isTrigger = true;
 		}
 		//Set collider for dead birds to be a trigger
-		this.GetComponent<CircleCollider2D>().isTrigger = true;
+		PolygonCollider2D col = this.GetComponent<PolygonCollider2D>();
+		Vector2[] points = new Vector2[]{new Vector2(.3f, -.4f), new Vector2(-.3f, -.4f), new Vector2(0f, .4f), new Vector2(.3f, -.4f)};
+		col.points = points; 
+		col.isTrigger = true;
 	}
 
 	void move ()
