@@ -337,10 +337,10 @@ public class GameManager : MonoBehaviour
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
 			guiStyle.fontSize = 200;
-			guiStyle.normal.textColor = new Color (.40f, .23f, .58f);
+			guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .9f);
 			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - (300)) / 2;
-			ypos = ((Screen.height) - (10)) / 2 - (Screen.height / 3);
+			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
 		} else if (done) {
 			go = false;
