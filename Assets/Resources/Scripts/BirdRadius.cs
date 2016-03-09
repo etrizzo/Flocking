@@ -48,12 +48,12 @@ public class BirdRadius : MonoBehaviour
 		// to Update is unpredictable.
 		clock = clock + Time.deltaTime;
 
-		/*if (!owner.owner.gm.inRadius) {
-			mat.color = Color.red;
+		if (!owner.owner.gm.inRadius) {
+			mat.color = new Color(1,0,0,.5f);
 		}
 		else{
-			mat.color = new Color(1,1,1, .5f);
-		}*/
+			mat.color = new Color(1,1,1, .7f);
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
