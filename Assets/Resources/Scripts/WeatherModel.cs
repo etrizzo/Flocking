@@ -26,24 +26,39 @@ public class WeatherModel : MonoBehaviour
 	int timeIn = 0;
 	bool containsBird;
 
-//	void OnGUI ()
-//	{
-//		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
-//		scale = GUI.HorizontalSlider (slider_box_rect, scale, 1F, 20.0F);
-//	}
+	//	void OnGUI ()
+	//	{
+	//		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
+	//		scale = GUI.HorizontalSlider (slider_box_rect, scale, 1F, 20.0F);
+	//	}
 
 	void Start ()
 	{
 		clock = 0f;
 	}
 
-	void Awake() {
+	void Awake ()
+	{
 		x_range.y = -1 * x_range.x;
 		y_range.y = -1 * y_range.x;
 	}
 
-	public void move_location() {
+	public void move_location ()
+	{
 		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
+		Vector2 pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
+		Vector2 world_center = new Vector2 (0, 0);
+		Vector2 dest_center = DestinationModel.dest_center;
+		while (PointInsideSphere(pos, world_center, 3f) | PointInsideSphere(pos, dest_center, 3f)) {
+			move_location ();
+			pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
+			print ("pos was in the dest or world sphere!");
+		}
+	}
+
+	public bool PointInsideSphere (Vector2 point, Vector2 center, float radius)
+	{
+		return Vector3.Distance (point, center) < radius;
 	}
 
 	public void init (Weather owner)
@@ -55,7 +70,7 @@ public class WeatherModel : MonoBehaviour
 //		transform.parent = owner.transform;// Set the model's parent to the bird.
 //		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
 		name = "Weather Model " + ++weather_counter + "— " + owner.type;// Name the object.
-		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
+		move_location ();
 		transform.localScale = new Vector3 (scale, scale, 1);
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
@@ -74,7 +89,8 @@ public class WeatherModel : MonoBehaviour
 		col.isTrigger = true;
 	}
 
-	void OnTriggerEnter2D(Collider2D other){
+	void OnTriggerEnter2D (Collider2D other)
+	{
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = true;
@@ -91,33 +107,34 @@ public class WeatherModel : MonoBehaviour
 			}
 		}
 		if (containsBird) {
-		// Glow blue randomly
-		mat.color = new Color (0, 0, Random.Range (-255, 255));
+			// Glow blue randomly
+			mat.color = new Color (0, 0, Random.Range (-255, 255));
 //		if (debug) {
 //			print ("booped " + other.name + ", time: " + timeIn++);
 //		}
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D other){
+	void OnTriggerExit2D (Collider2D other)
+	{
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;
 		}
-		if (otherBird){
+		if (otherBird) {
 			mat.color = Color.gray;
 		}
 	}
 
-//	void OnTriggerExit2D (Collider2D other)
-//	{
-//		if (debug) {
-//			print ("Oh, buh bye!");
-//			print ("------");
-//		}
-//		mat.color = Color.gray;
-//		timeIn = 0;
-//	}
+	//	void OnTriggerExit2D (Collider2D other)
+	//	{
+	//		if (debug) {
+	//			print ("Oh, buh bye!");
+	//			print ("------");
+	//		}
+	//		mat.color = Color.gray;
+	//		timeIn = 0;
+	//	}
 
 
 	void Update ()
