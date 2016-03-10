@@ -6,6 +6,7 @@ public class Destination : MonoBehaviour {
 
 	//private BackgroundModel bg_model;
 	private GameObject modelObject;
+	private DestinationModel dmodel;
 
 	public void init() {
 		float x = Random.Range (0f, 1f);
@@ -29,7 +30,7 @@ public class Destination : MonoBehaviour {
 
 	
 		this.modelObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
-		DestinationModel dmodel = modelObject.AddComponent<DestinationModel> ();
+		dmodel = modelObject.AddComponent<DestinationModel> ();
 		dmodel.init (this);
 
 	

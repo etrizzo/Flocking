@@ -10,12 +10,14 @@ public class DestinationModel : MonoBehaviour
 	private float BGSCALE = 4f;
 	private float quadHeight;
 	private float quadWidth;
+	public static Vector2 dest_center;
 
 	public void init(Destination owner) {
 		this.owner = owner;
 
 		transform.parent = owner.transform;					// Set the model's parent to the background.
 		transform.localPosition = owner.transform.position;		// Center the model on the parent.
+		dest_center = new Vector2(owner.transform.position.x, owner.transform.position.y);
 		//quadHeight = Camera.main.orthographicSize * 2.0f;
 		//quadWidth = quadHeight * Screen.width / Screen.height;
 		//		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f);
@@ -40,6 +42,8 @@ public class DestinationModel : MonoBehaviour
 			bird.AtDestination = true;
 		}
 	}
+
+
 
 
 }

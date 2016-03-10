@@ -122,7 +122,7 @@ public class BirdModel : MonoBehaviour
 
 	void makeRadius(){
 		if (owner.hasRadius && !owner.alive) {
-			print ("Bird is dead :( :( :(");
+//			print ("Bird is dead :( :( :(");
 			GameObject radiusObject = GameObject.CreatePrimitive (PrimitiveType.Quad);	// Create a quad object for holding the bird texture.
 
 			radius = radiusObject.AddComponent<BirdRadius> ();
