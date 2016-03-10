@@ -29,8 +29,9 @@ public class DestinationModel : MonoBehaviour
 		mat.color = new Color(1, 1, 1, .8f);
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/sun");	// Set the texture.  Must be in Resources folder.
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
-		BoxCollider2D bc = this.gameObject.AddComponent<BoxCollider2D> ();
-		bc.isTrigger = true;
+		CircleCollider2D cc = this.gameObject.AddComponent<CircleCollider2D> ();
+		cc.radius = .27f;
+		cc.isTrigger = true;
 		//bc.size = new Vector2 (4f, 4f);
 	}
 
@@ -43,6 +44,10 @@ public class DestinationModel : MonoBehaviour
 		}
 	}
 
+	void Update(){
+		clock += Time.deltaTime;
+		transform.eulerAngles = new Vector3 (0, 0, 360 * clock * .1f);
+	}
 
 
 

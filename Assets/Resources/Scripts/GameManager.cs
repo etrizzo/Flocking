@@ -235,7 +235,19 @@ public class GameManager : MonoBehaviour
 		gameAudio.Play ();
 	}
 
+	private float lowestDelta = 1;
+	private float highestDelta = 0;
 	void Update(){
+		/*if (Time.deltaTime < lowestDelta) {
+			lowestDelta = Time.deltaTime;
+		}
+		if (Time.deltaTime > highestDelta) {
+			highestDelta = Time.deltaTime;
+		}*/
+
+		//print ("Lowest deltaTime: " + lowestDelta);
+		//print ("Highest deltaTime: " + highestDelta);
+
 		if (Input.GetKeyDown ("space") && state.mode != 6){
 			if (!pause && go) {
 				pause = true;
