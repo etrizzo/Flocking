@@ -26,6 +26,8 @@ public class WeatherModel : MonoBehaviour
 	int timeIn = 0;
 	bool containsBird;
 
+	float weather_distance = 6f;
+
 	//	void OnGUI ()
 	//	{
 	//		GUI.Box (slider_rect, "Scale: " + scale.ToString ());
@@ -49,10 +51,10 @@ public class WeatherModel : MonoBehaviour
 		Vector2 pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
 		Vector2 world_center = new Vector2 (0, 0);
 		Vector2 dest_center = DestinationModel.dest_center;
-		while (PointInsideSphere(pos, world_center, 3f) | PointInsideSphere(pos, dest_center, 3f)) {
+		while (PointInsideSphere(pos, world_center, weather_distance) | PointInsideSphere(pos, dest_center, weather_distance)) {
 			move_location ();
 			pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
-			print ("pos was in the dest or world sphere!");
+//			print ("pos was in the dest or world sphere!");
 		}
 	}
 
@@ -75,6 +77,7 @@ public class WeatherModel : MonoBehaviour
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
 		mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + owner.type);// Set the texture.  Must be in Resources folder.
+		mat.color = Color.gray;
 //		mat.color = Color.blue;// Set the color (easy way to tint things).
 		// mat.shader = Shader.Find ("Sprites/Default");// Tell the renderer that our textures have transparency.
 		GetComponent<Renderer> ().material = mat;// Get the material component of this quad object.
@@ -107,11 +110,10 @@ public class WeatherModel : MonoBehaviour
 			}
 		}
 		if (containsBird) {
-			// Glow blue randomly
-			mat.color = new Color (0, 0, Random.Range (-255, 255));
-//		if (debug) {
-//			print ("booped " + other.name + ", time: " + timeIn++);
-//		}
+			string random_texture = (Random.RandomRange(-1, 1) < 0 ? "cloud" : "cloud-lightning");
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + random_texture);// Set the texture.  Must be in Resources folder.
+			float color_value = (float)  (Random.value * 0.5);
+			mat.color = new Color (color_value, color_value, color_value, 1);
 		}
 	}
 
@@ -122,6 +124,7 @@ public class WeatherModel : MonoBehaviour
 			containsBird = false;
 		}
 		if (otherBird) {
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/cloud");// Set the texture.  Must be in Resources folder.
 			mat.color = Color.gray;
 		}
 	}
