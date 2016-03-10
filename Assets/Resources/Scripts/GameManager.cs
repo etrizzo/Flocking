@@ -182,6 +182,7 @@ public class GameManager : MonoBehaviour
 					mouse.first = false;
 				}
 				if (i < mouse.movements.Count) {
+//					print (mouse.name + " " + mouse.movements.Count);
 					mouse.replay (i);
 
 				}
@@ -474,7 +475,12 @@ public class GameManager : MonoBehaviour
 		
 	private void loadScreen(){
 		Time.timeScale = 0;
-		loadScreenCounter -= Time.unscaledDeltaTime*.5f;
+
+		if (Time.unscaledDeltaTime > .1) {
+			print ("OMG DELTA TIME IS HUGE : " + Time.unscaledDeltaTime);
+		} else {
+			loadScreenCounter -= Time.unscaledDeltaTime * .5f;
+		}
 		int countdown = (int)loadScreenCounter+1;
 		GUIStyle guiStyle = new GUIStyle ();
 		int xpos = ((Screen.width) - (150)) / 2;

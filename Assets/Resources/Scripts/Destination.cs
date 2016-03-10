@@ -23,7 +23,7 @@ public class Destination : MonoBehaviour {
 		} else {
 			y = GameManager.y_coord * GameManager.BGSCALE;
 		}
-			
+
 	
 		this.modelObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
 		dmodel = modelObject.AddComponent<DestinationModel> ();
