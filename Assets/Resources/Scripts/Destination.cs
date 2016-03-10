@@ -25,7 +25,7 @@ public class Destination : MonoBehaviour {
 
 
 
-
+		print (x + " " +y);
 
 	
 		this.modelObject = GameObject.CreatePrimitive(PrimitiveType.Quad);
