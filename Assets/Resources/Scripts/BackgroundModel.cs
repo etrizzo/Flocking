@@ -26,10 +26,13 @@ public class BackgroundModel : MonoBehaviour
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 		if (!owner.gm.zenMode) {
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/background");	// Set the texture.  Must be in Resources folder.
+			mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
+
 		} else {
-			mat.mainTexture = Resources.Load<Texture2D> ("Textures/grid");	// Set the texture.  Must be in Resources folder.
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/zenbackground");	// Set the texture.  Must be in Resources folder.
+//			mat.color = new Color(.95f,.95f,.95f);											// Set the color (easy way to tint things).
+
 		}
-		mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
     }
 
