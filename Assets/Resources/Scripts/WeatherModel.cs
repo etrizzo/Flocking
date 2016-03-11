@@ -118,10 +118,16 @@ public class WeatherModel : MonoBehaviour
 			float color_value = (float)  (Random.value * 0.5);
 			mat.color = new Color (color_value, color_value, color_value, 1);
 
-			if (flash%4 == 0) {
+			if (flash % 4 == 0) {
 				bgMat = owner.gm.bg.bgMat;
 				float bgcolor_value = (float)(Random.value * 0.5);
 				bgMat.color = new Color (bgcolor_value, bgcolor_value, bgcolor_value);
+			} 
+			if (flash % 8 == 0) {
+				bird.model.mat.mainTexture = Resources.Load<Texture2D> ("Textures/dead-bird");
+			}
+			else {
+				bird.model.mat.mainTexture = Resources.Load<Texture2D> ("Textures/bird");
 			}
 			flash++;
 		}
@@ -137,6 +143,7 @@ public class WeatherModel : MonoBehaviour
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/cloud");// Set the texture.  Must be in Resources folder.
 			mat.color = Color.gray;
 			bgMat.color = new Color(1f, 1f, 1f);
+			otherBird.model.mat.mainTexture = Resources.Load<Texture2D>("Textures/bird");
 		}
 	}
 

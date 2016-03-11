@@ -42,8 +42,10 @@ public class SeedModel : MonoBehaviour
 
 
 	void Update(){
-		clock += Time.unscaledDeltaTime/speed;
-		transform.localPosition = new Vector3(Mathf.Sin(10*clock/2),Mathf.Sin(5*clock/2),0);	
+		if (owner.gm.state.mode != 4) {
+			clock += Time.unscaledDeltaTime/speed;
+			transform.localPosition = new Vector3 (Mathf.Sin (10 * clock / 6), Mathf.Sin (5 * clock / 6), 0);	
+		}
 	}
 
 
