@@ -11,6 +11,7 @@ public class WeatherModel : MonoBehaviour
 	private Weather owner;
 	// Material for setting/changing texture and color.
 	private Material mat;
+	private Material bgMat;
 
 	// Random weather position min/max
 	private static int weather_border = 1;
@@ -90,6 +91,7 @@ public class WeatherModel : MonoBehaviour
 			new Vector2(-.45f, 0f), new Vector2(-.15f, .35f), new Vector2(.3f, .15f), new Vector2(.45f, 0f),new Vector2(.43f, -.3f)};
 		col.points = points;
 		col.isTrigger = true;
+
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
@@ -100,6 +102,7 @@ public class WeatherModel : MonoBehaviour
 		}
 	}
 
+	int flash = 0;
 	void OnTriggerStay2D (Collider2D other)
 	{
 		Bird bird = other.gameObject.GetComponent<Bird> ();
@@ -114,6 +117,13 @@ public class WeatherModel : MonoBehaviour
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + random_texture);// Set the texture.  Must be in Resources folder.
 			float color_value = (float)  (Random.value * 0.5);
 			mat.color = new Color (color_value, color_value, color_value, 1);
+
+			if (flash%4 == 0) {
+				bgMat = owner.gm.bg.bgMat;
+				float bgcolor_value = (float)(Random.value * 0.5);
+				bgMat.color = new Color (bgcolor_value, bgcolor_value, bgcolor_value);
+			}
+			flash++;
 		}
 	}
 
@@ -126,6 +136,7 @@ public class WeatherModel : MonoBehaviour
 		if (otherBird) {
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/cloud");// Set the texture.  Must be in Resources folder.
 			mat.color = Color.gray;
+			bgMat.color = new Color(1f, 1f, 1f);
 		}
 	}
 

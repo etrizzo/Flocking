@@ -6,7 +6,7 @@ public class BackgroundModel : MonoBehaviour
 {
     private float clock;		// Keep track of time since creation for animation.
     private Background owner;			// Pointer to the parent object.
-    private Material mat;		// Material for setting/changing texture and color.
+    public Material mat;		// Material for setting/changing texture and color.
     private float BGSCALE = 4f;
 	private float quadHeight;
 	private float quadWidth;
@@ -26,7 +26,7 @@ public class BackgroundModel : MonoBehaviour
         mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 		if (!owner.gm.zenMode) {
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/background");	// Set the texture.  Must be in Resources folder.
-			mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
+			//mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
 		} else {
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/zenbackground2");	// Set the texture.  Must be in Resources folder.
