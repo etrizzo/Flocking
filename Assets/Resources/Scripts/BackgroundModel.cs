@@ -29,7 +29,7 @@ public class BackgroundModel : MonoBehaviour
 			mat.color = new Color(.55f,.6f,.65f);											// Set the color (easy way to tint things).
 
 		} else {
-			mat.mainTexture = Resources.Load<Texture2D> ("Textures/zenbackground");	// Set the texture.  Must be in Resources folder.
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/zenbackground2");	// Set the texture.  Must be in Resources folder.
 //			mat.color = new Color(.95f,.95f,.95f);											// Set the color (easy way to tint things).
 
 		}
