@@ -33,7 +33,7 @@ public class Destination : MonoBehaviour {
 		this.gameObject.transform.position = new Vector3 (x, y, 0);
 		this.modelObject.transform.position = gameObject.transform.position;
 //		this.gameObject.AddComponent<BoxCollider2D> ();
-
+		print(x + " " + y);
 	}
 
 

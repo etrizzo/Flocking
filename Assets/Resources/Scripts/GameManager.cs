@@ -98,8 +98,13 @@ public class GameManager : MonoBehaviour
 			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else { //in migration mode
+
 //			BGSCALE = 2f;
-			birdSpeed = 10f;
+			birdSpeed = 6f;
+
+			BGSCALE = 2f;
+			birdSpeed = 3f;
+
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
@@ -250,7 +255,6 @@ public class GameManager : MonoBehaviour
 
 		//print ("Lowest deltaTime: " + lowestDelta);
 		//print ("Highest deltaTime: " + highestDelta);
-
 		if (Input.GetKeyDown ("space") && state.mode != 6){
 			if (!pause && go) {
 				pause = true;
@@ -262,6 +266,7 @@ public class GameManager : MonoBehaviour
 
 		}
 		if(bird_num < 0){
+			
 			done = true;
 			state.mode = 7;
 		}
@@ -316,7 +321,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
-		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
+		
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -445,6 +450,9 @@ public class GameManager : MonoBehaviour
 
 	private void pauseGame ()
 	{
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		Time.timeScale = 0;
 		GUIStyle guiStyle = new GUIStyle ();
 		int xpos = ((Screen.width) - (800)) / 2;
@@ -460,6 +468,9 @@ public class GameManager : MonoBehaviour
 
 	private void unpauseGame ()
 	{
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		Time.timeScale = 1;
 		if (pause) {
 			state.mode = 4;
@@ -477,7 +488,9 @@ public class GameManager : MonoBehaviour
 		
 	private void loadScreen(){
 		Time.timeScale = 0;
-
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		if (Time.unscaledDeltaTime > .1) {
 			print ("OMG DELTA TIME IS HUGE : " + Time.unscaledDeltaTime);
 		} else {
@@ -488,7 +501,10 @@ public class GameManager : MonoBehaviour
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) - (60)) / 2;
 		guiStyle.fontSize = 60;
-		guiStyle.normal.textColor = new Color (58, 148, 130);
+		guiStyle.normal.textColor = new Color (.22f, .58f, .51f);
+//		if (zenMode) {
+//
+//		}
 		if (loadScreenCounter > 3) {
 			GUI.Label (new Rect (xpos, ypos, 150, 60), "Ready?", guiStyle);
 		}
@@ -513,6 +529,16 @@ public class GameManager : MonoBehaviour
 		int xpos = ((Screen.width) - (300)) / 2;
 		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
+
+		xpos = ((Screen.width) - (150)) / 2;
+		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
+		xpos = ((Screen.width) + (25)) / 2;
+		ypos = ((Screen.height) / 2 + (Screen.height / 8));
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
+			print ("restarting");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
+		}
 	}
 
 
@@ -531,6 +557,18 @@ public class GameManager : MonoBehaviour
 	public void clearWeather() {
 		foreach (WeatherModel w_model in weather_list) {
 			w_model.move_location();
+		}
+	}
+
+	public void clearAllTrails(){
+		if (zenMode) {
+			foreach (Bird birb in dead_bird_list.Values) {
+				print (birb.model2);
+				if (birb.model2.birdTrail){
+					birb.model2.birdTrail.Clear ();
+				}
+
+			}
 		}
 	}
 }

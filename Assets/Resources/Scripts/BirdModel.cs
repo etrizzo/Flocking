@@ -132,6 +132,9 @@ public class BirdModel : MonoBehaviour
 	}
 
 	void RestartBirds(){
+		if (owner.gm.zenMode){
+			owner.gm.clearAllTrails ();
+		}
 		// TODO: Add to gamemanager's list of repeatable birds'
 		owner.speed_slider ++;
 		owner.alive = false;
@@ -145,6 +148,7 @@ public class BirdModel : MonoBehaviour
 		} else {
 			owner.AtDestination = false;
 		}
+
 		Destroy (this.gameObject);
 
 	}
