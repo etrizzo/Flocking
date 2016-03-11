@@ -6,14 +6,17 @@ public class Weather : MonoBehaviour
 	// This should be the name of the texture the type uses in its model, for clarity
 	public string type;
 	WeatherModel model;
+	public GameManager gm;
 
-	public void init ()
+	public void init (GameManager gm)
 	{
-		init ("tileBlank");
+		this.gm = gm;
+		init ("tileBlank", gm);
 	}
 
-	public WeatherModel init (string weather_type)
+	public WeatherModel init (string weather_type, GameManager gm)
 	{
+		this.gm = gm;
 		this.type = weather_type;
 		return initWeatherModel ();
 	}

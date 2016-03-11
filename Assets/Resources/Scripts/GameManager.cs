@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
+	public AudioSource migrationAudio;
+	public AudioClip migrationClip;
+	int checkCall;
 
 	int bird_count = 0;
 	public bool birdOnScreen = true;
@@ -115,6 +118,8 @@ public class GameManager : MonoBehaviour
 
 	private void newBird ()
 	{
+		bg.bgMat.color = new Color (1, 1, 1);
+
 		bird_num--;
 		if (bird_num >= 0) {
 			birdSpeed++;
@@ -170,6 +175,29 @@ public class GameManager : MonoBehaviour
 //		Debug.Log ("inside migrationmode init :)))");
 		bird.hasRadius = true;
 		bird.hasTrail = false;
+		migrationAudio = this.gameObject.AddComponent<AudioSource> ();
+		migrationAudio.loop = false;
+		migrationAudio.playOnAwake = false;
+		checkCall = 0;
+	}
+
+	private string getsoundNum(){
+		int soundNum = (int) ((Random.value * 1000) % 11 ) + 1;
+		return soundNum.ToString();
+	}
+
+	private void birdCall(){
+		migrationClip = Resources.Load<AudioClip> ("Sounds/migrationSounds/flock"+getsoundNum());
+		migrationAudio.clip = migrationClip;
+		migrationAudio.Play ();
+	}
+
+	private void playBirdCall(){
+		float playCall = Random.value;
+		if (playCall < .03f) {
+			birdCall ();
+			print ("CHEEP! "+ playCall);
+		}
 	}
 
 	int i = 0;
@@ -235,6 +263,7 @@ public class GameManager : MonoBehaviour
 	private void initSound(AudioClip gameClip){
 		gameAudio = this.gameObject.AddComponent<AudioSource> ();
 		gameAudio.loop = true;
+		gameAudio.volume = .6f;
 		getSound (gameClip);
 	}
 
@@ -313,6 +342,13 @@ public class GameManager : MonoBehaviour
 				birdOnScreen = false;
 				clearWeather ();
 			}
+		}
+		if (!zenMode && state.mode == 5) {
+			if (checkCall % 17 == 0) {
+				Debug.Log ("check call: " + checkCall);
+				playBirdCall ();
+			}
+			checkCall++;
 		}
 	}
 
@@ -501,7 +537,7 @@ public class GameManager : MonoBehaviour
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) - (60)) / 2;
 		guiStyle.fontSize = 60;
-		guiStyle.normal.textColor = new Color (.22f, .58f, .51f);
+		guiStyle.normal.textColor = new Color (.5f, .5f, .5f);
 //		if (zenMode) {
 //
 //		}
@@ -532,8 +568,6 @@ public class GameManager : MonoBehaviour
 
 		xpos = ((Screen.width) - (150)) / 2;
 		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
-		xpos = ((Screen.width) + (25)) / 2;
-		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
 			print ("restarting");
 			Application.LoadLevel (Application.loadedLevel);
@@ -549,7 +583,7 @@ public class GameManager : MonoBehaviour
 	{
 		Weather new_weather = gameObject.AddComponent<Weather> ();
 		do {
-			WeatherModel new_model = new_weather.init ("cloud");
+			WeatherModel new_model = new_weather.init ("cloud", this);
 			weather_list.Add(new_model);
 		} while (--weather_count != 0);
 	}
