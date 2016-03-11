@@ -115,7 +115,7 @@ public class BirdModel : MonoBehaviour
 				owner.gm.score += 100;
 				RestartBirds ();
 				owner.gm.clearWeather ();
-
+				owner.gm.makeSeeds ();
 			}
 		}
     }

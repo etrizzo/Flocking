@@ -58,8 +58,14 @@ public class GameManager : MonoBehaviour
 	int weather_count = 50;
 	public List<WeatherModel> weather_list = new List<WeatherModel>();
 
+	int seed_count = 10;
+
+	public GameObject seedFolder;
+
 	void Start ()
 	{
+		seedFolder =  new GameObject();
+		seedFolder.name = "Seeds";
 		go = false;
 		done = false;
 		pause = false;
@@ -108,6 +114,7 @@ public class GameManager : MonoBehaviour
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
+			makeSeeds ();
 		}
 		this.bg = addBGtile (0, 0);
 		//newBird ();
@@ -554,10 +561,32 @@ public class GameManager : MonoBehaviour
 		} while (--weather_count != 0);
 	}
 
+	public void makeSeeds(){
+		int i = 0;
+		while (i < seed_count) {
+			float x = Random.Range (x_coord * -1, x_coord);
+			float y = Random.Range (y_coord, y_coord * -1);
+			Collider2D col = Physics2D.OverlapArea(new Vector2(x -2f, y - 2f), new Vector2(x + 2f, y + 2f)); 
+			if (!col && Mathf.Abs(x) > 5f && Mathf.Abs(y) > 5f) {
+				createSeed (x, y);
+				i++;
+			}
+		}
+	}
+
 	public void clearWeather() {
 		foreach (WeatherModel w_model in weather_list) {
 			w_model.move_location();
 		}
+	}
+
+	private void createSeed(float x, float y){
+		GameObject seedObject = new GameObject ();
+		Seed seed = seedObject.AddComponent<Seed> ();
+		seedObject.name = "Seed";
+		seedObject.transform.parent = seedFolder.transform;
+		print ("Seeeeds" + x + " " + y);
+		seed.init (x, y, this);
 	}
 
 	public void clearAllTrails(){
