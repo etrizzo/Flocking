@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else { //in migration mode
 //			BGSCALE = 2f;
-			birdSpeed = 3f;
+			birdSpeed = 10f;
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
@@ -111,33 +111,35 @@ public class GameManager : MonoBehaviour
 	private void newBird ()
 	{
 		bird_num--;
-		birdSpeed++;
-		GameObject birdObject = new GameObject ();
-		birdObject.name = "bird object";
-		Bird bird = birdObject.AddComponent<Bird> ();
-		bird.transform.parent = bird_folder.transform;
-		bird.transform.localPosition = new Vector3 (0, 0, 0);
-		if (zenMode) {
-			zenModeInit (bird);
-		} else {
-			migrationModeInit (bird);
+		if (bird_num >= 0) {
+			birdSpeed++;
+			GameObject birdObject = new GameObject ();
+			birdObject.name = "bird object";
+			Bird bird = birdObject.AddComponent<Bird> ();
+			bird.transform.parent = bird_folder.transform;
+			bird.transform.localPosition = new Vector3 (0, 0, 0);
+			if (zenMode) {
+				zenModeInit (bird);
+			} else {
+				migrationModeInit (bird);
 		
-		}
+			}
 
 //		rb.gravityScale = 0;
-		//rb.isKinematic = true;
-		DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
-		PolygonCollider2D col = bird.gameObject.AddComponent<PolygonCollider2D>();
-		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
-		col.isTrigger = true;
-		rb.isKinematic = true;
+			//rb.isKinematic = true;
+			DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
+			PolygonCollider2D col = bird.gameObject.AddComponent<PolygonCollider2D> ();
+			Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
+			col.isTrigger = true;
+			rb.isKinematic = true;
 //		rb.gravityScale = 0;
-		//rb.useGravity = false;
-		col.name = "Bird Collider";
-		bird.init (this, birdspeed);
-		bird.name = "Bird " + bird_count++;
-		live = bird;
-		birdspeed+= .25f;
+			//rb.useGravity = false;
+			col.name = "Bird Collider";
+			bird.init (this, birdspeed);
+			bird.name = "Bird " + bird_count++;
+			live = bird;
+			birdspeed += .25f;
+		}
 	}
 
 	Background addBGtile (int x, int y)
@@ -264,7 +266,7 @@ public class GameManager : MonoBehaviour
 			state.mode = 7;
 		}
 			
-		else if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
+		else if (!birdOnScreen && go && !pause && !done && bird_num >= 0) {
 			
 			birdOnScreen = true;
 			i = 0; //reset replay
@@ -284,7 +286,7 @@ public class GameManager : MonoBehaviour
 			
 			replayBirds ();
 
-		} 
+		}
 //		Debug.Log (dead_bird_list.Keys);
 
 		if (zenMode) {
@@ -505,14 +507,12 @@ public class GameManager : MonoBehaviour
 	private void endScreen(){
 		go = false;
 		GUIStyle guiStyle = new GUIStyle ();
-		guiStyle.normal.textColor = new Color (.58f, .23f, .33f);
-		guiStyle.fontSize = 80;
+		guiStyle.fontSize = 200;
+		guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .5f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
-		int xpos = ((Screen.width) - 300) / 2;
-		int ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
-		xpos = ((Screen.width) - (150)) / 2;
-		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
 	}
 
 
