@@ -19,7 +19,7 @@ public class SeedModel : MonoBehaviour
 		name = "Seed Model";		// Name the object.
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
-		mat.mainTexture = Resources.Load<Texture2D> ("Textures/dandelion");// Set the texture.  Must be in Resources folder.
+		mat.mainTexture = Resources.Load<Texture2D> ("Textures/seed");// Set the texture.  Must be in Resources folder.
 		//mat.color = Color.gray;
 		//		mat.color = Color.blue;// Set the color (easy way to tint things).
 		// mat.shader = Shader.Find ("Sprites/Default");// Tell the renderer that our textures have transparency.
@@ -42,7 +42,7 @@ public class SeedModel : MonoBehaviour
 
 
 	void Update(){
-		clock += Time.deltaTime/speed;
+		clock += Time.unscaledDeltaTime/speed;
 		transform.localPosition = new Vector3(Mathf.Sin(10*clock/2),Mathf.Sin(5*clock/2),0);	
 	}
 
