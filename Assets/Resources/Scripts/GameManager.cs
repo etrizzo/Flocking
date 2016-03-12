@@ -9,12 +9,12 @@ public class GameManager : MonoBehaviour
 	 * 0 - Zen Mode
 	 * 1 - Migration Mode
 	 */
-	struct GuiState
+	public struct GuiState
 	{
 		public int mode;
 	}
 
-	GuiState state;
+	public GuiState state;
 
 	public float score;
 	public bool zenMode;
