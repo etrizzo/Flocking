@@ -68,7 +68,7 @@ public class Bird : MonoBehaviour
 		getMousePos ();
 		cameraDiff = Camera.main.transform.position.y - this.transform.position.y;
 		direction = new Vector2 (0, 1);
-		birdClip = Resources.Load<AudioClip> ("Sounds/Bird" + getsoundNum());
+		birdClip = Resources.Load<AudioClip> ("Sounds/BirdSounds/Bird" + getsoundNum());
 		trailColor = getColor ();
 		alive = true;
 		initBirdModel (alive);

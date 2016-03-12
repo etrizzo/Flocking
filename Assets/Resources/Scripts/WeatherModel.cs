@@ -13,6 +13,9 @@ public class WeatherModel : MonoBehaviour
 	private Material mat;
 	private Material bgMat;
 
+	public AudioSource weatherAudio;
+	public AudioClip weatherClip;
+
 	// Random weather position min/max
 	private static int weather_border = 1;
 	Vector2 x_range = new Vector2 (GameManager.x_coord * GameManager.BGSCALE - weather_border, 0);
@@ -92,13 +95,33 @@ public class WeatherModel : MonoBehaviour
 		col.points = points;
 		col.isTrigger = true;
 
+		initSound ();
+
+	}
+
+	private void initSound(){
+		weatherAudio = this.gameObject.AddComponent<AudioSource> ();
+		weatherAudio.loop = true;
+		weatherAudio.playOnAwake = false;
+	}
+
+	private string getsoundNum(){
+		int soundNum = (int) ((Random.value * 1000) % 2 ) + 1;
+		return soundNum.ToString();
+	}
+
+	private void weatherSound(){
+		weatherClip = Resources.Load<AudioClip> ("Sounds/WeatherSounds/Thunder"+getsoundNum());
+		weatherAudio.clip = weatherClip;
 	}
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
+			weatherSound ();
 			containsBird = true;
+			weatherAudio.Play ();
 		}
 	}
 
@@ -135,6 +158,7 @@ public class WeatherModel : MonoBehaviour
 
 	void OnTriggerExit2D (Collider2D other)
 	{
+		weatherAudio.Stop ();
 		Bird otherBird = other.gameObject.GetComponent<Bird> ();
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;

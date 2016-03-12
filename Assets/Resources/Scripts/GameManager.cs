@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void birdCall(){
-		migrationClip = Resources.Load<AudioClip> ("Sounds/migrationSounds/flock"+getsoundNum());
+		migrationClip = Resources.Load<AudioClip> ("Sounds/MigrationSounds/flock"+getsoundNum());
 		migrationAudio.clip = migrationClip;
 		migrationAudio.Play ();
 	}
@@ -352,7 +352,6 @@ public class GameManager : MonoBehaviour
 		}
 		if (!zenMode && state.mode == 5) {
 			if (checkCall % 17 == 0) {
-				Debug.Log ("check call: " + checkCall);
 				playBirdCall ();
 			}
 			checkCall++;
@@ -435,7 +434,7 @@ public class GameManager : MonoBehaviour
 		showLifeSlider ();
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "FLY!")) {
 			state.mode = 3;
 		}
 	}
@@ -443,10 +442,23 @@ public class GameManager : MonoBehaviour
 	private void migrationOptions ()
 	{
 		zenMode = false;
-		showNumSlider ();
-		int xpos = ((Screen.width) - (150)) / 2;
-		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
+		//showNumSlider ();
+		int xpos1 = ((Screen.width) - (150)) / 4;
+		int ypos1 = ((Screen.height) / 2 + (Screen.height / 8));
+		int xpos2 = ((Screen.width) - (150)) / 2;
+		int ypos2 = ((Screen.height) / 2 + (Screen.height / 8));
+		int xpos3 = (((Screen.width) - (150)) / 4)*3;
+		int ypos3 = ((Screen.height) / 2 + (Screen.height / 8));
+		if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY")) {
+			bird_num = 3;
+			state.mode = 3;
+		}
+		else if (GUI.Button (new Rect (xpos2, ypos2, 150, 60), "A FLIGHT")) {
+			bird_num = 6;
+			state.mode = 3;
+		}
+		else if (GUI.Button (new Rect (xpos3, ypos3, 150, 60), "A FLOCK")) {
+			bird_num = 9;
 			state.mode = 3;
 		}
 	}
@@ -541,22 +553,23 @@ public class GameManager : MonoBehaviour
 		}
 		int countdown = (int)loadScreenCounter+1;
 		GUIStyle guiStyle = new GUIStyle ();
-		int xpos = ((Screen.width) - (150)) / 2;
-		int ypos = ((Screen.height) - (60)) / 2;
+		int xpos1 = ((Screen.width) - (400)) / 2;
+		int xpos2 = ((Screen.width) - (100)) / 2;
+		int ypos = ((Screen.height) - (200)) / 2;
 		guiStyle.fontSize = 60;
-		guiStyle.normal.textColor = new Color (.5f, .5f, .5f);
+		guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
 //		if (zenMode) {
 //
 //		}
 		if (loadScreenCounter > 3) {
-			GUI.Label (new Rect (xpos, ypos, 150, 60), "Ready?", guiStyle);
+			GUI.Label (new Rect (xpos1, ypos, 150, 60), "Bird "+bird_count+" Ready?", guiStyle);
 		}
 		else if (loadScreenCounter > 0) {
 			
-			GUI.Label (new Rect (xpos, ypos, 150, 60), countdown.ToString ()+"...", guiStyle);
+			GUI.Label (new Rect (xpos2, ypos, 150, 60), countdown.ToString ()+"...", guiStyle);
 		} 
 		else if(loadScreenCounter > -1){
-			GUI.Label (new Rect (xpos, ypos, 150, 60), "Go!", guiStyle);
+			GUI.Label (new Rect (xpos2, ypos, 150, 60), "Go!", guiStyle);
 		}
 		else {
 			state.mode = 5;
@@ -575,7 +588,7 @@ public class GameManager : MonoBehaviour
 
 		xpos = ((Screen.width) - (150)) / 2;
 		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
 			print ("restarting");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;

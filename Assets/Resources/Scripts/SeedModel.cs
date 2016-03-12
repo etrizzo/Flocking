@@ -53,9 +53,13 @@ public class SeedModel : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		print ("GET THE SEEEEED");
-		this.owner.gm.score += 30;
-		Destroy (this.gameObject);
+		Bird otherBird = other.gameObject.GetComponent<Bird> ();
+		if (otherBird != null && otherBird.alive) {
+			print ("GET THE SEEEEED");
+			otherBird.model.seedAudio.Play ();
+			this.owner.gm.score += 30;
+			Destroy (this.gameObject);
+		}
 	}
 }
 
