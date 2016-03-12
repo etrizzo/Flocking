@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	public GuiState state;
-	GUIStyle guiStyle = new GUIStyle ();
+	GUIStyle guiStyle;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -69,7 +69,9 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
-		guiStyle.font = (Font)Resources.Load("Fonts/Courier New");
+		guiStyle = new GUIStyle ();
+		guiStyle.font = (Font)Resources.Load("Fonts/WireOne");
+		guiStyle.alignment = TextAnchor.MiddleCenter;
 
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
@@ -413,9 +415,8 @@ public class GameManager : MonoBehaviour
 		if ((!go && !done) || (pause && !done)) {
 			guiStyle.fontSize = 200;
 			guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .9f);
-			guiStyle.alignment = TextAnchor.MiddleCenter;
 			xpos = ((Screen.width) - (300)) / 2;
-			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/10));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
 		}
 		if (!go && !done) {
@@ -571,7 +572,7 @@ public class GameManager : MonoBehaviour
 			loadScreenCounter -= Time.unscaledDeltaTime * .5f;
 		}
 		int countdown = (int)loadScreenCounter+1;
-		int xpos1 = ((Screen.width) - (400)) / 2;
+		int xpos1 = ((Screen.width) - (200)) / 2;
 		int xpos2 = ((Screen.width) - (100)) / 2;
 		int ypos = ((Screen.height) - (200)) / 2;
 		guiStyle.fontSize = 60;
