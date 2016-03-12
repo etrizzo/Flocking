@@ -112,8 +112,9 @@ public class WeatherModel : MonoBehaviour
 		if (containsBird) {
 			string random_texture = (Random.RandomRange(-1, 1) < 0 ? "cloud" : "cloud-lightning");
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + random_texture);// Set the texture.  Must be in Resources folder.
-			float color_value = (float)  (Random.value * 0.5);
-			mat.color = new Color (color_value, color_value, color_value, 1);
+			mat.color = Color.white;
+//			float color_value = (float)  (Random.value * 0.5);
+//			mat.color = new Color (color_value, color_value, color_value, 1);
 		}
 	}
 
