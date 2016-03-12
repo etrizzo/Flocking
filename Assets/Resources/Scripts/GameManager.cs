@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 	void Start ()
 	{
 		guiStyle = new GUIStyle ();
-		guiStyle.font = (Font)Resources.Load("Fonts/WireOne");
+		guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
 		guiStyle.alignment = TextAnchor.MiddleCenter;
 
 		seedFolder =  new GameObject();
