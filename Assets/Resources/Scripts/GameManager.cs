@@ -9,17 +9,20 @@ public class GameManager : MonoBehaviour
 	 * 0 - Zen Mode
 	 * 1 - Migration Mode
 	 */
-	struct GuiState
+	public struct GuiState
 	{
 		public int mode;
 	}
 
-	GuiState state;
+	public GuiState state;
 
 	public float score;
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
+	public AudioSource migrationAudio;
+	public AudioClip migrationClip;
+	int checkCall;
 
 	int bird_count = 0;
 	public bool birdOnScreen = true;
@@ -58,8 +61,14 @@ public class GameManager : MonoBehaviour
 	int weather_count = 50;
 	public List<WeatherModel> weather_list = new List<WeatherModel>();
 
+	int seed_count = 10;
+
+	public GameObject seedFolder;
+
 	void Start ()
 	{
+		seedFolder =  new GameObject();
+		seedFolder.name = "Seeds";
 		go = false;
 		done = false;
 		pause = false;
@@ -98,11 +107,17 @@ public class GameManager : MonoBehaviour
 			x_coord = Camera.main.ViewportToWorldPoint (new Vector3 (1, 0, dist)).x;
 			y_coord = Camera.main.ViewportToWorldPoint (new Vector3 (0, 0, dist)).y;
 		} else { //in migration mode
+
 //			BGSCALE = 2f;
+			birdSpeed = 6f;
+
+			BGSCALE = 2f;
 			birdSpeed = 3f;
+
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
+			makeSeeds ();
 		}
 		this.bg = addBGtile (0, 0);
 		//newBird ();
@@ -110,34 +125,38 @@ public class GameManager : MonoBehaviour
 
 	private void newBird ()
 	{
+		bg.bgMat.color = new Color (1, 1, 1);
+
 		bird_num--;
-		birdSpeed++;
-		GameObject birdObject = new GameObject ();
-		birdObject.name = "bird object";
-		Bird bird = birdObject.AddComponent<Bird> ();
-		bird.transform.parent = bird_folder.transform;
-		bird.transform.localPosition = new Vector3 (0, 0, 0);
-		if (zenMode) {
-			zenModeInit (bird);
-		} else {
-			migrationModeInit (bird);
+		if (bird_num >= 0) {
+			birdSpeed++;
+			GameObject birdObject = new GameObject ();
+			birdObject.name = "bird object";
+			Bird bird = birdObject.AddComponent<Bird> ();
+			bird.transform.parent = bird_folder.transform;
+			bird.transform.localPosition = new Vector3 (0, 0, 0);
+			if (zenMode) {
+				zenModeInit (bird);
+			} else {
+				migrationModeInit (bird);
 		
-		}
+			}
 
 //		rb.gravityScale = 0;
-		//rb.isKinematic = true;
-		DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
-		PolygonCollider2D col = bird.gameObject.AddComponent<PolygonCollider2D>();
-		Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
-		col.isTrigger = true;
-		rb.isKinematic = true;
+			//rb.isKinematic = true;
+			DestroyImmediate (bird.gameObject.GetComponent<MeshCollider> ());
+			PolygonCollider2D col = bird.gameObject.AddComponent<PolygonCollider2D> ();
+			Rigidbody2D rb = bird.gameObject.AddComponent<Rigidbody2D> ();
+			col.isTrigger = true;
+			rb.isKinematic = true;
 //		rb.gravityScale = 0;
-		//rb.useGravity = false;
-		col.name = "Bird Collider";
-		bird.init (this, birdspeed);
-		bird.name = "Bird " + bird_count++;
-		live = bird;
-		birdspeed+= .25f;
+			//rb.useGravity = false;
+			col.name = "Bird Collider";
+			bird.init (this, birdspeed);
+			bird.name = "Bird " + bird_count++;
+			live = bird;
+			birdspeed += .25f;
+		}
 	}
 
 	Background addBGtile (int x, int y)
@@ -163,6 +182,29 @@ public class GameManager : MonoBehaviour
 //		Debug.Log ("inside migrationmode init :)))");
 		bird.hasRadius = true;
 		bird.hasTrail = false;
+		migrationAudio = this.gameObject.AddComponent<AudioSource> ();
+		migrationAudio.loop = false;
+		migrationAudio.playOnAwake = false;
+		checkCall = 0;
+	}
+
+	private string getsoundNum(){
+		int soundNum = (int) ((Random.value * 1000) % 11 ) + 1;
+		return soundNum.ToString();
+	}
+
+	private void birdCall(){
+		migrationClip = Resources.Load<AudioClip> ("Sounds/migrationSounds/flock"+getsoundNum());
+		migrationAudio.clip = migrationClip;
+		migrationAudio.Play ();
+	}
+
+	private void playBirdCall(){
+		float playCall = Random.value;
+		if (playCall < .03f) {
+			birdCall ();
+			print ("CHEEP! "+ playCall);
+		}
 	}
 
 	int i = 0;
@@ -228,6 +270,7 @@ public class GameManager : MonoBehaviour
 	private void initSound(AudioClip gameClip){
 		gameAudio = this.gameObject.AddComponent<AudioSource> ();
 		gameAudio.loop = true;
+		gameAudio.volume = .6f;
 		getSound (gameClip);
 	}
 
@@ -248,7 +291,6 @@ public class GameManager : MonoBehaviour
 
 		//print ("Lowest deltaTime: " + lowestDelta);
 		//print ("Highest deltaTime: " + highestDelta);
-
 		if (Input.GetKeyDown ("space") && state.mode != 6){
 			if (!pause && go) {
 				pause = true;
@@ -260,11 +302,12 @@ public class GameManager : MonoBehaviour
 
 		}
 		if(bird_num < 0){
+			
 			done = true;
 			state.mode = 7;
 		}
 			
-		else if (!birdOnScreen && go && !pause && !done && bird_num > 0) {
+		else if (!birdOnScreen && go && !pause && !done && bird_num >= 0) {
 			
 			birdOnScreen = true;
 			i = 0; //reset replay
@@ -284,7 +327,7 @@ public class GameManager : MonoBehaviour
 			
 			replayBirds ();
 
-		} 
+		}
 //		Debug.Log (dead_bird_list.Keys);
 
 		if (zenMode) {
@@ -307,6 +350,13 @@ public class GameManager : MonoBehaviour
 				clearWeather ();
 			}
 		}
+		if (!zenMode && state.mode == 5) {
+			if (checkCall % 17 == 0) {
+				Debug.Log ("check call: " + checkCall);
+				playBirdCall ();
+			}
+			checkCall++;
+		}
 	}
 
 	/************************ Start Gui Stuff ****************************/
@@ -314,7 +364,7 @@ public class GameManager : MonoBehaviour
 	// Start button that disappears once clicked (and triggers the start of the game)
 	void OnGUI ()
 	{
-		GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int) score);
+		
 		switch (state.mode) {
 		case 0:
 			getMode ();
@@ -443,6 +493,9 @@ public class GameManager : MonoBehaviour
 
 	private void pauseGame ()
 	{
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		Time.timeScale = 0;
 		GUIStyle guiStyle = new GUIStyle ();
 		int xpos = ((Screen.width) - (800)) / 2;
@@ -458,6 +511,9 @@ public class GameManager : MonoBehaviour
 
 	private void unpauseGame ()
 	{
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		Time.timeScale = 1;
 		if (pause) {
 			state.mode = 4;
@@ -475,7 +531,9 @@ public class GameManager : MonoBehaviour
 		
 	private void loadScreen(){
 		Time.timeScale = 0;
-
+		if (!zenMode) {
+			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+		}
 		if (Time.unscaledDeltaTime > .1) {
 			print ("OMG DELTA TIME IS HUGE : " + Time.unscaledDeltaTime);
 		} else {
@@ -486,7 +544,10 @@ public class GameManager : MonoBehaviour
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) - (60)) / 2;
 		guiStyle.fontSize = 60;
-		guiStyle.normal.textColor = new Color (58, 148, 130);
+		guiStyle.normal.textColor = new Color (.5f, .5f, .5f);
+//		if (zenMode) {
+//
+//		}
 		if (loadScreenCounter > 3) {
 			GUI.Label (new Rect (xpos, ypos, 150, 60), "Ready?", guiStyle);
 		}
@@ -505,14 +566,20 @@ public class GameManager : MonoBehaviour
 	private void endScreen(){
 		go = false;
 		GUIStyle guiStyle = new GUIStyle ();
-		guiStyle.normal.textColor = new Color (.58f, .23f, .33f);
-		guiStyle.fontSize = 80;
+		guiStyle.fontSize = 200;
+		guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .5f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
-		int xpos = ((Screen.width) - 300) / 2;
-		int ypos = ((Screen.height) - 50) / 2 - (Screen.height / 6);
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
+
 		xpos = ((Screen.width) - (150)) / 2;
 		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
+			print ("restarting");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
+		}
 	}
 
 
@@ -523,14 +590,48 @@ public class GameManager : MonoBehaviour
 	{
 		Weather new_weather = gameObject.AddComponent<Weather> ();
 		do {
-			WeatherModel new_model = new_weather.init ("cloud");
+			WeatherModel new_model = new_weather.init ("cloud", this);
 			weather_list.Add(new_model);
 		} while (--weather_count != 0);
+	}
+
+	public void makeSeeds(){
+		int i = 0;
+		while (i < seed_count) {
+			float x = Random.Range (x_coord * -1, x_coord);
+			float y = Random.Range (y_coord, y_coord * -1);
+			Collider2D col = Physics2D.OverlapArea(new Vector2(x -2f, y - 2f), new Vector2(x + 2f, y + 2f)); 
+			if (!col && Mathf.Abs(x) > 5f && Mathf.Abs(y) > 5f) {
+				createSeed (x, y);
+				i++;
+			}
+		}
 	}
 
 	public void clearWeather() {
 		foreach (WeatherModel w_model in weather_list) {
 			w_model.move_location();
+		}
+	}
+
+	private void createSeed(float x, float y){
+		GameObject seedObject = new GameObject ();
+		Seed seed = seedObject.AddComponent<Seed> ();
+		seedObject.name = "Seed";
+		seedObject.transform.parent = seedFolder.transform;
+		print ("Seeeeds" + x + " " + y);
+		seed.init (x, y, this);
+	}
+
+	public void clearAllTrails(){
+		if (zenMode) {
+			foreach (Bird birb in dead_bird_list.Values) {
+				print (birb.model2);
+				if (birb.model2.birdTrail){
+					birb.model2.birdTrail.Clear ();
+				}
+
+			}
 		}
 	}
 }
