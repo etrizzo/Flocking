@@ -69,8 +69,7 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
-		guiStyle.font = (Font)Resources.Load("Fonts/Courier New");
-
+		guiStyle.font = (Font)Resources.Load("Fonts/Metrica");
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
 		go = false;
@@ -459,6 +458,7 @@ public class GameManager : MonoBehaviour
 		guiStyle.fontSize = 100;
 		guiStyle.normal.textColor = new Color (.80f, .63f, .98f, .3f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
+		guiStyle.font = (Font) Resources.Load("Fonts/Engineer");
 		int xpos = ((Screen.width) - (300)) / 2;
 		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "HOW MANY BIRDS?", guiStyle);
