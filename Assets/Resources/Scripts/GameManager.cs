@@ -455,12 +455,20 @@ public class GameManager : MonoBehaviour
 	{
 		zenMode = false;
 		//showNumSlider ();
+		GUIStyle guiStyle = new GUIStyle();
+		guiStyle.fontSize = 100;
+		guiStyle.normal.textColor = new Color (.80f, .63f, .98f, .3f);
+		guiStyle.alignment = TextAnchor.MiddleCenter;
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		GUI.Label (new Rect (xpos, ypos, 300, 50), "HOW MANY BIRDS?", guiStyle);
+
 		int xpos1 = ((Screen.width) - (150)) / 4;
-		int ypos1 = ((Screen.height) / 2 + (Screen.height / 8));
+		int ypos1 = ((Screen.height) / 2);// + (Screen.height / 8));
 		int xpos2 = ((Screen.width) - (150)) / 2;
-		int ypos2 = ((Screen.height) / 2 + (Screen.height / 8));
+		int ypos2 = ((Screen.height) / 2);// + (Screen.height / 8));
 		int xpos3 = (((Screen.width) - (150)) / 4)*3;
-		int ypos3 = ((Screen.height) / 2 + (Screen.height / 8));
+		int ypos3 = ((Screen.height) / 2);// + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY")) {
 			bird_num = 3;
 			state.mode = 3;
