@@ -30,6 +30,8 @@ public class WeatherModel : MonoBehaviour
 	int timeIn = 0;
 	bool containsBird;
 
+	float speed;
+
 	float weather_distance = 6f;
 
 	//	void OnGUI ()
@@ -40,7 +42,7 @@ public class WeatherModel : MonoBehaviour
 
 	void Start ()
 	{
-		clock = 0f;
+		this.clock = Random.Range(0,2);
 	}
 
 	void Awake ()
@@ -51,13 +53,22 @@ public class WeatherModel : MonoBehaviour
 
 	public void move_location ()
 	{
-		transform.localPosition = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
-		Vector2 pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
+		transform.position = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
+//		print ("Position: " + transform.position);
+		Vector2 pos = new Vector2 (transform.position.x, transform.position.y);
 		Vector2 world_center = new Vector2 (0, 0);
 		Vector2 dest_center = DestinationModel.dest_center;
-		while (PointInsideSphere(pos, world_center, weather_distance) | PointInsideSphere(pos, dest_center, weather_distance)) {
+		print (dest_center);
+		float x = transform.position.x;
+		float y = transform.position.y;
+		Collider2D col = Physics2D.OverlapArea(new Vector2(x -4f, y - 4f), new Vector2(x + 4f, y + 4f));
+//		print (col.gameObject);
+//		if (col.gameObject.GetComponent<DestinationModel> ()) {
+//			print (col);
+//		}
+		while (PointInsideSphere(pos, world_center, weather_distance) | PointInsideSphere(pos, dest_center, weather_distance) ) {
 			move_location ();
-			pos = new Vector2 (transform.localPosition.x, transform.localPosition.y);
+			pos = new Vector2 (transform.position.x, transform.position.y);
 //			print ("pos was in the dest or world sphere!");
 		}
 	}
@@ -69,14 +80,17 @@ public class WeatherModel : MonoBehaviour
 
 	public void init (Weather owner)
 	{
+		this.speed = Random.Range(.4f, .7f) * 5f;
 		this.owner = owner;
+		transform.parent = owner.transform;
+		transform.localPosition = new Vector3 (0, 0, 0);
 		slider_rect = new Rect (slider_coords.x, slider_coords.y, slider_size.x, slider_size.y);
 		slider_box_rect = new Rect (slider_coords.x, slider_coords.y + slider_rect.height, slider_size.x, slider_size.y);
 
 //		transform.parent = owner.transform;// Set the model's parent to the bird.
 //		transform.localPosition = new Vector3 (0, 0, 0);// Center the model on the parent.
 		name = "Weather Model " + ++weather_counter + "— " + owner.type;// Name the object.
-		move_location ();
+//		move_location ();
 		transform.localScale = new Vector3 (scale, scale, 1);
 
 		mat = new Material (Shader.Find ("Sprites/Default"));
@@ -134,8 +148,8 @@ public class WeatherModel : MonoBehaviour
 			if (bird.gm.score < 0) {
 				bird.gm.score = 0;
 			}
-		}
-		if (containsBird) {
+//		}
+//		if (containsBird) {
 			string random_texture = (Random.RandomRange(-1, 1) < 0 ? "cloud" : "cloud-lightning");
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/" + random_texture);// Set the texture.  Must be in Resources folder.
 			float color_value = (float)  (Random.value * 0.5);
@@ -187,8 +201,11 @@ public class WeatherModel : MonoBehaviour
 		// Incrememnt the clock based on how much time has elapsed since the previous update.
 		// Using deltaTime is critical for animation and movement, since the time between each call
 		// to Update is unpredictable.
-		clock = clock + Time.deltaTime;
-
+//		clock = clock + Time.deltaTime;
+		if (owner.gm.state.mode != 4) {
+			clock += Time.unscaledDeltaTime/speed;
+			transform.localPosition = new Vector3 (Mathf.Sin (10 * clock / 6), Mathf.Sin (5 * clock / 6), 0);	
+		}
 //		transform.localScale = new Vector3 (scale, scale, scale);
 	}
 }
