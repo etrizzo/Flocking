@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	public GuiState state;
+	GUIStyle guiStyle = new GUIStyle ();
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -68,6 +69,8 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
+		guiStyle.font = (Font)Resources.Load("Fonts/Courier New");
+
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
 		go = false;
@@ -405,8 +408,6 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void getMode(){
-
-		GUIStyle guiStyle = new GUIStyle();
 		int xpos;
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
@@ -455,7 +456,6 @@ public class GameManager : MonoBehaviour
 	{
 		zenMode = false;
 		//showNumSlider ();
-		GUIStyle guiStyle = new GUIStyle();
 		guiStyle.fontSize = 100;
 		guiStyle.normal.textColor = new Color (.80f, .63f, .98f, .3f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
@@ -529,7 +529,6 @@ public class GameManager : MonoBehaviour
 			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
 		}
 		Time.timeScale = 0;
-		GUIStyle guiStyle = new GUIStyle ();
 		int xpos = ((Screen.width) - (800)) / 2;
 		int ypos = ((Screen.height) + (250)) / 2 - (Screen.height / 3);
 		if (!done && pause) {
@@ -572,7 +571,6 @@ public class GameManager : MonoBehaviour
 			loadScreenCounter -= Time.unscaledDeltaTime * .5f;
 		}
 		int countdown = (int)loadScreenCounter+1;
-		GUIStyle guiStyle = new GUIStyle ();
 		int xpos1 = ((Screen.width) - (400)) / 2;
 		int xpos2 = ((Screen.width) - (100)) / 2;
 		int ypos = ((Screen.height) - (200)) / 2;
@@ -598,7 +596,6 @@ public class GameManager : MonoBehaviour
 
 	private void endScreen(){
 		go = false;
-		GUIStyle guiStyle = new GUIStyle ();
 		guiStyle.fontSize = 200;
 		guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .5f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
