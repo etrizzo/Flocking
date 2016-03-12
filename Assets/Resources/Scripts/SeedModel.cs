@@ -29,7 +29,7 @@ public class SeedModel : MonoBehaviour
 		PolygonCollider2D col = gameObject.AddComponent<PolygonCollider2D>();
 
 		//set the points array for the polygon collider
-		Vector2[] points = new Vector2[]{new Vector2(-.5f, -.5f), new Vector2(-.5f, .5f), new Vector2(.5f, -.5f), new Vector2(.5f, -.5f)};
+		Vector2[] points = new Vector2[]{new Vector2(-.35f, -.5f), new Vector2(-.2f, .5f), new Vector2(.5f, .45f), new Vector2(.5f, .2f), new Vector2(-.25f,-.5f)};
 //		Vector2[] points = new Vector2[]{new Vector2(-.5f, -.5f), new Vector2(-.4f, -.3f), 
 //			new Vector2(-.45f, 0f), new Vector2(-.15f, .35f), new Vector2(.3f, .15f), new Vector2(.45f, 0f),new Vector2(.43f, -.3f)};
 		col.points = points;

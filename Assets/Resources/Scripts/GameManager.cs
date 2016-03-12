@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 	Destination dest;
 
 	int weather_count = 50;
-	public List<WeatherModel> weather_list = new List<WeatherModel>();
+	public List<Weather> weather_list = new List<Weather>();
 
 	int seed_count = 10;
 
@@ -348,11 +348,11 @@ public class GameManager : MonoBehaviour
 				Destroy (live.gameObject);
 				birdOnScreen = false;
 				clearWeather ();
+				makeSeeds ();
 			}
 		}
 		if (!zenMode && state.mode == 5) {
 			if (checkCall % 17 == 0) {
-				Debug.Log ("check call: " + checkCall);
 				playBirdCall ();
 			}
 			checkCall++;
@@ -588,29 +588,31 @@ public class GameManager : MonoBehaviour
 
 	private void makeWeather ()
 	{
-		Weather new_weather = gameObject.AddComponent<Weather> ();
+		
 		do {
-			WeatherModel new_model = new_weather.init ("cloud", this);
-			weather_list.Add(new_model);
+			GameObject weatherObject = new GameObject();
+			Weather new_weather = weatherObject.AddComponent<Weather> ();
+			new_weather.init ("cloud", this);
+			weather_list.Add(new_weather);
 		} while (--weather_count != 0);
 	}
 
 	public void makeSeeds(){
-		int i = 0;
-		while (i < seed_count) {
+		int seeds = 0;
+		while (seeds < seed_count + dead_bird_list.Count) {
 			float x = Random.Range (x_coord * -1, x_coord);
 			float y = Random.Range (y_coord, y_coord * -1);
 			Collider2D col = Physics2D.OverlapArea(new Vector2(x -2f, y - 2f), new Vector2(x + 2f, y + 2f)); 
 			if (!col && Mathf.Abs(x) > 5f && Mathf.Abs(y) > 5f) {
 				createSeed (x, y);
-				i++;
+				seeds++;
 			}
 		}
 	}
 
 	public void clearWeather() {
-		foreach (WeatherModel w_model in weather_list) {
-			w_model.move_location();
+		foreach (Weather w in weather_list) {
+			w.move_location();
 		}
 	}
 
@@ -619,7 +621,7 @@ public class GameManager : MonoBehaviour
 		Seed seed = seedObject.AddComponent<Seed> ();
 		seedObject.name = "Seed";
 		seedObject.transform.parent = seedFolder.transform;
-		print ("Seeeeds" + x + " " + y);
+//		print ("Seeeeds" + x + " " + y);
 		seed.init (x, y, this);
 	}
 
