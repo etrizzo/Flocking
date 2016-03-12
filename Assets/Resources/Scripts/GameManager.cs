@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
 
 	public GuiState state;
 
-	public float score;
+	public float score; //in game score
+    float highscore; //player's overall highscore
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
@@ -94,7 +95,10 @@ public class GameManager : MonoBehaviour
 		gameClip = Resources.Load<AudioClip> ("Sounds/StartMenu");
 		initSound (gameClip);
 
-	}
+        //loads a previous high score if it exists
+        highscore = PlayerPrefs.GetInt("High Score");
+
+    }
 
 	private void initMode ()
 	{
@@ -304,7 +308,15 @@ public class GameManager : MonoBehaviour
 		if(bird_num < 0){
 			
 			done = true;
-			state.mode = 7;
+            if(score > highscore && !zenMode) //updates highscore if player beat their previous high score in migration mode
+            {
+                Debug.Log("You've Beat Your Previous High Score!! Old High Score is " + highscore);
+                highscore = score;
+                PlayerPrefs.SetInt("High Score", (int)highscore);
+
+                Debug.Log("New High Score is " + highscore);
+            }
+			state.mode = 7; //Go to End Game Screen
 		}
 			
 		else if (!birdOnScreen && go && !pause && !done && bird_num >= 0) {
@@ -596,7 +608,7 @@ public class GameManager : MonoBehaviour
 	}
 
 
-	/************************ End Gui Stuff ****************************/
+	/************************ End GUI Stuff ****************************/
 
 
 	private void makeWeather ()
