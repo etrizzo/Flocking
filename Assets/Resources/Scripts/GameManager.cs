@@ -15,8 +15,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	public GuiState state;
+	GUIStyle guiStyle = new GUIStyle ();
 
-	public float score;
+	public float score; //in game score
+    float highscore; //player's overall highscore
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
@@ -67,6 +69,8 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
+		guiStyle.font = (Font)Resources.Load("Fonts/Courier New");
+
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
 		go = false;
@@ -94,7 +98,10 @@ public class GameManager : MonoBehaviour
 		gameClip = Resources.Load<AudioClip> ("Sounds/StartMenu");
 		initSound (gameClip);
 
-	}
+        //loads a previous high score if it exists
+        highscore = PlayerPrefs.GetInt("High Score");
+
+    }
 
 	private void initMode ()
 	{
@@ -194,7 +201,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void birdCall(){
-		migrationClip = Resources.Load<AudioClip> ("Sounds/migrationSounds/flock"+getsoundNum());
+		migrationClip = Resources.Load<AudioClip> ("Sounds/MigrationSounds/flock"+getsoundNum());
 		migrationAudio.clip = migrationClip;
 		migrationAudio.Play ();
 	}
@@ -304,7 +311,15 @@ public class GameManager : MonoBehaviour
 		if(bird_num < 0){
 			
 			done = true;
-			state.mode = 7;
+            if(score > highscore && !zenMode) //updates highscore if player beat their previous high score in migration mode
+            {
+                Debug.Log("You've Beat Your Previous High Score!! Old High Score is " + highscore);
+                highscore = score;
+                PlayerPrefs.SetInt("High Score", (int)highscore);
+
+                Debug.Log("New High Score is " + highscore);
+            }
+			state.mode = 7; //Go to End Game Screen
 		}
 			
 		else if (!birdOnScreen && go && !pause && !done && bird_num >= 0) {
@@ -394,8 +409,6 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void getMode(){
-
-		GUIStyle guiStyle = new GUIStyle();
 		int xpos;
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
@@ -435,7 +448,7 @@ public class GameManager : MonoBehaviour
 		showLifeSlider ();
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "FLY!")) {
 			state.mode = 3;
 		}
 	}
@@ -443,10 +456,30 @@ public class GameManager : MonoBehaviour
 	private void migrationOptions ()
 	{
 		zenMode = false;
-		showNumSlider ();
-		int xpos = ((Screen.width) - (150)) / 2;
-		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "START")) {
+		//showNumSlider ();
+		guiStyle.fontSize = 100;
+		guiStyle.normal.textColor = new Color (.80f, .63f, .98f, .3f);
+		guiStyle.alignment = TextAnchor.MiddleCenter;
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		GUI.Label (new Rect (xpos, ypos, 300, 50), "HOW MANY BIRDS?", guiStyle);
+
+		int xpos1 = ((Screen.width) - (150)) / 4;
+		int ypos1 = ((Screen.height) / 2);// + (Screen.height / 8));
+		int xpos2 = ((Screen.width) - (150)) / 2;
+		int ypos2 = ((Screen.height) / 2);// + (Screen.height / 8));
+		int xpos3 = (((Screen.width) - (150)) / 4)*3;
+		int ypos3 = ((Screen.height) / 2);// + (Screen.height / 8));
+		if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY")) {
+			bird_num = 3;
+			state.mode = 3;
+		}
+		else if (GUI.Button (new Rect (xpos2, ypos2, 150, 60), "A FLIGHT")) {
+			bird_num = 6;
+			state.mode = 3;
+		}
+		else if (GUI.Button (new Rect (xpos3, ypos3, 150, 60), "A FLOCK")) {
+			bird_num = 9;
 			state.mode = 3;
 		}
 	}
@@ -497,7 +530,6 @@ public class GameManager : MonoBehaviour
 			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
 		}
 		Time.timeScale = 0;
-		GUIStyle guiStyle = new GUIStyle ();
 		int xpos = ((Screen.width) - (800)) / 2;
 		int ypos = ((Screen.height) + (250)) / 2 - (Screen.height / 3);
 		if (!done && pause) {
@@ -540,23 +572,23 @@ public class GameManager : MonoBehaviour
 			loadScreenCounter -= Time.unscaledDeltaTime * .5f;
 		}
 		int countdown = (int)loadScreenCounter+1;
-		GUIStyle guiStyle = new GUIStyle ();
-		int xpos = ((Screen.width) - (150)) / 2;
-		int ypos = ((Screen.height) - (60)) / 2;
+		int xpos1 = ((Screen.width) - (400)) / 2;
+		int xpos2 = ((Screen.width) - (100)) / 2;
+		int ypos = ((Screen.height) - (200)) / 2;
 		guiStyle.fontSize = 60;
-		guiStyle.normal.textColor = new Color (.5f, .5f, .5f);
+		guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
 //		if (zenMode) {
 //
 //		}
 		if (loadScreenCounter > 3) {
-			GUI.Label (new Rect (xpos, ypos, 150, 60), "Ready?", guiStyle);
+			GUI.Label (new Rect (xpos1, ypos, 150, 60), "Bird "+bird_count+" Ready?", guiStyle);
 		}
 		else if (loadScreenCounter > 0) {
 			
-			GUI.Label (new Rect (xpos, ypos, 150, 60), countdown.ToString ()+"...", guiStyle);
+			GUI.Label (new Rect (xpos2, ypos, 150, 60), countdown.ToString ()+"...", guiStyle);
 		} 
 		else if(loadScreenCounter > -1){
-			GUI.Label (new Rect (xpos, ypos, 150, 60), "Go!", guiStyle);
+			GUI.Label (new Rect (xpos2, ypos, 150, 60), "Go!", guiStyle);
 		}
 		else {
 			state.mode = 5;
@@ -565,7 +597,6 @@ public class GameManager : MonoBehaviour
 
 	private void endScreen(){
 		go = false;
-		GUIStyle guiStyle = new GUIStyle ();
 		guiStyle.fontSize = 200;
 		guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .5f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
@@ -575,7 +606,7 @@ public class GameManager : MonoBehaviour
 
 		xpos = ((Screen.width) - (150)) / 2;
 		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
 			print ("restarting");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -583,7 +614,7 @@ public class GameManager : MonoBehaviour
 	}
 
 
-	/************************ End Gui Stuff ****************************/
+	/************************ End GUI Stuff ****************************/
 
 
 	private void makeWeather ()

@@ -16,6 +16,10 @@ public class BirdModel : MonoBehaviour
 	public Material radiusMat;
 	public CircleCollider2D radiusCollider;
 
+
+	public AudioSource seedAudio;
+	public AudioClip seedClip;
+
 	public bool pause;
 
 	float lifetime;
@@ -61,8 +65,10 @@ public class BirdModel : MonoBehaviour
 
 		//Radius 
 		}
-		if(owner.hasRadius && !owner.alive) {
+		if (owner.hasRadius && !owner.alive) {
 			makeRadius ();
+		} else if (owner.hasRadius) {
+			initSeedSound ();
 		}
 
 		pause = false;
@@ -71,6 +77,19 @@ public class BirdModel : MonoBehaviour
 
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
     }
+
+
+	private void initSeedSound(){
+		seedAudio = this.gameObject.AddComponent<AudioSource> ();
+		seedAudio.loop = false;
+		seedAudio.playOnAwake = false;
+		seedSound ();
+	}
+
+	private void seedSound(){
+		seedClip = Resources.Load<AudioClip> ("Sounds/SeedSounds/Blip1");
+		seedAudio.clip = seedClip;
+	}
 
 
 	void Start ()
