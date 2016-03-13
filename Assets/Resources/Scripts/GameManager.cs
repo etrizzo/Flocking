@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
+		Cursor.SetCursor((Texture2D)Resources.Load("Textures/cursor"), new Vector2(4,4), CursorMode.Auto);
 		guiStyle = new GUIStyle ();
 		//guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
 		guiStyle.alignment = TextAnchor.MiddleCenter;
