@@ -51,33 +51,6 @@ public class WeatherModel : MonoBehaviour
 		y_range.y = -1 * y_range.x;
 	}
 
-	public void move_location ()
-	{
-		transform.position = new Vector3 (Random.Range (x_range.x, x_range.y), Random.Range (y_range.x, y_range.y), 0);
-//		print ("Position: " + transform.position);
-		Vector2 pos = new Vector2 (transform.position.x, transform.position.y);
-		Vector2 world_center = new Vector2 (0, 0);
-		Vector2 dest_center = DestinationModel.dest_center;
-		print (dest_center);
-		float x = transform.position.x;
-		float y = transform.position.y;
-		Collider2D col = Physics2D.OverlapArea(new Vector2(x -4f, y - 4f), new Vector2(x + 4f, y + 4f));
-//		print (col.gameObject);
-//		if (col.gameObject.GetComponent<DestinationModel> ()) {
-//			print (col);
-//		}
-		while (PointInsideSphere(pos, world_center, weather_distance) | PointInsideSphere(pos, dest_center, weather_distance) ) {
-			move_location ();
-			pos = new Vector2 (transform.position.x, transform.position.y);
-//			print ("pos was in the dest or world sphere!");
-		}
-	}
-
-	public bool PointInsideSphere (Vector2 point, Vector2 center, float radius)
-	{
-		return Vector3.Distance (point, center) < radius;
-	}
-
 	public void init (Weather owner)
 	{
 		this.speed = Random.Range(.4f, .7f) * 5f;
@@ -143,7 +116,7 @@ public class WeatherModel : MonoBehaviour
 	void OnTriggerStay2D (Collider2D other)
 	{
 		Bird bird = other.gameObject.GetComponent<Bird> ();
-		if (bird) {
+		if (bird & bird.alive) {
 			bird.gm.score -= .2f;
 			if (bird.gm.score < 0) {
 				bird.gm.score = 0;
