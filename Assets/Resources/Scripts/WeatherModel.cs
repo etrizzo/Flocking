@@ -116,7 +116,7 @@ public class WeatherModel : MonoBehaviour
 	void OnTriggerStay2D (Collider2D other)
 	{
 		Bird bird = other.gameObject.GetComponent<Bird> ();
-		if (bird & bird.alive) {
+		if (bird && bird.alive) {
 			bird.gm.score -= .2f;
 			if (bird.gm.score < 0) {
 				bird.gm.score = 0;
@@ -150,7 +150,7 @@ public class WeatherModel : MonoBehaviour
 		if (otherBird != null && otherBird.alive) {
 			containsBird = false;
 		}
-		if (otherBird) {
+		if (otherBird != null) {
 			mat.mainTexture = Resources.Load<Texture2D> ("Textures/cloud");// Set the texture.  Must be in Resources folder.
 			mat.color = Color.gray;
 			bgMat.color = new Color(1f, 1f, 1f);

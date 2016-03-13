@@ -151,6 +151,7 @@ public class BirdModel : MonoBehaviour
 	}
 
 	void RestartBirds(){
+		print("restarting");
 		if (owner.gm.zenMode){
 			owner.gm.clearAllTrails ();
 		}
@@ -169,6 +170,7 @@ public class BirdModel : MonoBehaviour
 		}
 
 		Destroy (this.gameObject);
+		Destroy (this);
 
 	}
 }
