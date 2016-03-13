@@ -704,6 +704,7 @@ public class GameManager : MonoBehaviour
 
 	private void makeWeather ()
 	{
+//		print ("lol");
 		
 		do {
 			GameObject weatherObject = new GameObject();
@@ -715,14 +716,24 @@ public class GameManager : MonoBehaviour
 
 	public void makeSeeds(){
 		int seeds = 0;
-		while (seeds < seed_count + dead_bird_list.Count) {
-			float x = Random.Range (x_coord * -1, x_coord);
-			float y = Random.Range (y_coord, y_coord * -1);
+//		print ("ha");
+		int tries = 0;
+		float scale = BGSCALE * 3 / 4;
+		while (seeds < seed_count && tries < 500) {
+			float x = Random.Range (x_coord * scale * -1, x_coord*scale);
+			float y = Random.Range (y_coord * scale, y_coord * -1*scale);
 			Collider2D col = Physics2D.OverlapArea(new Vector2(x -2f, y - 2f), new Vector2(x + 2f, y + 2f)); 
-			if (!col && Mathf.Abs(x) > 5f && Mathf.Abs(y) > 5f) {
+			if (!col && Mathf.Abs (x) > 4f && Mathf.Abs (y) > 4f) {
 				createSeed (x, y);
 				seeds++;
+			} else {
+				tries++;
+//				print ("thinkin about seeds <3");
 			}
+			if (tries >= 500) {
+				print ("too many seeeds :o");
+			}
+
 		}
 	}
 
