@@ -28,7 +28,7 @@ public class BirdModel : MonoBehaviour
 	void OnGUI ()
 	{
 		if (!owner.playback && owner.gm.zenMode) {
-			GUI.Box (clock_rect, "Bird time: " + lifetime);
+			GUI.Box (clock_rect, "Bird time: " + (int)lifetime);
 		}
 	}
 
@@ -112,15 +112,15 @@ public class BirdModel : MonoBehaviour
 
 
 		if (Input.GetKeyDown ("space")){
-			if (!pause) {
-				pause = true;
-				if (owner.gm.zenMode) {
+			if (!owner.gm.pause) {
+				//pause = true;
+				if (owner.gm.zenMode && owner.gm.pause) {
 					birdAudio.Pause ();
 				}
 				Time.timeScale = 0;
 			} else {
-				pause = false;
-				if (owner.gm.zenMode) {
+				//pause = false;
+				if (owner.gm.zenMode && !owner.gm.pause) {
 					birdAudio.UnPause ();
 				}
 				Time.timeScale = 1;
@@ -128,10 +128,10 @@ public class BirdModel : MonoBehaviour
 
 		}
 		if (owner.gm.zenMode) {
-			if (lifetime <= 0 && !owner.playback && !pause) {
+			if (lifetime <= 0 && !owner.playback && !owner.gm.pause) {
 				
 				RestartBirds ();
-			} else if (lifetime > 0 && !pause) {
+			} else if (lifetime > 0 && !owner.gm.pause) {
 				lifetime -= Time.deltaTime;
 			}
 		} else {

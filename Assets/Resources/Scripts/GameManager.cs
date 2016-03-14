@@ -399,7 +399,7 @@ public class GameManager : MonoBehaviour
 
 		//print ("Lowest deltaTime: " + lowestDelta);
 		//print ("Highest deltaTime: " + highestDelta);
-		if (Input.GetKeyDown ("space") && state.mode != 6){
+		if (Input.GetKeyDown ("space") && (state.mode == 5 || state.mode == 4)){
 			if (!pause && go) {
 				pause = true;
 				state.mode = 4;
@@ -519,20 +519,20 @@ public class GameManager : MonoBehaviour
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle2);
 		}
 		if (!go && !done) {
-			xpos = ((Screen.width) + (25)) / 2;
-			ypos = ((Screen.height) / 2 + (Screen.height / 8));
+			xpos = ((Screen.width) + (50)) / 2;
+			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = zenHover;
-			if (GUI.Button (new Rect (xpos, ypos, 100, 150), zenbutton, buttonStyle)) {
+			if (GUI.Button (new Rect (xpos, ypos, 150, 225), zenbutton, buttonStyle)) {
 				state.mode = 1;
 				/*go = true;
 				zenMode = true;
 				chooseMode ();
 				newBird ();*/
 			}
-			xpos = ((Screen.width) - (325)) / 2;
-			ypos = ((Screen.height) / 2 + (Screen.height / 8));
+			xpos = ((Screen.width) - (375)) / 2;
+			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = migrationHover;
-			if (GUI.Button (new Rect (xpos, ypos, 100, 150), migrationbutton, buttonStyle)) {
+			if (GUI.Button (new Rect (xpos, ypos, 150, 225), migrationbutton, buttonStyle)) {
 				state.mode = 2;
 				/*go = true;
 				zenMode = false;
@@ -554,10 +554,10 @@ public class GameManager : MonoBehaviour
 			state.mode = 3;
 		}
 			
-		xpos = ((Screen.width) - (60)) / 2;
+		xpos = ((Screen.width) - (90)) / 2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 4));
 		buttonStyle.hover = homeHover;
-		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -577,37 +577,37 @@ public class GameManager : MonoBehaviour
 		//guiStyle.font = (Font) Resources.Load("Fonts/Engineer");
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		int xpos = ((Screen.width) - (300)) / 2;
-		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		int ypos = ((Screen.height) - (50)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "HOW MANY BIRDS?", guiStyle);
 
-		int xpos1 = ((Screen.width) + (60)) / 3;
-		int ypos1 = ((Screen.height) / 2);// + (Screen.height / 8));
-		int xpos2 = ((Screen.width) - (60)) / 2;
-		int ypos2 = ((Screen.height) / 2);// + (Screen.height / 8));
+		int xpos1 = ((Screen.width) - (60)) / 3;
+		int ypos1 = ((Screen.height) / 2 -50);// + (Screen.height / 8));
+		int xpos2 = ((Screen.width) - (90)) / 2;
+		int ypos2 = ((Screen.height) / 2 -50);// + (Screen.height / 8));
 		int xpos3 = (((Screen.width) - (120)) / 3)*2;
-		int ypos3 = ((Screen.height) / 2);// + (Screen.height / 8));
+		int ypos3 = ((Screen.height) / 2 -50);// + (Screen.height / 8));
 		buttonStyle.hover = buttonHover;
 		//if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY (3)")) {
-		if (GUI.Button (new Rect (xpos1, ypos1, 60, 60), coveybutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos1, ypos1, 90, 90), coveybutton, buttonStyle)) {
 			bird_num = 3;
 			covey = true;
 			state.mode = 3;
 		}
-		else if (GUI.Button (new Rect (xpos2, ypos2, 60, 60), flightbutton, buttonStyle)) {
+		else if (GUI.Button (new Rect (xpos2, ypos2, 90, 90), flightbutton, buttonStyle)) {
 			bird_num = 6;
 			flight = true;
 			state.mode = 3;
 		}
-		else if (GUI.Button (new Rect (xpos3, ypos3, 60, 60), flockbutton, buttonStyle)) {
+		else if (GUI.Button (new Rect (xpos3, ypos3, 90, 90), flockbutton, buttonStyle)) {
 			bird_num = 9;
 			flock = true;
 			state.mode = 3;
 		}
 
-		xpos = ((Screen.width) - (60)) / 2;
-		ypos = ((Screen.height) / 2 + (Screen.height / 4));
+		xpos = ((Screen.width) - (90)) / 2;
+		ypos = ((Screen.height) / 2 + (Screen.height / 6));
 		buttonStyle.hover = homeHover;
-		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -670,10 +670,10 @@ public class GameManager : MonoBehaviour
 		} else {
 			state.mode = 5;
 		}
-		xpos = ((Screen.width) -60)/2;
+		xpos = ((Screen.width) -90)/2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 6));
 		buttonStyle.hover = homeHoverAlt;
-		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -784,10 +784,10 @@ public class GameManager : MonoBehaviour
 
 		//MENU
 		//xpos = ((Screen.width) + (25)) / 2;
-		xpos = ((Screen.width) -60)/2;
+		xpos = ((Screen.width) -90)/2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		buttonStyle.hover = homeHoverAlt;
-		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
