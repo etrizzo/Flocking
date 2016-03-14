@@ -528,13 +528,13 @@ public class GameManager : MonoBehaviour
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle2);
 		}
 		if (!go && !done) {
-			xpos = (((Screen.width) - (150)) / 2) -150;
+			xpos = (((Screen.width) - (150)) / 2) +150;
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = zenHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), zenbutton, buttonStyle)) {
 				state.mode = 1;
 			}
-			xpos = (((Screen.width) - (150)) / 2)+150;
+			xpos = (((Screen.width) - (150)) / 2)-150;
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = migrationHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), migrationbutton, buttonStyle)) {
