@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 	public GuiState state;
 	GUIStyle guiStyle;
 	GUIStyle guiStyle2;
+	GUIStyle scoreStyle;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
 	int seed_count = 10;
 
 	public GameObject seedFolder;
+	public GameObject cloudFolder;
 
 	void Start ()
 	{
@@ -90,9 +92,17 @@ public class GameManager : MonoBehaviour
 		guiStyle2.alignment = TextAnchor.MiddleCenter;
 		guiStyle2.font = (Font) Resources.Load("Fonts/Metrica");
 		guiStyle2.normal.textColor = new Color (.40f, .23f, .58f, .9f);
+		guiStyle.font = (Font)Resources.Load("Fonts/Metrica");
+		scoreStyle = new GUIStyle ();
+		scoreStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+		scoreStyle.fontSize = 30;
+		scoreStyle.normal.textColor = new Color (0f, 0f, 0f, .5f);
 
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
+
+		cloudFolder =  new GameObject();
+		cloudFolder.name = "Clouds";
 		go = false;
 		done = false;
 		pause = false;
@@ -359,7 +369,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("You've Beat Your Previous High Score!! Old High Score is " + highscore);
                 highscore = score;
-                PlayerPrefs.SetInt("High Score", (int)highscore);
+                PlayerPrefs.SetInt("High Score", (int) highscore);
 
                 Debug.Log("New High Score is " + highscore);
             }
@@ -592,7 +602,7 @@ public class GameManager : MonoBehaviour
 	{
 		
 		if (!zenMode) {
-			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+			displayScore ();
 		}
 		Time.timeScale = 0;
 		int xpos = ((Screen.width) - (450)) / 2;
@@ -613,10 +623,14 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	private void displayScore() {
+		GUI.Label (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score, scoreStyle);
+	}
+
 	private void unpauseGame ()
 	{
 		if (!zenMode) {
-			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+			displayScore ();
 		}
 		Time.timeScale = 1;
 		if (pause) {
@@ -636,7 +650,7 @@ public class GameManager : MonoBehaviour
 	private void loadScreen(){
 		Time.timeScale = 0;
 		if (!zenMode) {
-			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
+			displayScore ();
 		}
 		if (Time.unscaledDeltaTime > .1) {
 			print ("OMG DELTA TIME IS HUGE : " + Time.unscaledDeltaTime);
@@ -703,10 +717,11 @@ public class GameManager : MonoBehaviour
 		guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
 		xpos = ((Screen.width) - (300)) / 2;
 		ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		//guiStyle.normal.textColor = new Color(.5f, .5f, .5f);
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: "+(int)score, guiStyle);
 		xpos = ((Screen.width) - (300)) / 2;
 		ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3)-(Screen.height/30));
-		GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: "+highscore, guiStyle);
+		GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: "+(int)highscore, guiStyle);
 
 		//MENU
 		//xpos = ((Screen.width) + (25)) / 2;
@@ -741,6 +756,7 @@ public class GameManager : MonoBehaviour
 			Weather new_weather = weatherObject.AddComponent<Weather> ();
 			new_weather.init ("cloud", this);
 			weather_list.Add(new_weather);
+			new_weather.transform.parent = cloudFolder.transform;
 		} while (--weather_count != 0);
 	}
 
