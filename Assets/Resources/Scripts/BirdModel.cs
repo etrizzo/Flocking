@@ -112,6 +112,7 @@ public class BirdModel : MonoBehaviour
         clock = clock + Time.deltaTime;
 
 
+
 		if (Input.GetKeyDown ("space")){
 			if (!owner.gm.pause) {
 				//pause = true;
@@ -163,7 +164,6 @@ public class BirdModel : MonoBehaviour
 	}
 
 	void RestartBirds(){
-		print("restarting");
 		if (owner.gm.zenMode){
 			owner.gm.clearAllTrails ();
 		}
