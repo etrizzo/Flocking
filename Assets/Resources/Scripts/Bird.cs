@@ -59,12 +59,20 @@ public class Bird : MonoBehaviour
 	float begin_circle_clock = 5f;
 	Vector3 circle_pos;
 	Vector2 follow_dest;
+	GUIStyle scoreStyle;
+
+	void Start(){
+		scoreStyle = new GUIStyle ();
+		scoreStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
+		scoreStyle.fontSize = 30;
+		scoreStyle.normal.textColor = new Color (1f, 1f, 1f, .5f);
+	}
 
 
 	void OnGUI ()
 	{
 		if (!playback && gm.zenMode) {
-			GUI.Box (slider_rect, "Use x or . to increase speed \nUse z or , to decrease speed\nSpeed: " + speed_slider.ToString ());
+			GUI.Label (slider_rect, "Use x or . to increase speed \nUse z or , to decrease speed\nSpeed: " + speed_slider.ToString (), scoreStyle);
 //			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 		}
 	}

@@ -23,13 +23,23 @@ public class BirdModel : MonoBehaviour
 	public bool pause;
 
 	float lifetime;
-	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
+	Rect clock_rect = new Rect(Screen.width - 200, 10, 200, 50);
+	GUIStyle scoreStyle;
+
+	void Start(){
+		clock = 0f;
+
+		scoreStyle = new GUIStyle ();
+		scoreStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
+		scoreStyle.fontSize = 30;
+		scoreStyle.normal.textColor = new Color (1f, 1f, 1f, .5f);
+	}
 
 	void OnGUI ()
 	{
 		if (!owner.playback && owner.gm.zenMode) {
             //GUI.Box (clock_rect, "Bird time: " + (int)lifetime);
-            GUI.Box(clock_rect, "Press B For A New Bird");
+			GUI.Box(clock_rect, "Press B For A New Bird", scoreStyle);
         }
 	}
 
@@ -95,12 +105,6 @@ public class BirdModel : MonoBehaviour
 	private void seedSound(){
 		seedClip = Resources.Load<AudioClip> ("Sounds/SeedSounds/Blip1");
 		seedAudio.clip = seedClip;
-	}
-
-
-	void Start ()
-	{
-		clock = 0f;
 	}
 
 
