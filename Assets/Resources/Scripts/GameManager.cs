@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
 	public GuiState state;
 	GUIStyle guiStyle;
-	UIStyle scoreStyle;
+	GUIStyle scoreStyle;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
