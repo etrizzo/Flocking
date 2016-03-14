@@ -26,12 +26,15 @@ public class GameManager : MonoBehaviour
 	GUIContent migrationbutton;
 	GUIContent zenbutton;
 	GUIContent helpbutton;
+	GUIContent quitbutton;
 	GUIStyleState buttonHover;
 	GUIStyleState homeHover;
 	GUIStyleState homeHoverAlt;
 	GUIStyleState zenHover;
 	GUIStyleState migrationHover;
 	GUIStyleState helpHover;
+	GUIStyleState quitHover;
+	GUIStyleState quitHoverAlt;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -171,6 +174,8 @@ public class GameManager : MonoBehaviour
 		zenbutton.image = Resources.Load<Texture2D> ("Textures/zen");
 		helpbutton = new GUIContent ();
 		helpbutton.image = Resources.Load<Texture2D> ("Textures/help");
+		quitbutton = new GUIContent ();
+		quitbutton.image = Resources.Load<Texture2D> ("Textures/quit");
 		buttonStyle.normal.textColor = new Color (0, 0, 0, .3f);
 		//homebutton.text = "Home";
 		buttonHover = new GUIStyleState ();
@@ -185,6 +190,10 @@ public class GameManager : MonoBehaviour
 		migrationHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
 		helpHover = new GUIStyleState ();
 		helpHover.background = Resources.Load<Texture2D> ("Textures/helpglow");
+		quitHover = new GUIStyleState ();
+		quitHover.background = Resources.Load<Texture2D> ("Textures/quitglow");
+		quitHoverAlt = new GUIStyleState ();
+		quitHoverAlt.background = Resources.Load<Texture2D> ("Textures/quitglow2");
 		buttonStyle.hover = buttonHover;
 	}
 
@@ -540,11 +549,18 @@ public class GameManager : MonoBehaviour
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), migrationbutton, buttonStyle)) {
 				state.mode = 2;
 			}
-			xpos = ((Screen.width) - (60)) / 2;
+			xpos = ((Screen.width) - (60)) / 2 + 50;
 			ypos = ((Screen.height) / 2 + (200));
 			buttonStyle.hover = helpHover;
 			if (GUI.Button (new Rect (xpos, ypos, 60, 90), helpbutton, buttonStyle)) {
 				state.mode = 8;
+			}
+
+			xpos = ((Screen.width) - (60)) / 2 -50;
+			ypos = ((Screen.height) / 2 + (200));
+			buttonStyle.hover = quitHover;
+			if (GUI.Button (new Rect (xpos, ypos, 60, 90), quitbutton, buttonStyle)) {
+				Application.Quit();
 			}
 		}
 	}
@@ -677,13 +693,19 @@ public class GameManager : MonoBehaviour
 		} else {
 			state.mode = 5;
 		}
-		xpos = ((Screen.width) -90)/2;
+		xpos = ((Screen.width) - (90)) / 2 + 70;
 		ypos = ((Screen.height) / 2 + (Screen.height / 6));
 		buttonStyle.hover = homeHoverAlt;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
+		}
+		xpos = ((Screen.width) - (90)) / 2 - 70;
+		ypos = ((Screen.height) / 2 + (Screen.height / 6));
+		buttonStyle.hover = quitHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), quitbutton, buttonStyle)) {
+			Application.Quit();
 		}
 	}
 
@@ -791,14 +813,19 @@ public class GameManager : MonoBehaviour
 		}
 
 		//MENU
-		//xpos = ((Screen.width) + (25)) / 2;
-		xpos = ((Screen.width) -90)/2;
+		xpos = ((Screen.width) - (90)) / 2 + 70;
 		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		buttonStyle.hover = homeHoverAlt;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
+		}
+		xpos = ((Screen.width) - (90)) / 2 - 70;
+		ypos = ((Screen.height) / 2 + (Screen.height / 8));
+		buttonStyle.hover = quitHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), quitbutton, buttonStyle)) {
+			Application.Quit();
 		}
 
 		/*//RESTART
