@@ -775,6 +775,7 @@ public class GameManager : MonoBehaviour
 		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
 
+
 		//SCORE
 		if (!zenMode) {
 			guiStyle.fontSize = 60;
