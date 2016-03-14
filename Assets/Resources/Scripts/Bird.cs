@@ -23,7 +23,7 @@ public class Bird : MonoBehaviour
 	public bool hasRadius = false;
 
 	Vector2 slider_coords = new Vector2 (10, 10);
-	Vector2 slider_size = new Vector2 (150, 30);
+	Vector2 slider_size = new Vector2 (200, 60);
 	Rect slider_rect, slider_box_rect;
 	bool dead = false;
 	public bool alive;
@@ -64,15 +64,15 @@ public class Bird : MonoBehaviour
 	void OnGUI ()
 	{
 		if (!playback && gm.zenMode) {
-			GUI.Box (slider_rect, "Speed: " + speed_slider.ToString ());
-			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
+			GUI.Box (slider_rect, "Use x or . to increase speed \nUse z or , to decrease speed\nSpeed: " + speed_slider.ToString ());
+//			speed_slider = GUI.HorizontalSlider (slider_box_rect, speed_slider, 0.0F, 20.0F);
 		}
 	}
 
 	public void init(GameManager gm, float speed)
 	{
 		clock = 0f;
-		this.speed_slider = speed;
+//		this.speed_slider = speed;
 		this.gm = gm;
 		initSlider ();
 		getMousePos ();
@@ -93,16 +93,16 @@ public class Bird : MonoBehaviour
 
 	public void Update ()
 	{
-		/*if (Input.GetKeyDown ("space")){
-			if (!pause) {
-				pause = true;
-				Time.timeScale = 0;
-			} else {
-				pause = false;
-				Time.timeScale = 1;
+		if ((Input.GetKeyDown ("x") || Input.GetKeyDown(".")) && gm.zenMode){
+			if (speed_slider < 12f) {
+				speed_slider += .5f;
 			}
-
-		}*/
+		}
+		if ((Input.GetKeyDown ("z") || Input.GetKeyDown(",")) && gm.zenMode) {
+			if (speed_slider > 1f) {
+				speed_slider -= .5f;
+			}
+		}
 		if (!playback && !gm.pause) {
 			gm.score += Time.deltaTime;
 			speed = Screen.width / Screen.height * speed_slider;
@@ -219,7 +219,7 @@ public class Bird : MonoBehaviour
 		if (!circling) {
 			circle_pos = mouse_pos;
 		}
-		if (Vector2.Distance (bird.transform.position, circle_pos) > 1f || Vector2.Distance(circle_pos, mouse_pos) > 1) {
+		if (Vector2.Distance (bird.transform.position, circle_pos) > 1.2f || Vector2.Distance(circle_pos, mouse_pos) > 1.2f) {
 			//if the mouse has just moved outside the circle radius, set up to end circling
 			if (circling) {
 				follow_dest = this.transform.position;
@@ -242,14 +242,16 @@ public class Bird : MonoBehaviour
 				bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed);
 			}
 
-//		} else if (Vector2.Distance (bird.transform.position, mouse_pos) < .3 && gm.state.mode != 6f) {	//if the mouse is too close, move it away.
-//			circling = true;
-//			bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed * -1);
+		} else if (Vector2.Distance (bird.transform.position, mouse_pos) < .2 && gm.state.mode != 6f) {	//if the mouse is too close, move it away.
+			circling = true;
+			bird.transform.position = Vector2.MoveTowards (transform.position, mouse_pos, Time.deltaTime * speed * -1);
 
 		} else if (gm.state.mode != 6) {	//otherwise, circle
-			if (!circling) {	//if the bird is just starting to circle, set up to lerp into circling
+			if (!circling && begin_circle_clock > 1f) {	//if the bird is just starting to circle, set up to lerp into circling
 				circling = true;
-//				begin_circle_clock = 0f;
+				if (speed_slider < 7) {
+					begin_circle_clock = 0f;
+				}
 				circle_pos = mouse_pos;
 			} else if (begin_circle_clock < 1f) {		//if you're beginning to circle, move forward
 				transform.Translate (Vector3.up * Time.deltaTime * speed);
@@ -324,8 +326,8 @@ public class Bird : MonoBehaviour
 		} else {
 			if (begin_circle_clock < 1) {
 				transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.AngleAxis (angle - 180, Vector3.forward), Time.deltaTime * 10f);
-				begin_circle_clock += Time.deltaTime*6;
-				print (transform.rotation);
+				begin_circle_clock += Time.deltaTime*8;
+				print (begin_circle_clock);
 			}else {
 				transform.rotation = Quaternion.AngleAxis (angle - 180, Vector3.forward);
 			}
