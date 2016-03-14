@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 	public GuiState state;
 	GUIStyle guiStyle;
+	GUIStyle guiStyle2;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -82,7 +83,13 @@ public class GameManager : MonoBehaviour
 		guiStyle = new GUIStyle ();
 		//guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
 		guiStyle.alignment = TextAnchor.MiddleCenter;
-		guiStyle.font = (Font)Resources.Load("Fonts/Metrica");
+		guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+
+		guiStyle2 = new GUIStyle ();
+		guiStyle2.fontSize = 200;
+		guiStyle2.alignment = TextAnchor.MiddleCenter;
+		guiStyle2.font = (Font) Resources.Load("Fonts/Metrica");
+		guiStyle2.normal.textColor = new Color (.40f, .23f, .58f, .9f);
 
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
@@ -449,11 +456,9 @@ public class GameManager : MonoBehaviour
 		int xpos;
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
-			guiStyle.fontSize = 200;
-			guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .9f);
 			xpos = ((Screen.width) - (300)) / 2;
 			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/10));
-			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle);
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle2);
 		}
 		if (!go && !done) {
 			xpos = ((Screen.width) + (25)) / 2;
@@ -480,12 +485,20 @@ public class GameManager : MonoBehaviour
 	private void zenOptions ()
 	{
 		zenMode = true;
+		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		showNumSlider ();
 		showLifeSlider ();
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "FLY!")) {
 			state.mode = 3;
+		}
+			
+		ypos = ((Screen.height) / 2 + (Screen.height / 4));
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
+			Debug.Log ("menu");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
 		}
 	}
 
@@ -525,6 +538,13 @@ public class GameManager : MonoBehaviour
 			bird_num = 9;
 			flock = true;
 			state.mode = 3;
+		}
+
+		ypos = ((Screen.height) / 2 + (Screen.height / 4));
+		if (GUI.Button (new Rect (xpos2, ypos, 150, 60), "Menu")) {
+			Debug.Log ("menu");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
 		}
 	}
 
@@ -570,18 +590,26 @@ public class GameManager : MonoBehaviour
 
 	private void pauseGame ()
 	{
+		
 		if (!zenMode) {
 			GUI.Box (new Rect (Screen.width - 100, -1, 100, 30), "Score: " + (int)score);
 		}
 		Time.timeScale = 0;
 		int xpos = ((Screen.width) - (450)) / 2;
-		int ypos = ((Screen.height) + (250)) / 2 - (Screen.height / 3);
+		int ypos = ((Screen.height) + (200)) / 2 - (Screen.height / 3);
 		if (!done && pause) {
 			guiStyle.fontSize = 500;
 			guiStyle.normal.textColor = new Color (255, 255, 255, .5f);
 			GUI.Label (new Rect (xpos, ypos, 500, 10), "PAUSED", guiStyle);
 		} else {
 			state.mode = 5;
+		}
+		xpos = ((Screen.width) -150)/2;
+		ypos = ((Screen.height) / 2 + (Screen.height / 6));
+		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
+			Debug.Log ("menu");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
 		}
 	}
 
@@ -681,7 +709,8 @@ public class GameManager : MonoBehaviour
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: "+highscore, guiStyle);
 
 		//MENU
-		xpos = ((Screen.width) + (25)) / 2;
+		//xpos = ((Screen.width) + (25)) / 2;
+		xpos = ((Screen.width) -150)/2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
 			Debug.Log ("menu");
@@ -689,14 +718,14 @@ public class GameManager : MonoBehaviour
 			state.mode = 0;
 		}
 
-		//RESTART
+		/*//RESTART
 		xpos = ((Screen.width) - (325)) / 2;
 			ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Restart")) {
 			Debug.Log ("restart");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 2;
-		}
+		}*/
 	}
 
 
