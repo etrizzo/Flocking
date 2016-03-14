@@ -110,6 +110,7 @@ public class Bird : MonoBehaviour
 			//getMousePos ();
 			if (mouse) {
 				if (counter % distanceFromMouse == 0) {
+					
 					//	direction = mouse_pos;
 					move ();
 					rotateTowardMouse ();
@@ -194,7 +195,7 @@ public class Bird : MonoBehaviour
 				addSound (modelObject2, birdClip);
 			}
 			model2.init (this);
-			model2.mat.color = Color.black;
+			//model2.mat.color = Color.black;
 
 			//Set collider for dead birds to be a trigger
 
@@ -370,8 +371,10 @@ public class Bird : MonoBehaviour
 		if (!circling) {
 			Camera cam = Camera.main;
 			Vector3 cameraPos = checkCameraBoundaries ();
+
+//			cam.transform.position = cameraPos;
 			cam.transform.position = Vector3.Lerp (
-				cam.transform.position, cameraPos, Time.deltaTime * smooth
+				cam.transform.position, cameraPos, .5f
 			);
 		}
 	}
