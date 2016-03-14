@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
 	public bool flight;
 	public bool flock;
 
-	public int bird_num = 8;
+	public int bird_num = 30;
 	public int bird_life = 10;
 	float birdspeed = 6f;
 
@@ -571,6 +571,7 @@ public class GameManager : MonoBehaviour
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		showNumSlider ();
 		showLifeSlider ();
+		bird_num = 30;
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "FLY!")) {
