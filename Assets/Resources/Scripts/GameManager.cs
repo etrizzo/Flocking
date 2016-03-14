@@ -25,11 +25,13 @@ public class GameManager : MonoBehaviour
 	GUIContent flockbutton;
 	GUIContent migrationbutton;
 	GUIContent zenbutton;
+	GUIContent helpbutton;
 	GUIStyleState buttonHover;
 	GUIStyleState homeHover;
 	GUIStyleState homeHoverAlt;
 	GUIStyleState zenHover;
 	GUIStyleState migrationHover;
+	GUIStyleState helpHover;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -79,7 +81,7 @@ public class GameManager : MonoBehaviour
 
 	public int bird_num = 8;
 	public int bird_life = 10;
-	float birdspeed = 4f;
+	float birdspeed = 6f;
 
 	Destination dest;
 
@@ -167,6 +169,8 @@ public class GameManager : MonoBehaviour
 		migrationbutton.image = Resources.Load<Texture2D> ("Textures/migration");
 		zenbutton = new GUIContent ();
 		zenbutton.image = Resources.Load<Texture2D> ("Textures/zen");
+		helpbutton = new GUIContent ();
+		helpbutton.image = Resources.Load<Texture2D> ("Textures/help");
 		buttonStyle.normal.textColor = new Color (0, 0, 0, .3f);
 		//homebutton.text = "Home";
 		buttonHover = new GUIStyleState ();
@@ -179,6 +183,8 @@ public class GameManager : MonoBehaviour
 		zenHover.background = Resources.Load<Texture2D> ("Textures/zenglow");
 		migrationHover = new GUIStyleState ();
 		migrationHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
+		helpHover = new GUIStyleState ();
+		helpHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
 		buttonStyle.hover = buttonHover;
 	}
 
@@ -507,6 +513,9 @@ public class GameManager : MonoBehaviour
 		case 7:
 			endScreen();
 			break;
+		case 8:
+			helpScreen ();
+			break;
 		}
 	}
 
@@ -524,20 +533,18 @@ public class GameManager : MonoBehaviour
 			buttonStyle.hover = zenHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), zenbutton, buttonStyle)) {
 				state.mode = 1;
-				/*go = true;
-				zenMode = true;
-				chooseMode ();
-				newBird ();*/
 			}
 			xpos = ((Screen.width) - (375)) / 2;
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = migrationHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), migrationbutton, buttonStyle)) {
 				state.mode = 2;
-				/*go = true;
-				zenMode = false;
-				chooseMode ();
-				newBird ();*/
+			}
+			xpos = ((Screen.width) - (60)) / 2;
+			ypos = ((Screen.height) / 2 + (200));
+			buttonStyle.hover = helpHover;
+			if (GUI.Button (new Rect (xpos, ypos, 60, 90), helpbutton, buttonStyle)) {
+				state.mode = 8;
 			}
 		}
 	}
@@ -802,6 +809,9 @@ public class GameManager : MonoBehaviour
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 2;
 		}*/
+	}
+
+	private void helpScreen(){
 	}
 
 
