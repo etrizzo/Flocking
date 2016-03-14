@@ -79,7 +79,7 @@ public class BirdModel : MonoBehaviour
 
 		pause = false;
 
-		lifetime = (float)owner.gm.bird_life; //gets lifetime from menu slider
+		//lifetime = (float)owner.gm.bird_life; //gets lifetime from menu slider
 
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
     }
