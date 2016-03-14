@@ -50,8 +50,13 @@ public class BirdModel : MonoBehaviour
 
         mat = GetComponent<Renderer>().material;								// Get the material component of this quad object.
 		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
-        mat.mainTexture = Resources.Load<Texture2D>("Textures/bird");	// Set the texture.  Must be in Resources folder.
-        mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
+		if (owner.alive) {
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/bird");	// Set the texture.  Must be in Resources folder.
+		} else {
+			mat.mainTexture = Resources.Load<Texture2D> ("Textures/ghostbird");	// Set the texture.  Must be in Resources folder.
+
+		}
+		mat.color = new Color(1,1,1);											// Set the color (easy way to tint things).
 
 
 		// Trail Stuff

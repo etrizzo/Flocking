@@ -184,7 +184,7 @@ public class Bird : MonoBehaviour
 				addSound (modelObject2, birdClip);
 			}
 			model2.init (this);
-			model2.mat.color = Color.black;
+			//model2.mat.color = Color.black;
 
 			//Set collider for dead birds to be a trigger
 

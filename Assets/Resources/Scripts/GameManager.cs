@@ -18,6 +18,18 @@ public class GameManager : MonoBehaviour
 	GUIStyle guiStyle;
 	GUIStyle guiStyle2;
 	GUIStyle scoreStyle;
+	GUIStyle buttonStyle;
+	GUIContent homebutton;
+	GUIContent coveybutton;
+	GUIContent flightbutton;
+	GUIContent flockbutton;
+	GUIContent migrationbutton;
+	GUIContent zenbutton;
+	GUIStyleState buttonHover;
+	GUIStyleState homeHover;
+	GUIStyleState homeHoverAlt;
+	GUIStyleState zenHover;
+	GUIStyleState migrationHover;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -81,22 +93,7 @@ public class GameManager : MonoBehaviour
 
 	void Start ()
 	{
-		Cursor.SetCursor((Texture2D)Resources.Load("Textures/cursor"), new Vector2(4,4), CursorMode.Auto);
-		guiStyle = new GUIStyle ();
-		//guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
-		guiStyle.alignment = TextAnchor.MiddleCenter;
-		guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
-
-		guiStyle2 = new GUIStyle ();
-		guiStyle2.fontSize = 200;
-		guiStyle2.alignment = TextAnchor.MiddleCenter;
-		guiStyle2.font = (Font) Resources.Load("Fonts/Metrica");
-		guiStyle2.normal.textColor = new Color (.40f, .23f, .58f, .9f);
-		guiStyle.font = (Font)Resources.Load("Fonts/Metrica");
-		scoreStyle = new GUIStyle ();
-		scoreStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
-		scoreStyle.fontSize = 30;
-		scoreStyle.normal.textColor = new Color (0f, 0f, 0f, .5f);
+		initStyles ();
 
 		seedFolder =  new GameObject();
 		seedFolder.name = "Seeds";
@@ -133,6 +130,57 @@ public class GameManager : MonoBehaviour
         highscore = PlayerPrefs.GetInt("High Score");
 
     }
+
+	private void initStyles(){
+		Cursor.SetCursor((Texture2D)Resources.Load("Textures/cursor"), new Vector2(4,4), CursorMode.Auto);
+
+		guiStyle = new GUIStyle ();
+		//guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+		guiStyle.alignment = TextAnchor.MiddleCenter;
+		guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+
+		//HOME MENU
+		guiStyle2 = new GUIStyle ();
+		guiStyle2.fontSize = 200;
+		guiStyle2.alignment = TextAnchor.MiddleCenter;
+		guiStyle2.font = (Font) Resources.Load("Fonts/Metrica");
+		guiStyle2.normal.textColor = new Color (.40f, .23f, .58f, .9f);
+
+		//SCORE
+		scoreStyle = new GUIStyle ();
+		scoreStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+		scoreStyle.fontSize = 30;
+		scoreStyle.normal.textColor = new Color (0f, 0f, 0f, .5f);
+
+		//HOME BUTTON
+		buttonStyle = new GUIStyle ();
+		buttonStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
+		homebutton = new GUIContent ();
+		homebutton.image = Resources.Load<Texture2D> ("Textures/nest");
+		coveybutton = new GUIContent ();
+		coveybutton.image = Resources.Load<Texture2D> ("Textures/covey");
+		flightbutton = new GUIContent ();
+		flightbutton.image = Resources.Load<Texture2D> ("Textures/flight");
+		flockbutton = new GUIContent ();
+		flockbutton.image = Resources.Load<Texture2D> ("Textures/flock");
+		migrationbutton = new GUIContent ();
+		migrationbutton.image = Resources.Load<Texture2D> ("Textures/migration");
+		zenbutton = new GUIContent ();
+		zenbutton.image = Resources.Load<Texture2D> ("Textures/zen");
+		buttonStyle.normal.textColor = new Color (0, 0, 0, .3f);
+		//homebutton.text = "Home";
+		buttonHover = new GUIStyleState ();
+		buttonHover.background = Resources.Load<Texture2D> ("Textures/glow");
+		homeHover = new GUIStyleState ();
+		homeHover.background = Resources.Load<Texture2D> ("Textures/homeglow");
+		homeHoverAlt = new GUIStyleState ();
+		homeHoverAlt.background = Resources.Load<Texture2D> ("Textures/homeglow2");
+		zenHover = new GUIStyleState ();
+		zenHover.background = Resources.Load<Texture2D> ("Textures/zenglow");
+		migrationHover = new GUIStyleState ();
+		migrationHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
+		buttonStyle.hover = buttonHover;
+	}
 
 	private void initMode ()
 	{
@@ -467,13 +515,14 @@ public class GameManager : MonoBehaviour
 		int ypos;
 		if ((!go && !done) || (pause && !done)) {
 			xpos = ((Screen.width) - (300)) / 2;
-			ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/10));
+			ypos = ((Screen.height) - (80)) / 2 - ((Screen.height / 3)-(Screen.height/10));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle2);
 		}
 		if (!go && !done) {
 			xpos = ((Screen.width) + (25)) / 2;
 			ypos = ((Screen.height) / 2 + (Screen.height / 8));
-			if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Zen Mode")) {
+			buttonStyle.hover = zenHover;
+			if (GUI.Button (new Rect (xpos, ypos, 100, 150), zenbutton, buttonStyle)) {
 				state.mode = 1;
 				/*go = true;
 				zenMode = true;
@@ -482,7 +531,8 @@ public class GameManager : MonoBehaviour
 			}
 			xpos = ((Screen.width) - (325)) / 2;
 			ypos = ((Screen.height) / 2 + (Screen.height / 8));
-			if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Migration Mode")) {
+			buttonStyle.hover = migrationHover;
+			if (GUI.Button (new Rect (xpos, ypos, 100, 150), migrationbutton, buttonStyle)) {
 				state.mode = 2;
 				/*go = true;
 				zenMode = false;
@@ -504,8 +554,10 @@ public class GameManager : MonoBehaviour
 			state.mode = 3;
 		}
 			
+		xpos = ((Screen.width) - (60)) / 2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 4));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
+		buttonStyle.hover = homeHover;
+		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -528,30 +580,34 @@ public class GameManager : MonoBehaviour
 		int ypos = ((Screen.height) - (10)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "HOW MANY BIRDS?", guiStyle);
 
-		int xpos1 = ((Screen.width) - (150)) / 4;
+		int xpos1 = ((Screen.width) + (60)) / 3;
 		int ypos1 = ((Screen.height) / 2);// + (Screen.height / 8));
-		int xpos2 = ((Screen.width) - (150)) / 2;
+		int xpos2 = ((Screen.width) - (60)) / 2;
 		int ypos2 = ((Screen.height) / 2);// + (Screen.height / 8));
-		int xpos3 = (((Screen.width) - (150)) / 4)*3;
+		int xpos3 = (((Screen.width) - (120)) / 3)*2;
 		int ypos3 = ((Screen.height) / 2);// + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY (3)")) {
+		buttonStyle.hover = buttonHover;
+		//if (GUI.Button (new Rect (xpos1, ypos1, 150, 60), "A COVEY (3)")) {
+		if (GUI.Button (new Rect (xpos1, ypos1, 60, 60), coveybutton, buttonStyle)) {
 			bird_num = 3;
 			covey = true;
 			state.mode = 3;
 		}
-		else if (GUI.Button (new Rect (xpos2, ypos2, 150, 60), "A FLIGHT (6)")) {
+		else if (GUI.Button (new Rect (xpos2, ypos2, 60, 60), flightbutton, buttonStyle)) {
 			bird_num = 6;
 			flight = true;
 			state.mode = 3;
 		}
-		else if (GUI.Button (new Rect (xpos3, ypos3, 150, 60), "A FLOCK (9)")) {
+		else if (GUI.Button (new Rect (xpos3, ypos3, 60, 60), flockbutton, buttonStyle)) {
 			bird_num = 9;
 			flock = true;
 			state.mode = 3;
 		}
 
+		xpos = ((Screen.width) - (60)) / 2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 4));
-		if (GUI.Button (new Rect (xpos2, ypos, 150, 60), "Menu")) {
+		buttonStyle.hover = homeHover;
+		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -614,9 +670,10 @@ public class GameManager : MonoBehaviour
 		} else {
 			state.mode = 5;
 		}
-		xpos = ((Screen.width) -150)/2;
+		xpos = ((Screen.width) -60)/2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 6));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
+		buttonStyle.hover = homeHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
@@ -712,22 +769,25 @@ public class GameManager : MonoBehaviour
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
 
 		//SCORE
-		guiStyle.fontSize = 60;
-		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
-		guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
-		xpos = ((Screen.width) - (300)) / 2;
-		ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3)-(Screen.height/30));
-		//guiStyle.normal.textColor = new Color(.5f, .5f, .5f);
-		GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: "+(int)score, guiStyle);
-		xpos = ((Screen.width) - (300)) / 2;
-		ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3)-(Screen.height/30));
-		GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: "+(int)highscore, guiStyle);
+		if (!zenMode) {
+			guiStyle.fontSize = 60;
+			guiStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
+			guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
+			xpos = ((Screen.width) - (300)) / 2;
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			//guiStyle.normal.textColor = new Color(.5f, .5f, .5f);
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: " + (int)score, guiStyle);
+			xpos = ((Screen.width) - (300)) / 2;
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: " + (int)highscore, guiStyle);
+		}
 
 		//MENU
 		//xpos = ((Screen.width) + (25)) / 2;
-		xpos = ((Screen.width) -150)/2;
+		xpos = ((Screen.width) -60)/2;
 		ypos = ((Screen.height) / 2 + (Screen.height / 8));
-		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
+		buttonStyle.hover = homeHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 60, 90), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
