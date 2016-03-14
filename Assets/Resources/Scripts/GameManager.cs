@@ -82,8 +82,7 @@ public class GameManager : MonoBehaviour
 	public bool flight;
 	public bool flock;
 
-	public int bird_num = 30;
-	public int bird_life = 10;
+	public int bird_num;
 	float birdspeed = 6f;
 
 	Destination dest;
@@ -356,12 +355,12 @@ public class GameManager : MonoBehaviour
 				// basically some birds don't reach the end of their list to clear the trail lolol
 				// we probably need to change how this is done.
 //			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
-				if (zenMode) {
+				/*if (zenMode) {
 					if (i >= mouse.movements.Count || clearAll) {		//lol wacky trailz
 						mouse.model2.birdTrail.Clear ();
 						clearAll = true;
 					}
-				}
+				}*/
 
 			}
 //		if (clearAll) {
@@ -541,7 +540,9 @@ public class GameManager : MonoBehaviour
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = zenHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), zenbutton, buttonStyle)) {
-				state.mode = 1;
+                zenMode = true;
+                state.mode = 1;
+
 			}
 			xpos = (((Screen.width) - (150)) / 2)-150;
 			ypos = ((Screen.height) / 2 - (0));
@@ -564,10 +565,16 @@ public class GameManager : MonoBehaviour
 			}
 		}
 	}
-
+    
+    
+    
+    //Options screen for zen mode. Get to Choose lifetime of bird and number of birds.
 	private void zenOptions ()
 	{
-		zenMode = true;
+        bird_num = 30;
+        state.mode = 3;
+
+        /*
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		showNumSlider ();
 		showLifeSlider ();
@@ -586,8 +593,9 @@ public class GameManager : MonoBehaviour
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
+        */
 	}
-
+    
 	private void migrationOptions ()
 	{
 		zenMode = false;
@@ -638,31 +646,31 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void showNumSlider ()
-	{
-		Vector2 num_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2);
-		Vector2 num_slider_size = new Vector2 (150, 30);
-		Rect num_slider_rect, num_slider_box_rect;
+	//private void showNumSlider ()
+	//{
+	//	Vector2 num_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2);
+	//	Vector2 num_slider_size = new Vector2 (150, 30);
+	//	Rect num_slider_rect, num_slider_box_rect;
 
-		num_slider_rect = new Rect (num_slider_coords.x, num_slider_coords.y, num_slider_size.x, num_slider_size.y);
-		num_slider_box_rect = new Rect (num_slider_coords.x, num_slider_coords.y + num_slider_size.y, num_slider_size.x, num_slider_size.y);
+	//	num_slider_rect = new Rect (num_slider_coords.x, num_slider_coords.y, num_slider_size.x, num_slider_size.y);
+	//	num_slider_box_rect = new Rect (num_slider_coords.x, num_slider_coords.y + num_slider_size.y, num_slider_size.x, num_slider_size.y);
 
-		GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
-		bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
-	}
+	//	GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
+	//	bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
+	//}
 
-	private void showLifeSlider ()
-	{
-		Vector2 life_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2 - (Screen.height / 8));
-		Vector2 life_slider_size = new Vector2 (150, 30);
-		Rect life_slider_rect, life_slider_box_rect;
+	//private void showLifeSlider ()
+	//{
+	//	Vector2 life_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2 - (Screen.height / 8));
+	//	Vector2 life_slider_size = new Vector2 (150, 30);
+	//	Rect life_slider_rect, life_slider_box_rect;
 
-		life_slider_rect = new Rect (life_slider_coords.x, life_slider_coords.y, life_slider_size.x, life_slider_size.y);
-		life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
+	//	life_slider_rect = new Rect (life_slider_coords.x, life_slider_coords.y, life_slider_size.x, life_slider_size.y);
+	//	life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
 
-		GUI.Box (life_slider_rect, "Bird Lifetime (sec): " + bird_life.ToString ());
-		bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
-	}
+	//	GUI.Box (life_slider_rect, "Bird Lifetime (sec): " + bird_life.ToString ());
+	//	bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
+	//}
 
 	private void startGame(){
 		if (!zenMode) {

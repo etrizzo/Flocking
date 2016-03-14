@@ -270,7 +270,7 @@ public class Bird : MonoBehaviour
 		TrailRenderer trail = modelObject.AddComponent<TrailRenderer> ();
 		trail.material.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 		trail.receiveShadows = false;
-		trail.time = 10;
+		trail.time = 300;
 		trail.startWidth = 0.05f;
 		trail.endWidth = 0.5f;
 		trail.material.color = trailColor;
