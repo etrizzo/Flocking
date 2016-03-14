@@ -610,7 +610,6 @@ public class GameManager : MonoBehaviour
 		xpos = ((Screen.width) - (150)) / 2;
 		ypos = ((Screen.height) - (60)) / 2 + (Screen.height / 6);
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "Menu")) {
-			print ("restarting");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
