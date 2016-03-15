@@ -426,7 +426,7 @@ public class GameManager : MonoBehaviour
 
 		//print ("Lowest deltaTime: " + lowestDelta);
 		//print ("Highest deltaTime: " + highestDelta);
-		if (Input.GetKeyDown ("space") && (state.mode == 5 || state.mode == 4)){
+		if ((Input.GetKeyDown ("space") || Input.GetKeyDown ("escape")) && (state.mode == 5 || state.mode == 4)){
 			if (!pause && go) {
 				pause = true;
 				state.mode = 4;
@@ -899,12 +899,13 @@ public class GameManager : MonoBehaviour
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
 		GUILayout.Label("\n\n   <size=80>Migration Mode</size>", textStyle);
 		GUILayout.Label(
-			"  <size=30>  Pick the size of your flock and help all your birds \n" +
-			"      find the sunset, which has randomly spawned in a corner. \n" +
+			"  <size=30>  Pick the size of your flock and then build it bird by bird, \n" +
+			"      keeping all your birds close. Help your flock migrate towards \n" +
+			"      the sunset, which has randomly spawned in a corner. \n" +
 			"      You gain points the longer you explore the map, \n" + 
 			"      but watch out - the clouds are waiting to roast \n" +
 			"      your tiny bird body!</size>", textStyle);
-		GUILayout.Label ("<size=25>\n\n\n\n\n</size>");
+		GUILayout.Label ("<size=25>\n</size>");
 		GUILayout.Label(us, textStyle);
         GUILayout.EndArea();
 
@@ -916,6 +917,12 @@ public class GameManager : MonoBehaviour
 			"             with the birds. No weather or tiny birdy skeletons here,\n" +
 			"                                      just nice sounds and colors.</size>", textStyle);
         GUILayout.EndArea();
+
+		GUILayout.BeginArea(new Rect(Screen.width/2-Screen.width/12, (Screen.height/3)*2-100, Screen.width/3, Screen.height/3));
+		GUILayout.Label("<size=80>  Controls</size>", textStyle);
+		GUILayout.Label("<size=30>      spacebar/esc pauses</size>", textStyle);
+		GUILayout.Label("<size=30>  new birds follow your cursor</size>", textStyle);
+		GUILayout.EndArea ();
 
 		xpos = ((Screen.width) - (300)) / 2;
 		ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));

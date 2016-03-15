@@ -117,7 +117,7 @@ public class BirdModel : MonoBehaviour
 
 
 
-		if (Input.GetKeyDown ("space")){
+		if (Input.GetKeyDown ("space") || Input.GetKeyDown ("escape")){
 			if (!owner.gm.pause) {
 				//pause = true;
 				if (owner.gm.zenMode && owner.gm.pause) {
