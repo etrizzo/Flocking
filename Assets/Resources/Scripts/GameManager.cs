@@ -839,18 +839,18 @@ public class GameManager : MonoBehaviour
 
 			//Display Scores
 			xpos = ((Screen.width) - (300)) / 2 - 200;
-			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: " + (int)score, guiStyle);
 			xpos = ((Screen.width) - (300)) / 2 - 200;
-			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: " + (int)highscore, guiStyle);
 
 			//Display times
 			xpos = ((Screen.width) - (300)) / 2 + 200;
-			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Time: " + clock.ToString("N2"), guiStyle);
 			xpos = ((Screen.width) - (300)) / 2 + 200;
-			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Fastest Time: " + fastestTime.ToString("N2"), guiStyle);
 		}
 
