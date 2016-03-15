@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
 
 	public float score; //in game score
     float highscore; //player's overall highscore
+	float fastestTime; //fastest completed game
+	float clock;
+
 	public bool zenMode;
 	public AudioSource gameAudio;
 	public AudioClip gameClip;
@@ -133,6 +136,7 @@ public class GameManager : MonoBehaviour
 
         //loads a previous high score if it exists
         highscore = PlayerPrefs.GetInt("High Score");
+		fastestTime = PlayerPrefs.GetFloat ("Fastest Time");
 
     }
 
@@ -222,6 +226,7 @@ public class GameManager : MonoBehaviour
 			BGSCALE = 2f;
 			birdSpeed = 5f;
 
+			clock = 0f;
 			inRadius = true;
 			makeDestination ();
 			makeWeather ();
@@ -431,6 +436,10 @@ public class GameManager : MonoBehaviour
 			}
 
 		}
+		if (state.mode == 5 && !zenMode) {
+			clock += Time.deltaTime;
+		}
+
 		if(bird_num < 0){
 			
 			done = true;
@@ -443,6 +452,14 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log("New High Score is " + highscore);
             }
+			if (fastestTime == 0f && !zenMode) {
+				fastestTime = clock;
+				PlayerPrefs.SetFloat ("Fastest Time", fastestTime);
+			}
+			else if (clock < fastestTime && !zenMode) {
+				fastestTime = clock;
+				PlayerPrefs.SetFloat ("Fastest Time", fastestTime);
+			}
 
 		}
 			
@@ -648,7 +665,7 @@ public class GameManager : MonoBehaviour
 		buttonStyle.hover = homeHover;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
-			Application.LoadLevel (Application.loadedLevel);
+			//Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
 	}
@@ -818,14 +835,23 @@ public class GameManager : MonoBehaviour
 		if (!zenMode) {
 			guiStyle.fontSize = 60;
 			guiStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
-			guiStyle.normal.textColor = new Color (0f, 0f, 0f, .3f);
-			xpos = ((Screen.width) - (300)) / 2;
+			guiStyle.normal.textColor = new Color (0f, 0f, 0f, .4f);
+
+			//Display Scores
+			xpos = ((Screen.width) - (300)) / 2 - 200;
 			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
-			//guiStyle.normal.textColor = new Color(.5f, .5f, .5f);
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: " + (int)score, guiStyle);
-			xpos = ((Screen.width) - (300)) / 2;
+			xpos = ((Screen.width) - (300)) / 2 - 200;
 			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: " + (int)highscore, guiStyle);
+
+			//Display times
+			xpos = ((Screen.width) - (300)) / 2 + 200;
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Time: " + clock.ToString("N2"), guiStyle);
+			xpos = ((Screen.width) - (300)) / 2 + 200;
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			GUI.Label (new Rect (xpos, ypos, 300, 50), "Fastest Time: " + fastestTime.ToString("N2"), guiStyle);
 		}
 
 		//MENU
@@ -855,10 +881,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void helpScreen(){
-		int xpos = ((Screen.width) - (300)) / 2;
-		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
-		xpos = ((Screen.width) - (90)) / 2;
-		ypos = ((Screen.height) / 2 + (Screen.height / 6));
+		
 
 		string us = "<size=35>Made by Alejandro Belgrave, Andres Cuervo, Linnea Kirby, Emily Rizzo, and Margaret McCarthy.</size>";
 
@@ -888,10 +911,14 @@ public class GameManager : MonoBehaviour
 			" just nice sounds and colors.</size>", textStyle);
         GUILayout.EndArea();
 
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		xpos = ((Screen.width) - (90) - Screen.width/20);
+		ypos = ((Screen.height)-135) - Screen.height/10;
 		buttonStyle.hover = homeHover;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
-			Application.LoadLevel (Application.loadedLevel);
+			//Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
 	}
