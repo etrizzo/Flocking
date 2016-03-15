@@ -915,7 +915,7 @@ public class GameManager : MonoBehaviour
 		int xpos = ((Screen.width) - (300)) / 2;
 		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		xpos = ((Screen.width) - (90) - Screen.width/20);
-		ypos = ((Screen.height)-135) - Screen.height/10;
+		ypos = ((Screen.height)-135) - Screen.height/20;
 		buttonStyle.hover = homeHover;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
