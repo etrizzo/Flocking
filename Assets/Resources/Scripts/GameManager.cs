@@ -839,18 +839,18 @@ public class GameManager : MonoBehaviour
 
 			//Display Scores
 			xpos = ((Screen.width) - (300)) / 2 - 200;
-			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Score: " + (int)score, guiStyle);
 			xpos = ((Screen.width) - (300)) / 2 - 200;
-			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "High Score: " + (int)highscore, guiStyle);
 
 			//Display times
 			xpos = ((Screen.width) - (300)) / 2 + 200;
-			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (250)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Final Time: " + clock.ToString("N2"), guiStyle);
 			xpos = ((Screen.width) - (300)) / 2 + 200;
-			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 3) - (Screen.height / 30));
+			ypos = ((Screen.height) + (400)) / 2 - ((Screen.height / 4));// - (Screen.height / 30));
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "Fastest Time: " + fastestTime.ToString("N2"), guiStyle);
 		}
 
@@ -897,20 +897,20 @@ public class GameManager : MonoBehaviour
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
-		GUILayout.Label("\n   <size=80>Migration Mode</size>", textStyle);
+		GUILayout.Label("\n\n   <size=80>Migration Mode</size>", textStyle);
 		GUILayout.Label(
 			"  <size=30>  Pick the size of your flock and help all your birds \n" +
 			"      find the sunset, which has randomly spawned in a corner. \n" +
 			"      You gain points the longer you explore the map, \n" + 
 			"      but watch out - the clouds are waiting to roast \n" +
 			"      your tiny bird body!</size>", textStyle);
-		GUILayout.Label ("<size=25>\n\n\n\n\n\n\n\n\n</size>");
+		GUILayout.Label ("<size=25>\n\n\n\n\n</size>");
 		GUILayout.Label(us, textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
 		GUILayout.Label(" <size=30></size>", textStyle);
-		GUILayout.Label("                   <size=80>  Zen Mode</size>", textStyle);
+		GUILayout.Label("\n                   <size=80>  Zen Mode</size>", textStyle);
 		GUILayout.Label(
 			"<size=30>                You get to make pretty swirls, swoops, and swooshes \n" +
 			"             with the birds. No weather or tiny birdy skeletons here,\n" +
