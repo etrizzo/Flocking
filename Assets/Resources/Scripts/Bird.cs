@@ -57,6 +57,7 @@ public class Bird : MonoBehaviour
 	bool returning = false;
 	float return_clock = 5f;
 	float begin_circle_clock = 5f;
+	float circle_rad = 1f;
 	Vector3 circle_pos;
 	Vector2 follow_dest;
 	GUIStyle scoreStyle;
@@ -95,6 +96,7 @@ public class Bird : MonoBehaviour
 		pause = false;
 		if (!gm.zenMode) {
 			speed_slider = gm.birdSpeed;
+			circle_rad = .5f;
 		}
 
 	}
@@ -227,7 +229,7 @@ public class Bird : MonoBehaviour
 		if (!circling) {
 			circle_pos = mouse_pos;
 		}
-		if (Vector2.Distance (bird.transform.position, circle_pos) > 1.2f || Vector2.Distance(circle_pos, mouse_pos) > 1.2f) {
+		if (Vector2.Distance (bird.transform.position, circle_pos) > (circle_rad + .2f) || Vector2.Distance(circle_pos, mouse_pos) > (circle_rad + .2f)) {
 			//if the mouse has just moved outside the circle radius, set up to end circling
 			if (circling) {
 				follow_dest = this.transform.position;
