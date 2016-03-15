@@ -835,7 +835,7 @@ public class GameManager : MonoBehaviour
 		if (!zenMode) {
 			guiStyle.fontSize = 60;
 			guiStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
-			guiStyle.normal.textColor = new Color (0f, 0f, 0f, .4f);
+			guiStyle.normal.textColor = new Color (1f, 1f, 1f, .4f);
 
 			//Display Scores
 			xpos = ((Screen.width) - (300)) / 2 - 200;
@@ -885,12 +885,15 @@ public class GameManager : MonoBehaviour
 
 		string us = "<size=35>  Made by Alejandro Belgrave, Andres Cuervo, Linnea Kirby, Emily Rizzo, and Margaret McCarthy.</size>";
 
-		GUILayout.BeginArea(new Rect(10, Screen.height /2, Screen.width, 35));
-		GUILayout.Label(us, textStyle);
+		GUILayout.BeginArea(new Rect(10, Screen.height /8, Screen.width, 35));
+		GUILayout.Label("\n\n\n\n"+us, textStyle);
         GUILayout.EndArea();
+		int xpos;// = (900);
+		int ypos;// = ((Screen.height) - (50));
+		//GUI.Label (new Rect (xpos, ypos, 900, 50), us, guiStyle);
 
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height * (3.5f/4)));
-		GUILayout.Label("\t          <size=120>Flocking</size>", textStyle);
+		GUILayout.Label("\t             <size=120>Flocking</size>", textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
@@ -901,21 +904,21 @@ public class GameManager : MonoBehaviour
 			"      You gain points the longer you explore the map, \n" + 
 			"      but watch out - the clouds are waiting to roast \n" +
 			"      your tiny bird body!</size>", textStyle);
-		GUILayout.Label ("<size=25>\n</size>");
+		GUILayout.Label ("<size=25>\n\n\n\n\n\n\n\n\n</size>");
 		GUILayout.Label(us, textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
 		GUILayout.Label(" <size=30></size>", textStyle);
-		GUILayout.Label("                <size=80>  Zen Mode</size>", textStyle);
+		GUILayout.Label("                   <size=80>  Zen Mode</size>", textStyle);
 		GUILayout.Label(
-			"<size=30>          You get to make pretty swirls, swoops, and swooshes \n" +
-			"       with the birds. No weather or tiny birdy skeletons here,\n" +
-			"                                just nice sounds and colors.</size>", textStyle);
+			"<size=30>                You get to make pretty swirls, swoops, and swooshes \n" +
+			"             with the birds. No weather or tiny birdy skeletons here,\n" +
+			"                                      just nice sounds and colors.</size>", textStyle);
         GUILayout.EndArea();
 
-		int xpos = ((Screen.width) - (300)) / 2;
-		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		xpos = ((Screen.width) - (300)) / 2;
+		ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		xpos = ((Screen.width) - (90) - Screen.width/15);
 		ypos = ((Screen.height)-135) - Screen.height/30;
 		buttonStyle.hover = homeHover;
