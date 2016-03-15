@@ -16,6 +16,10 @@ public class BirdRadius : MonoBehaviour
 
 	public bool containsBird;
 
+	public AudioSource radiusAudio;
+	public AudioClip radiusClip;
+	int playsound;
+
 	public void init(BirdModel owner) {
 		this.owner = owner;
 
@@ -35,6 +39,22 @@ public class BirdRadius : MonoBehaviour
 		mat.shader = Shader.Find ("Sprites/Default");						// Tell the renderer that our textures have transparency.
 		mat.mainTexture = Resources.Load<Texture2D>("Textures/radius");	// Set the texture.  Must be in Resources folder.
 		mat.color = new Color(1,1,1, .5f);											// Set the color (easy way to tint things).
+
+		initRadiusSound ();
+	}
+
+	private void initRadiusSound(){
+		radiusAudio = this.gameObject.AddComponent<AudioSource> ();
+		radiusAudio.loop = false;
+		radiusAudio.playOnAwake = false;
+		radiusAudio.volume = .5f;
+		radiusSound ();
+		playsound = 0;
+	}
+
+	private void radiusSound(){
+		radiusClip = Resources.Load<AudioClip> ("Sounds/Blip3");
+		radiusAudio.clip = radiusClip;
 	}
 
 	void Start () {
@@ -50,9 +70,14 @@ public class BirdRadius : MonoBehaviour
 
 		if (!owner.owner.gm.inRadius) {
 			mat.color = new Color(1,0,0,.5f);
+			if (playsound % 32 == 0) {
+				radiusAudio.Play ();
+			}
+			playsound++;
 		}
 		else{
 			mat.color = new Color(1,1,1, .7f);
+			radiusAudio.Stop ();
 		}
 	}
 

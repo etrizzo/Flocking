@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 	public bool flock;
 
 	public int bird_num;
-	float birdspeed = 6f;
+	float birdspeed = 5f;
 
 	Destination dest;
 
@@ -209,10 +209,10 @@ public class GameManager : MonoBehaviour
 		} else { //in migration mode
 
 //			BGSCALE = 2f;
-			birdSpeed = 6f;
+			birdSpeed = 5f;
 
 			BGSCALE = 2f;
-			birdSpeed = 3f;
+			birdSpeed = 5f;
 
 			inRadius = true;
 			makeDestination ();
