@@ -27,12 +27,15 @@ public class GameManager : MonoBehaviour
 	GUIContent migrationbutton;
 	GUIContent zenbutton;
 	GUIContent helpbutton;
+	GUIContent quitbutton;
 	GUIStyleState buttonHover;
 	GUIStyleState homeHover;
 	GUIStyleState homeHoverAlt;
 	GUIStyleState zenHover;
 	GUIStyleState migrationHover;
 	GUIStyleState helpHover;
+	GUIStyleState quitHover;
+	GUIStyleState quitHoverAlt;
 
 	public float score; //in game score
     float highscore; //player's overall highscore
@@ -80,8 +83,7 @@ public class GameManager : MonoBehaviour
 	public bool flight;
 	public bool flock;
 
-	public int bird_num = 8;
-	public int bird_life = 10;
+	public int bird_num;
 	float birdspeed = 6f;
 
 	Destination dest;
@@ -172,6 +174,8 @@ public class GameManager : MonoBehaviour
 		zenbutton.image = Resources.Load<Texture2D> ("Textures/zen");
 		helpbutton = new GUIContent ();
 		helpbutton.image = Resources.Load<Texture2D> ("Textures/help");
+		quitbutton = new GUIContent ();
+		quitbutton.image = Resources.Load<Texture2D> ("Textures/quit");
 		buttonStyle.normal.textColor = new Color (0, 0, 0, .3f);
 		//homebutton.text = "Home";
 		buttonHover = new GUIStyleState ();
@@ -185,7 +189,11 @@ public class GameManager : MonoBehaviour
 		migrationHover = new GUIStyleState ();
 		migrationHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
 		helpHover = new GUIStyleState ();
-		helpHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
+		helpHover.background = Resources.Load<Texture2D> ("Textures/helpglow");
+		quitHover = new GUIStyleState ();
+		quitHover.background = Resources.Load<Texture2D> ("Textures/quitglow");
+		quitHoverAlt = new GUIStyleState ();
+		quitHoverAlt.background = Resources.Load<Texture2D> ("Textures/quitglow2");
 		buttonStyle.hover = buttonHover;
 
 		// Help text
@@ -355,12 +363,12 @@ public class GameManager : MonoBehaviour
 				// basically some birds don't reach the end of their list to clear the trail lolol
 				// we probably need to change how this is done.
 //			if (i >= mouse.positions.Count - bird_count || clearAll){		//kind of makes it a little bit better?!? but this is not a good thing
-				if (zenMode) {
+				/*if (zenMode) {
 					if (i >= mouse.movements.Count || clearAll) {		//lol wacky trailz
 						mouse.model2.birdTrail.Clear ();
 						clearAll = true;
 					}
-				}
+				}*/
 
 			}
 //		if (clearAll) {
@@ -536,33 +544,49 @@ public class GameManager : MonoBehaviour
 			GUI.Label (new Rect (xpos, ypos, 300, 50), "FLOCKING", guiStyle2);
 		}
 		if (!go && !done) {
-			xpos = ((Screen.width) + (50)) / 2;
+			xpos = (((Screen.width) - (150)) / 2) +150;
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = zenHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), zenbutton, buttonStyle)) {
-				state.mode = 1;
+                zenMode = true;
+                state.mode = 1;
+
 			}
-			xpos = ((Screen.width) - (375)) / 2;
+			xpos = (((Screen.width) - (150)) / 2)-150;
 			ypos = ((Screen.height) / 2 - (0));
 			buttonStyle.hover = migrationHover;
 			if (GUI.Button (new Rect (xpos, ypos, 150, 225), migrationbutton, buttonStyle)) {
 				state.mode = 2;
 			}
-			xpos = ((Screen.width) - (60)) / 2;
+			xpos = ((Screen.width) - (60)) / 2 + 50;
 			ypos = ((Screen.height) / 2 + (200));
 			buttonStyle.hover = helpHover;
 			if (GUI.Button (new Rect (xpos, ypos, 60, 90), helpbutton, buttonStyle)) {
 				state.mode = 8;
 			}
+
+			xpos = ((Screen.width) - (60)) / 2 -50;
+			ypos = ((Screen.height) / 2 + (200));
+			buttonStyle.hover = quitHover;
+			if (GUI.Button (new Rect (xpos, ypos, 60, 90), quitbutton, buttonStyle)) {
+				Application.Quit();
+			}
 		}
 	}
-
+    
+    
+    
+    //Options screen for zen mode. Get to Choose lifetime of bird and number of birds.
 	private void zenOptions ()
 	{
-		zenMode = true;
+        bird_num = 30;
+        state.mode = 3;
+
+        /*
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		showNumSlider ();
 		showLifeSlider ();
+		bird_num = 30;
 		int xpos = ((Screen.width) - (150)) / 2;
 		int ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		if (GUI.Button (new Rect (xpos, ypos, 150, 60), "FLY!")) {
@@ -577,8 +601,9 @@ public class GameManager : MonoBehaviour
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
+        */
 	}
-
+    
 	private void migrationOptions ()
 	{
 		zenMode = false;
@@ -628,31 +653,31 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void showNumSlider ()
-	{
-		Vector2 num_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2);
-		Vector2 num_slider_size = new Vector2 (150, 30);
-		Rect num_slider_rect, num_slider_box_rect;
+	//private void showNumSlider ()
+	//{
+	//	Vector2 num_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2);
+	//	Vector2 num_slider_size = new Vector2 (150, 30);
+	//	Rect num_slider_rect, num_slider_box_rect;
 
-		num_slider_rect = new Rect (num_slider_coords.x, num_slider_coords.y, num_slider_size.x, num_slider_size.y);
-		num_slider_box_rect = new Rect (num_slider_coords.x, num_slider_coords.y + num_slider_size.y, num_slider_size.x, num_slider_size.y);
+	//	num_slider_rect = new Rect (num_slider_coords.x, num_slider_coords.y, num_slider_size.x, num_slider_size.y);
+	//	num_slider_box_rect = new Rect (num_slider_coords.x, num_slider_coords.y + num_slider_size.y, num_slider_size.x, num_slider_size.y);
 
-		GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
-		bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
-	}
+	//	GUI.Box (num_slider_rect, "Number of Birds: " + bird_num.ToString ());
+	//	bird_num = (int)GUI.HorizontalSlider (num_slider_box_rect, (float)bird_num, 1.0F, 30.0F);
+	//}
 
-	private void showLifeSlider ()
-	{
-		Vector2 life_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2 - (Screen.height / 8));
-		Vector2 life_slider_size = new Vector2 (150, 30);
-		Rect life_slider_rect, life_slider_box_rect;
+	//private void showLifeSlider ()
+	//{
+	//	Vector2 life_slider_coords = new Vector2 (((Screen.width) - (150)) / 2, (Screen.height) / 2 - (Screen.height / 8));
+	//	Vector2 life_slider_size = new Vector2 (150, 30);
+	//	Rect life_slider_rect, life_slider_box_rect;
 
-		life_slider_rect = new Rect (life_slider_coords.x, life_slider_coords.y, life_slider_size.x, life_slider_size.y);
-		life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
+	//	life_slider_rect = new Rect (life_slider_coords.x, life_slider_coords.y, life_slider_size.x, life_slider_size.y);
+	//	life_slider_box_rect = new Rect (life_slider_coords.x, life_slider_coords.y + life_slider_size.y, life_slider_size.x, life_slider_size.y);
 
-		GUI.Box (life_slider_rect, "Bird Lifetime (sec): " + bird_life.ToString ());
-		bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
-	}
+	//	GUI.Box (life_slider_rect, "Bird Lifetime (sec): " + bird_life.ToString ());
+	//	bird_life = (int)GUI.HorizontalSlider (life_slider_box_rect, (float)bird_life, 1.0F, 60.0F);
+	//}
 
 	private void startGame(){
 		if (!zenMode) {
@@ -684,13 +709,19 @@ public class GameManager : MonoBehaviour
 		} else {
 			state.mode = 5;
 		}
-		xpos = ((Screen.width) -90)/2;
+		xpos = ((Screen.width) - (90)) / 2 + 70;
 		ypos = ((Screen.height) / 2 + (Screen.height / 6));
 		buttonStyle.hover = homeHoverAlt;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
+		}
+		xpos = ((Screen.width) - (90)) / 2 - 70;
+		ypos = ((Screen.height) / 2 + (Screen.height / 6));
+		buttonStyle.hover = quitHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), quitbutton, buttonStyle)) {
+			Application.Quit();
 		}
 	}
 
@@ -782,6 +813,7 @@ public class GameManager : MonoBehaviour
 		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		GUI.Label (new Rect (xpos, ypos, 300, 50), "GAME OVER", guiStyle);
 
+
 		//SCORE
 		if (!zenMode) {
 			guiStyle.fontSize = 60;
@@ -797,14 +829,19 @@ public class GameManager : MonoBehaviour
 		}
 
 		//MENU
-		//xpos = ((Screen.width) + (25)) / 2;
-		xpos = ((Screen.width) -90)/2;
+		xpos = ((Screen.width) - (90)) / 2 + 70;
 		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		buttonStyle.hover = homeHoverAlt;
 		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
+		}
+		xpos = ((Screen.width) - (90)) / 2 - 70;
+		ypos = ((Screen.height) / 2 + (Screen.height / 8));
+		buttonStyle.hover = quitHoverAlt;
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), quitbutton, buttonStyle)) {
+			Application.Quit();
 		}
 
 		/*//RESTART

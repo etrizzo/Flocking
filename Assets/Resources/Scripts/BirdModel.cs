@@ -23,13 +23,24 @@ public class BirdModel : MonoBehaviour
 	public bool pause;
 
 	float lifetime;
-	Rect clock_rect = new Rect(Screen.width - 150, 10, 150, 50);
+	Rect clock_rect = new Rect(Screen.width - 200, 10, 200, 50);
+	GUIStyle scoreStyle;
+
+	void Start(){
+		clock = 0f;
+
+		scoreStyle = new GUIStyle ();
+		scoreStyle.font = (Font)Resources.Load ("Fonts/Mathlete-Skinny");
+		scoreStyle.fontSize = 30;
+		scoreStyle.normal.textColor = new Color (1f, 1f, 1f, .5f);
+	}
 
 	void OnGUI ()
 	{
 		if (!owner.playback && owner.gm.zenMode) {
-			GUI.Box (clock_rect, "Bird time: " + (int)lifetime);
-		}
+            //GUI.Box (clock_rect, "Bird time: " + (int)lifetime);
+			GUI.Box(clock_rect, "Press B For A New Bird", scoreStyle);
+        }
 	}
 
 	public void init (Bird owner)
@@ -78,7 +89,7 @@ public class BirdModel : MonoBehaviour
 
 		pause = false;
 
-		lifetime = (float)owner.gm.bird_life;
+		//lifetime = (float)owner.gm.bird_life; //gets lifetime from menu slider
 
 		DestroyImmediate(this.gameObject.GetComponent<MeshCollider>());
     }
@@ -97,18 +108,13 @@ public class BirdModel : MonoBehaviour
 	}
 
 
-	void Start ()
-	{
-		clock = 0f;
-	}
-
-
     void Update () {
 		
         // Incrememnt the clock based on how much time has elapsed since the previous update.
         // Using deltaTime is critical for animation and movement, since the time between each call
         // to Update is unpredictable.
         clock = clock + Time.deltaTime;
+
 
 
 		if (Input.GetKeyDown ("space")){
@@ -128,12 +134,18 @@ public class BirdModel : MonoBehaviour
 
 		}
 		if (owner.gm.zenMode) {
-			if (lifetime <= 0 && !owner.playback && !owner.gm.pause) {
-				
-				RestartBirds ();
-			} else if (lifetime > 0 && !owner.gm.pause) {
-				lifetime -= Time.deltaTime;
-			}
+            //if (lifetime <= 0 && !owner.playback && !owner.gm.pause) {
+
+            //	RestartBirds ();
+            //} 
+            if (Input.GetKeyDown("b") && !owner.playback && !owner.gm.pause)
+            {
+                RestartBirds();
+            }
+            else if (lifetime > 0 && !owner.gm.pause)
+            {
+                lifetime -= Time.deltaTime;
+            }
 		} else {
 			if (owner.AtDestination) {
 				owner.gm.score += 100;
@@ -156,7 +168,6 @@ public class BirdModel : MonoBehaviour
 	}
 
 	void RestartBirds(){
-		print("restarting");
 		if (owner.gm.zenMode){
 			owner.gm.clearAllTrails ();
 		}
