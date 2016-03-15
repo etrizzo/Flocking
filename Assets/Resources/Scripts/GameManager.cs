@@ -877,7 +877,7 @@ public class GameManager : MonoBehaviour
 			"destination, which randomly spawns in a corner each time. \n" +
 			"  You gain points the longer you explore the map, but watch \n" +
 			"out - the clouds are waiting to roast your tiny bird body!</size>", textStyle);
-		GUILayout.Label("\n" + us, textStyle);
+		GUILayout.Label("\n\n" + us, textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
