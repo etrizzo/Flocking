@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 	GUIStyle guiStyle2;
 	GUIStyle scoreStyle;
 	GUIStyle buttonStyle;
+	GUIStyle textStyle;
 	GUIContent homebutton;
 	GUIContent coveybutton;
 	GUIContent flightbutton;
@@ -186,6 +187,13 @@ public class GameManager : MonoBehaviour
 		helpHover = new GUIStyleState ();
 		helpHover.background = Resources.Load<Texture2D> ("Textures/migrationglow");
 		buttonStyle.hover = buttonHover;
+
+		// Help text
+		textStyle = new GUIStyle(buttonStyle);
+		textStyle.fontSize = 60;
+		textStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
+		textStyle.normal.textColor = new Color (.9f, .8f, .9f, 1f);
+		textStyle.richText = true;
 	}
 
 	private void initMode ()
@@ -581,7 +589,6 @@ public class GameManager : MonoBehaviour
 		guiStyle.fontSize = 100;
 		guiStyle.normal.textColor = new Color (.80f, .63f, .98f, .3f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
-		//guiStyle.font = (Font) Resources.Load("Fonts/Engineer");
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		int xpos = ((Screen.width) - (300)) / 2;
 		int ypos = ((Screen.height) - (50)) / 2 - ((Screen.height / 3)-(Screen.height/30));
@@ -811,6 +818,45 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void helpScreen(){
+		int xpos = ((Screen.width) - (300)) / 2;
+		int ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
+		xpos = ((Screen.width) - (90)) / 2;
+		ypos = ((Screen.height) / 2 + (Screen.height / 6));
+
+		string us = "<size=35>Made by Alejandro Belgrave, Andres Cuervo, Linnea Kirby, Emily Rizzo, and Margaret McCarthy.</size>";
+
+		GUILayout.BeginArea(new Rect(10, Screen.height /2, Screen.width, 35));
+		GUILayout.Label(us, textStyle);
+        GUILayout.EndArea();
+
+		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height * (3.5f/4)));
+		GUILayout.Label("\t             <size=100>Flocking</size>", textStyle);
+        GUILayout.EndArea();
+
+		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
+		GUILayout.Label("\n       <size=80>Migration Mode</size>", textStyle);
+		GUILayout.Label(
+			"  <size=30>Pick a number of birds and then get them all to the \n" +
+			"destination, which randomly spawns in a corner each time. \n" +
+			"  You gain points the longer you explore the map, but watch \n" +
+			"out - the clouds are waiting to roast your tiny bird body!</size>", textStyle);
+		GUILayout.Label("\n" + us, textStyle);
+        GUILayout.EndArea();
+
+		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
+		GUILayout.Label("\n\t<size=80>Zen Mode</size>", textStyle);
+		GUILayout.Label(
+			"  <size=30>You get to make pretty swirls, swoops, and swooshes \n" +
+			"with the birds. No weather or tiny birdy skeletons here,\n" +
+			" just nice sounds and colors.</size>", textStyle);
+        GUILayout.EndArea();
+
+		buttonStyle.hover = homeHover;
+		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
+			Debug.Log ("menu");
+			Application.LoadLevel (Application.loadedLevel);
+			state.mode = 0;
+		}
 	}
 
 
