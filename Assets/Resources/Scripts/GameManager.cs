@@ -867,25 +867,26 @@ public class GameManager : MonoBehaviour
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height * (3.5f/4)));
-		GUILayout.Label("\t             <size=100>Flocking</size>", textStyle);
+		GUILayout.Label("\t         <size=100>Flocking</size>", textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
-		GUILayout.Label("\n       <size=80>Migration Mode</size>", textStyle);
+		GUILayout.Label("\n   <size=80>Migration Mode</size>", textStyle);
 		GUILayout.Label(
-			"  <size=30>Pick a number of birds and then get them all to the \n" +
-			"destination, which randomly spawns in a corner each time. \n" +
-			"  You gain points the longer you explore the map, but watch \n" +
-			"out - the clouds are waiting to roast your tiny bird body!</size>", textStyle);
-		GUILayout.Label("\n\n" + us, textStyle);
+			"  <size=30>  Pick a number of birds and then get them all to the \n" +
+			"      sunset, which randomly spawns in a corner each time. \n" +
+			"      You gain points the longer you explore the map, \n" + 
+			"      but watch out - the clouds are waiting to roast \n" +
+			"      your tiny bird body!</size>", textStyle);
+		GUILayout.Label( us, textStyle);
         GUILayout.EndArea();
 
 		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
 		GUILayout.Label("\n\t<size=80>Zen Mode</size>", textStyle);
 		GUILayout.Label(
-			"  <size=30>You get to make pretty swirls, swoops, and swooshes \n" +
-			"with the birds. No weather or tiny birdy skeletons here,\n" +
-			" just nice sounds and colors.</size>", textStyle);
+			"<size=30>     You get to make pretty swirls, swoops, and swooshes \n" +
+			"  with the birds. No weather or tiny birdy skeletons here,\n" +
+			"                           just nice sounds and colors.</size>", textStyle);
         GUILayout.EndArea();
 
 		buttonStyle.hover = homeHover;
