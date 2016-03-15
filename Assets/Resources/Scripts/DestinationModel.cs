@@ -14,10 +14,11 @@ public class DestinationModel : MonoBehaviour
 
 	public void init(Destination owner) {
 		this.owner = owner;
-
+		dest_center = new Vector2(owner.transform.position.x, owner.transform.position.y);
 		transform.parent = owner.transform;					// Set the model's parent to the background.
 		transform.localPosition = owner.transform.position;		// Center the model on the parent.
-		dest_center = new Vector2(owner.transform.position.x, owner.transform.position.y);
+
+//		print ("owner-center " + owner.transform.position);
 		//quadHeight = Camera.main.orthographicSize * 2.0f;
 		//quadWidth = quadHeight * Screen.width / Screen.height;
 		//		transform.localScale = new Vector3(quadWidth * BGSCALE, quadHeight * BGSCALE,1f);

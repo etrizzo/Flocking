@@ -49,7 +49,7 @@ public class Weather : MonoBehaviour
 		//		print ("Position: " + transform.position);
 		Vector2 pos = new Vector2 (transform.position.x, transform.position.y);
 		Vector2 world_center = new Vector2 (0, 0);
-		Vector2 dest_center = DestinationModel.dest_center;
+		Vector2 dest_center = (Vector2) DestinationModel.dest_center;
 		float x = transform.position.x;
 		float y = transform.position.y;
 		Collider2D col = Physics2D.OverlapArea(new Vector2(x -4f, y - 4f), new Vector2(x + 4f, y + 4f));
