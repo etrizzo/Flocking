@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 		public int mode;
 	}
 
+	public bool web = true;
 	public GuiState state;
 	GUIStyle guiStyle;
 	GUIStyle guiStyle2;
@@ -147,10 +148,16 @@ public class GameManager : MonoBehaviour
 		//guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
 		guiStyle.alignment = TextAnchor.MiddleCenter;
 		guiStyle.font = (Font)Resources.Load("Fonts/Mathlete-Skinny");
+//		if (web) {
+//			guiStyle.fontSize = 50;
+//		}
 
 		//HOME MENU
 		guiStyle2 = new GUIStyle ();
 		guiStyle2.fontSize = 200;
+		if (web) {
+			guiStyle2.fontSize = 150;
+		}
 		guiStyle2.alignment = TextAnchor.MiddleCenter;
 		guiStyle2.font = (Font) Resources.Load("Fonts/Metrica");
 		guiStyle2.normal.textColor = new Color (.40f, .23f, .58f, .9f);
@@ -203,6 +210,9 @@ public class GameManager : MonoBehaviour
 		// Help text
 		textStyle = new GUIStyle(buttonStyle);
 		textStyle.fontSize = 60;
+		if (web) {
+			textStyle.fontSize = 40;
+		}
 		textStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		textStyle.normal.textColor = new Color (.9f, .8f, .9f, 1f);
 		textStyle.richText = true;
@@ -721,6 +731,9 @@ public class GameManager : MonoBehaviour
 		int ypos = ((Screen.height) + (200)) / 2 - (Screen.height / 3);
 		if (!done && pause) {
 			guiStyle.fontSize = 500;
+			if (web) {
+				guiStyle.fontSize = 450;
+			}
 			guiStyle.normal.textColor = new Color (255, 255, 255, .5f);
 			GUI.Label (new Rect (xpos, ypos, 500, 10), "PAUSED", guiStyle);
 		} else {
@@ -824,6 +837,9 @@ public class GameManager : MonoBehaviour
 		go = false;
 		guiStyle.font = (Font) Resources.Load("Fonts/Mathlete-Skinny");
 		guiStyle.fontSize = 350;
+		if (web) {
+			guiStyle.fontSize = 300;
+		}
 		guiStyle.normal.textColor = new Color (.40f, .23f, .58f, .5f);
 		guiStyle.alignment = TextAnchor.MiddleCenter;
 		int xpos = ((Screen.width) - (300)) / 2;
@@ -855,18 +871,21 @@ public class GameManager : MonoBehaviour
 		}
 
 		//MENU
-		xpos = ((Screen.width) - (90)) / 2 + 70;
-		ypos = ((Screen.height) / 2 + (Screen.height / 8));
+		if (web) {
+			xpos = ((Screen.width) - (90)) / 2;
+			ypos = ((Screen.height) / 2 + (Screen.height / 4));
+		} else {
+			xpos = ((Screen.width) - (90)) / 2;
+			ypos = ((Screen.height) / 2 + (Screen.height / 8));
+		}
 		buttonStyle.hover = homeHoverAlt;
-		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos + 70, ypos, 90, 135), homebutton, buttonStyle)) {
 			Debug.Log ("menu");
 			Application.LoadLevel (Application.loadedLevel);
 			state.mode = 0;
 		}
-		xpos = ((Screen.width) - (90)) / 2 - 70;
-		ypos = ((Screen.height) / 2 + (Screen.height / 8));
 		buttonStyle.hover = quitHoverAlt;
-		if (GUI.Button (new Rect (xpos, ypos, 90, 135), quitbutton, buttonStyle)) {
+		if (GUI.Button (new Rect (xpos - 70, ypos, 90, 135), quitbutton, buttonStyle)) {
 			Application.Quit();
 		}
 
@@ -883,7 +902,7 @@ public class GameManager : MonoBehaviour
 	private void helpScreen(){
 		
 
-		string us = "<size=35>  Made by Alejandro Belgrave, Andres Cuervo, Linnea Kirby, Emily Rizzo, and Margaret McCarthy.</size>";
+		string us = "<size=35>   Made by Alejandro Belgrave, Andres Cuervo, Linnea Kirby, Emily Rizzo, and Margaret McCarthy.</size>";
 
 		GUILayout.BeginArea(new Rect(10, Screen.height /8, Screen.width, 35));
 		GUILayout.Label("\n\n\n\n"+us, textStyle);
@@ -892,47 +911,97 @@ public class GameManager : MonoBehaviour
 		int ypos;// = ((Screen.height) - (50));
 		//GUI.Label (new Rect (xpos, ypos, 900, 50), us, guiStyle);
 
-		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height * (3.5f/4)));
-		GUILayout.Label("\t             <size=120>Flocking</size>", textStyle);
-        GUILayout.EndArea();
 
-		GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height));
-		GUILayout.Label("\n\n   <size=80>Migration Mode</size>", textStyle);
-		GUILayout.Label(
-			"  <size=30>  Pick the size of your flock and then build it bird by bird, \n" +
-			"      keeping all your birds close. Help your flock migrate towards \n" +
-			"      the sunset, which has randomly spawned in a corner. \n" +
-			"      You gain points the longer you explore the map, \n" + 
-			"      but watch out - the clouds are waiting to roast \n" +
-			"      your tiny bird body!</size>", textStyle);
-		GUILayout.Label ("<size=25>\n</size>");
-		GUILayout.Label(us, textStyle);
-        GUILayout.EndArea();
+		if (web) {
+			GUILayout.BeginArea(new Rect(0, 10, Screen.width, Screen.height * (3.5f/4)));
+			GUILayout.Label ("\t                    <size=100>Flocking</size>", textStyle);
+			GUILayout.EndArea();
+		} else {
+			GUILayout.BeginArea(new Rect(10, 10, Screen.width, Screen.height * (3.5f/4)));
+			GUILayout.Label ("\t             <size=120>Flocking</size>", textStyle);
+			GUILayout.EndArea();
+		}
 
-		GUILayout.BeginArea(new Rect(Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
-		GUILayout.Label(" <size=30></size>", textStyle);
-		GUILayout.Label("\n                   <size=80>  Zen Mode</size>", textStyle);
-		GUILayout.Label(
-			"<size=30>                You get to make pretty swirls, swoops, and swooshes \n" +
-			"             with the birds. No weather or tiny birdy skeletons here,\n" +
-			"                                      just nice sounds and colors.</size>", textStyle);
-        GUILayout.EndArea();
+		if (web) {
+			GUILayout.BeginArea (new Rect (10, 10, Screen.width, Screen.height));
+			GUILayout.Label ("\n\n   <size=80>Migration Mode</size>", textStyle);
+			GUILayout.Label (
+				"  <size=25>  Pick the size of your flock and then build it bird by bird, \n" +
+				"     keeping all your birds close. Help your flock migrate towards \n" +
+				"     the sunset, which has randomly spawned in a corner. \n" +
+				"     You gain points the longer you explore the map, \n" +
+				"     but watch out - the clouds are waiting to roast \n" +
+				"     your tiny bird body!</size>", textStyle);
+			GUILayout.Label ("<size=25>\n</size>");
+			GUILayout.Label (us, textStyle);
+			GUILayout.EndArea ();
+		} else {
+			GUILayout.BeginArea (new Rect (10, 10, Screen.width, Screen.height));
+			GUILayout.Label ("\n\n   <size=80>Migration Mode</size>", textStyle);
+			GUILayout.Label (
+				"  <size=30>  Pick the size of your flock and then build it bird by bird, \n" +
+				"     keeping all your birds close. Help your flock migrate towards \n" +
+				"     the sunset, which has randomly spawned in a corner. \n" +
+				"     You gain points the longer you explore the map, \n" +
+				"     but watch out - the clouds are waiting to roast \n" +
+				"     your tiny bird body!</size>", textStyle);
+			GUILayout.Label ("<size=25>\n</size>");
+			GUILayout.Label (us, textStyle);
+			GUILayout.EndArea ();
 
-		GUILayout.BeginArea(new Rect(Screen.width/2-Screen.width/12, (Screen.height/3)*2-100, Screen.width/3, Screen.height/3));
-		GUILayout.Label("<size=80>  Controls</size>", textStyle);
-		GUILayout.Label("<size=30>      spacebar/esc pauses</size>", textStyle);
-		GUILayout.Label("<size=30>  new birds follow your cursor</size>", textStyle);
-		GUILayout.EndArea ();
+		}
+		if (web) {
+			GUILayout.BeginArea (new Rect (Screen.width / 2 -10, 10, Screen.width / 2, Screen.width / 2));
+			GUILayout.Label (" <size=25></size>", textStyle);
+			GUILayout.Label ("\n                   <size=80>  Zen Mode</size>", textStyle);
+			GUILayout.Label (
+				"<size=25>                You get to make pretty swirls, swoops, and swooshes \n" +
+				"             with the birds. No weather or tiny birdy skeletons here,\n" +
+				"                                    just nice sounds and colors.</size>", textStyle);
+			GUILayout.EndArea ();
+
+		} else {
+			GUILayout.BeginArea (new Rect (Screen.width / 2 + 10, 10, Screen.width / 2, Screen.width / 2));
+			GUILayout.Label (" <size=30></size>", textStyle);
+			GUILayout.Label ("\n                   <size=80>  Zen Mode</size>", textStyle);
+			GUILayout.Label (
+				"<size=30>                You get to make pretty swirls, swoops, and swooshes \n" +
+				"             with the birds. No weather or tiny birdy skeletons here,\n" +
+				"                                      just nice sounds and colors.</size>", textStyle);
+			GUILayout.EndArea ();
+
+		}
+		if (web) {
+			GUILayout.BeginArea (new Rect (Screen.width / 2 - Screen.width / 15, (Screen.height / 3) * 2 - 80, Screen.width / 3, Screen.height / 3));
+			GUILayout.Label ("<size=60>  Controls</size>", textStyle);
+			GUILayout.Label ("<size=25>      spacebar/esc pauses</size>", textStyle);
+			GUILayout.Label ("<size=25>  new birds follow your cursor</size>", textStyle);
+			GUILayout.EndArea ();
+		} else {
+			GUILayout.BeginArea (new Rect (Screen.width / 2 - Screen.width / 12, (Screen.height / 3) * 2 - 100, Screen.width / 3, Screen.height / 3));
+			GUILayout.Label ("<size=80>  Controls</size>", textStyle);
+			GUILayout.Label ("<size=30>      spacebar/esc pauses</size>", textStyle);
+			GUILayout.Label ("<size=30>  new birds follow your cursor</size>", textStyle);
+			GUILayout.EndArea ();
+		}
 
 		xpos = ((Screen.width) - (300)) / 2;
 		ypos = ((Screen.height) - (100)) / 2 - ((Screen.height / 3)-(Screen.height/30));
 		xpos = ((Screen.width) - (90) - Screen.width/15);
 		ypos = ((Screen.height)-135) - Screen.height/30;
 		buttonStyle.hover = homeHover;
-		if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
-			Debug.Log ("menu");
-			//Application.LoadLevel (Application.loadedLevel);
-			state.mode = 0;
+		if (web) {
+			if (GUI.Button (new Rect (xpos, ypos-40, 90, 135), homebutton, buttonStyle)) {
+				Debug.Log ("menu");
+				//Application.LoadLevel (Application.loadedLevel);
+				state.mode = 0;
+			}
+		} else {
+			if (GUI.Button (new Rect (xpos, ypos, 90, 135), homebutton, buttonStyle)) {
+				Debug.Log ("menu");
+				//Application.LoadLevel (Application.loadedLevel);
+				state.mode = 0;
+			}
 		}
 	}
 
